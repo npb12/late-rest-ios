@@ -1,0 +1,6 @@
+framework module Pods_LateReservation {
+  umbrella header "Pods-LateReservation-umbrella.h"
+
+  export *
+  module * { export * }
+}
