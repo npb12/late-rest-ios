@@ -472,7 +472,7 @@ class RegisterViewController: BaseViewController, UITextFieldDelegate {
             return
         }
         
-        let registerInfo = RegistrationInfo(email: email, password: password, confirm: repassword, first: first, phone: number)
+        let registerInfo = RegistrationInfo()
         
         
         if Credentials.isValidRegistration(info: registerInfo)
@@ -503,7 +503,7 @@ class RegisterViewController: BaseViewController, UITextFieldDelegate {
                         self.dismiss(animated: false, completion: {
                             if let registerDelegate = self.delegate
                             {
-                                registerDelegate.didSuccessfullyRegister(self)
+                                //registerDelegate.didSuccessfullyRegister(self)
                             }
                         })
                     }
@@ -609,7 +609,7 @@ class RegisterViewController: BaseViewController, UITextFieldDelegate {
         return false
     }
     
-    func didSuccessfullyRegister(_ sender: RegisterViewController) {
+    func didSuccessfullyRegister(_ sender: OnboardingViewController) {
         DispatchQueue.main.async {
             self.dismiss(animated: false, completion: {
                 self.delegate?.didSuccessfullyRegister(sender)

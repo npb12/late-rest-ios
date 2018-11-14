@@ -382,7 +382,7 @@ class AccountCell: UITableViewCell {
     let accountLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.header
-        label.font = UIFont(name:"Helvetica",size:15)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:15)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -457,7 +457,7 @@ class ProfileCell: UITableViewCell {
     let nameLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.header
-        label.font = UIFont(name:"Helvetica-Bold",size:18)
+        label.font = UIFont(name:"SourceSansPro-Bold",size:18)
         label.numberOfLines = 0
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -467,7 +467,7 @@ class ProfileCell: UITableViewCell {
     let changeLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.subheader
-        label.font = UIFont(name:"Helvetica",size:14)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:14)
         label.numberOfLines = 0
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

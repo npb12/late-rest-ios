@@ -38,7 +38,7 @@ class FavoriteCell : LateTableCell
         bottomView.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor).isActive = true
         bottomView.bottomAnchor.constraint(equalTo: viewContainer.bottomAnchor).isActive = true */
         
-        let imgSize = UIScreen.main.bounds.width * 0.25
+        let imgSize = UIScreen.main.bounds.width * 0.24
         viewContainer.addSubview(imageView)
         imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
@@ -51,13 +51,27 @@ class FavoriteCell : LateTableCell
         imageView.layer.borderWidth = 2
         
         viewContainer.addSubview(titleLabel)
-        titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: viewContainer.centerXAnchor).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor, constant: 5).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -5).isActive = true
-        titleLabel.font = UIFont(name:"Helvetica-Bold",size:14)
+        titleLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 0).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 0).isActive = true
+        titleLabel.font = UIFont(name:"SourceSansPro-Regular",size:16)
         titleLabel.textAlignment = .center
         
+        imageView.addSubview(emptyView)
+        emptyView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
+        emptyView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
+        emptyView.trailingAnchor.constraint(equalTo: imageView.trailingAnchor).isActive = true
+        emptyView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
+        emptyView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        
+        emptyView.addSubview(likeImg)
+        likeImg.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
+        likeImg.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        likeImg.heightAnchor.constraint(equalToConstant: 22.5).isActive = true
+        likeImg.widthAnchor.constraint(equalToConstant: 22.5).isActive = true
+        likeImg.image = UIImage.init(named: "like_active_nav")
+        emptyView.isHidden = false
      //   imageView.topAnchor.constraint(equalTo: viewContainer.topAnchor).isActive = true
      //   imageView.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor).isActive = true
      //   imageView.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor).isActive = true

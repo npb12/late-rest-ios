@@ -28,6 +28,7 @@ class LRServer : NSObject
         case isAvailable = "is-available/%d/"
         case tables = "tables/%d/"
         case changePassword = "change-password/"
+        case deviceToken = "device-token/"
     }
     
     private func formattedEndpoint(_ endpoint: Endpoint) -> String
@@ -99,6 +100,27 @@ class LRServer : NSObject
         }
     }
     
+    public func updateDeviceToken(_ token: String)
+    {
+        let urlStr = formattedEndpoint(Endpoint.deviceToken)
+        let parameters: Parameters =
+            [ "token" : token ]
+        let header = apiHeader()
+        
+        if let url = URL.init(string: urlStr)
+        {
+            Alamofire.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).validate(contentType: ["application/json"]).responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                case .failure(let error):
+                    let json = JSON(error)
+                    print(json)
+                }
+            }
+        }
+    }
+    
     public func changePassword(_ password: String, completion: @escaping (_ error: Error?) -> Void)
     {
         let urlStr = formattedEndpoint(Endpoint.changePassword)
@@ -119,7 +141,7 @@ class LRServer : NSObject
         }
     }
     
-    public func getNearbyRestaurants(_ location: CLLocation, completion: @escaping (_ restaurants: [Restaurant]?, _ error: Error?) -> Void)
+    public func getNearbyRestaurants(_ location: CLLocation, _ all : Bool, completion: @escaping (_ restaurants: [Restaurant]?, _ error: Error?) -> Void)
     {
         let lat = location.coordinate.latitude as Double
         let lon = location.coordinate.longitude as Double
@@ -134,7 +156,7 @@ class LRServer : NSObject
                 case .success(let value):
                     let json = JSON(value)
                     print(json)
-                    let restaurants = Restaurant.fromJson(json)
+                    let restaurants = Restaurant.fromJson(json, all)
                     completion(restaurants, nil)
                  //   completion(startups, nil)
                 case .failure(let error):
@@ -306,53 +328,6 @@ class LRServer : NSObject
             }
         }
     }
-    
-    /*
-    public func getNearbyStartups(_ location: CLLocation, completion: @escaping (_ startups: [Startup]?, _ error: Error?) -> Void)
-    {
-        let lat = location.coordinate.latitude as Double
-        let lon = location.coordinate.longitude as Double
-        let locationEndpoint = String(format:Endpoint.nearby.rawValue, lat, lon)
-        let urlStr = formattedEndpoint(locationEndpoint)
-        let header = apiHeader()
-        
-        if let url = URL.init(string: urlStr)
-        {
-            Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: header).validate(contentType: ["application/json"]).responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    let startups = Startup.fromJson(json)
-                    completion(startups, nil)
-                case .failure(let error):
-                    completion(nil, error)
-                }
-            }
-        }
-    }
-    
-
-    
-    public func getMyStartups(completion: @escaping (_ startups: [Startup]?, _ error: Error?) -> Void)
-    {
-        let urlStr = formattedEndpoint(Endpoint.myStartups)
-        let header = apiHeader()
-        
-        if let url = URL.init(string: urlStr)
-        {
-            Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: header).validate(contentType: ["application/json"]).responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    let startups = Startup.fromJson(json)
-                    MyStartups.syncMyStartups(startups)
-                    completion(startups, nil)
-                case .failure(let error):
-                    completion(nil, error)
-                }
-            }
-        }
-    } */
 }
  
  

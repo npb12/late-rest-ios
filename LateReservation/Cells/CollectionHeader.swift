@@ -18,7 +18,7 @@ class CollectionHeader: UICollectionViewCell  {
     
     let headerLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica-Bold",size:32)
+        label.font = UIFont(name:"SourceSansPro-Bold",size:32)
         label.textColor = UIColor.header
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ class CollectionHeader: UICollectionViewCell  {
     
     let descLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:14)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:16)
         label.textColor = UIColor.subheader
         label.text = "Nearby"
         label.numberOfLines = 1

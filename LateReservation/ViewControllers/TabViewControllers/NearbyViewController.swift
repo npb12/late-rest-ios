@@ -24,7 +24,6 @@ class LRPassThroughContainer:UIView
             }
         }
         
-        //UUDebugLog("SBPassThroughContainer: \(point)")
         return false
     }
 }
@@ -74,7 +73,7 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
         
         self.searchContainer.layer.cornerRadius = 22.5
         shadowView.layer.shadowOffset = .zero
-        shadowView.layer.shadowOpacity = 0.1
+        shadowView.layer.shadowOpacity = 0.075
         shadowView.layer.shadowRadius = 5
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.clipsToBounds = false
@@ -91,9 +90,10 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
         self.locationContainer.layer.masksToBounds = true
         shadowView.layer.masksToBounds = false
         
-        self.locationContainer.layer.cornerRadius = 5
+        self.locationContainer.layoutIfNeeded()
+        self.locationContainer.layer.cornerRadius = self.locationContainer.bounds.height / 2
         shadowView.layer.shadowOffset = .zero
-        shadowView.layer.shadowOpacity = 0.1
+        shadowView.layer.shadowOpacity = 0.075
         shadowView.layer.shadowRadius = 5
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.clipsToBounds = false
@@ -103,32 +103,10 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
     {
         super.viewDidLoad()
         
-     //   searchContainer.layer.masksToBounds = true
-     //   searchContainer.layer.cornerRadius = 22.5
-      //  searchContainer.layer.borderColor = UIColor.black.cgColor
-      //  searchContainer.layer.borderWidth = 0.5
         
         self.hideKeyboardOnTap(#selector(self.dismissKeyboard))
-        
-        let placeholderAppearance = UILabel.appearance(whenContainedInInstancesOf: [UISearchBar.self])
-        placeholderAppearance.font = UIFont(name: "Helvetica", size: 14)
-        
-        let searchTextAppearance = UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
-        searchTextAppearance.font = UIFont(name: "Helvetica", size: 14)
-     //   placeholderAppearance.textColor = .red
-        /*
-        if (!SBFramework.shared.isAuthorized())
-        {
-            showLogin()
-        }
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(showLogin), name: SBNotifications.showLogin, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleRefreshAgentBar(_:)), name: SBNotifications.refreshAgentBar, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleRemoteImageDownloaded), name: UURemoteData.Notifications.DataDownloaded, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleShowTutorialNotification), name: SBNotifications.showTutorial, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleRequestLocationNotification), name:SBNotifications.requestLocationUse, object: nil) */
+
+        locationContainer.isHidden = true
         view.addSubview(statusView)
         statusView.contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         statusView.contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -157,14 +135,24 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
                         guard let city = city, error == nil else { return }
                         DispatchQueue.main.async {
                             self.locationLabel.text = city
+                            self.locationContainer.isHidden = false
                         }
                     }
                     
                     LRServer.shared.getFavorites() {
                         (favorites: [Favorite]?, error: Error?) in
-                        LRServer.shared.getNearbyRestaurants(loc) {
+                        LRServer.shared.getNearbyRestaurants(loc, false) {
                             (data: [Restaurant]?, error: Error?) in
                             DispatchQueue.main.async {
+                                
+                                if let favs = favorites
+                                {
+                                    if favs.count > 0
+                                    {
+                                        AppDelegate.shared().registerForPushNotifications()
+                                    }
+                                }
+                                
                                 self.hideIndicator()
                                 // nearby = restaurants
                                 // self.
@@ -271,5 +259,13 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
             self.locationTop.constant = 10
         })
         //   }
+    }
+    
+    @IBAction func listAction(_ sender: Any)
+    {
+        if let tabBar: TabBarController = self.tabBarController as? TabBarController
+        {
+            tabBar.showNearbyList()
+        }
     }
 }

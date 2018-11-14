@@ -283,8 +283,12 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
 
             let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "pin")
             
-            annotationView.markerTintColor = UIColor.black
-            annotationView.glyphText = String(format: "%d", lrAnnotation.rest.reservations[0].party)
+            annotationView.markerTintColor = UIColor.mapColor
+            
+            if lrAnnotation.rest.reservations.count > 0
+            {
+                annotationView.glyphText = String(format: "%d", lrAnnotation.rest.reservations.count)
+            }
             
             return annotationView
         }
@@ -348,10 +352,20 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
  
  public var title: String?
  {
+    /*
     let name:String = rest.restaurantName
-    let discount:Int = rest.reservations[0].discount
+    var discVal = 0
+    if rest.reservations.count > 0
+    {
+        discVal = rest.reservations[0].discount
+    }
+    
+    if discVal > 0
+    {
+        return String(format: "%@\n%d%% Off", name, discVal)
+    } */
  
- return String(format: "%@\n%d%% Off", name, discount)
+    return ""
  }
 
  }

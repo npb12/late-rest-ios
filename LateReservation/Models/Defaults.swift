@@ -13,6 +13,7 @@ struct Defaults {
     static let (userKey, idKey, emailKey, firstKey, phoneKey) = ("user", "id", "email", "first", "number")
     static let userSessionKey = "com.save.usersession"
     static let userLoggedinKey = "userLogin"
+    static let returningUserKey = "returningUserKey"
     static let userModeKey = "userMode"
     static let syncConstantsKey = "syncConstants"
 
@@ -27,6 +28,16 @@ struct Defaults {
     static func isLoggedIn() -> Bool
     {
         return UserDefaults.standard.bool(forKey: userLoggedinKey)
+    }
+    
+    static func returningUser() -> Bool
+    {
+        return UserDefaults.standard.bool(forKey: returningUserKey)
+    }
+    
+    static func setReturningUser(status: Bool)
+    {
+        UserDefaults.standard.set(status, forKey: returningUserKey)
     }
     
     static func setLoginStatus(status: Bool)

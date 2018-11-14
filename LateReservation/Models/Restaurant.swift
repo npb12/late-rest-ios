@@ -38,6 +38,7 @@ public class Restaurant
     var description : String = ""
     var location : String = ""
     var reservations = [LateReservation]()
+    
     /*
     public static func toJson(_ startup: Startup) -> Parameters
     {
@@ -50,7 +51,7 @@ public class Restaurant
                  JsonKeys.understanding : startup.understanding, JsonKeys.whatsNew : startup.whatsNew]
     } */
     
-    public static func fromJson(_ json: JSON) -> [Restaurant]
+    public static func fromJson(_ json: JSON, _ all : Bool) -> [Restaurant]
     {
         var restaurants = [Restaurant]()
         
@@ -60,12 +61,21 @@ public class Restaurant
             let restaurant = parseRestaurant(data)
             let tables = object[JsonKeys.jsonTablesId]
             restaurant.reservations = LateReservation.fromJson(restaurant, tables)
-            if restaurant.reservations.count > 0
+            
+            
+            restaurants.append(restaurant)
+            /*
+            if all
             {
                 restaurants.append(restaurant)
             }
+            else if restaurant.reservations.count > 0
+            {
+                restaurants.append(restaurant)
+            } */
         }
         
+        restaurants = restaurants.sorted(by: { $0.reservations.count > $1.reservations.count })
         return restaurants
     }
     

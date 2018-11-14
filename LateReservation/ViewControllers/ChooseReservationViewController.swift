@@ -30,7 +30,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"Helvetica-Bold",size:26)
+        label.font = UIFont(name:"SourceSansPro-Bold",size:26)
         label.textAlignment = .center
         label.textColor = UIColor.title
         label.numberOfLines = 0
@@ -40,7 +40,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     
     let locationLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:12)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:12)
         label.textColor = .lightGray
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -50,7 +50,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     
     let todayLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:17)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:17)
         label.textColor = .title
         label.textAlignment = .center
         label.text = "Today"
@@ -61,7 +61,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     
     let partyLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:17)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:17)
         label.textColor = .lightGray
         label.textAlignment = .center
         label.text = "Party of"
@@ -72,7 +72,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     
     let timeLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:17)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:17)
         label.textColor = .lightGray
         label.textAlignment = .center
         label.text = "Reservation time"
@@ -105,8 +105,10 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         
         titleLabel.text = restaurant.restaurantName
         locationLabel.text = restaurant.location
-        let buttonTitle = String(format: "RESERVE | %d%% OFF", (restaurant.reservations.first?.discount)!)
+        reserveButton.titleLabel?.font = UIFont(name: "SourceSansPro-Bold", size: 19)//UIFont.systemFont(ofSize: 19, weight: .semibold)
+        let buttonTitle = String(format: "RESERVE | %d%% OFF", (restaurant.reservations[0].discount))
         reserveButton.setTitle(buttonTitle, for: .normal)
+        
         
         if Favorites.isFavorited(id: restaurant.id)
         {
@@ -123,11 +125,13 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         {
             for res in reservations
             {
-                listOfParty.append(String(res.party))
+                listOfParty.appendIfNotContains(String(res.party))
             }
             listOfParty.sort()
             partyPicker.reloadAllComponents()
-            orderTimes(listOfParty.first!)
+            orderTimes(listOfParty[0])
+            let btnTitle = String(format: "RESERVE | %d%% OFF", reservations[0].discount)
+            reserveButton.setTitle(btnTitle, for: .normal)
         }
     }
     
@@ -157,14 +161,14 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
                 }
             }
         }
-        listOfTimes.sort()
+        listOfTimes = listOfTimes.sorted{ $0 > $1 }
         if listOfTimes.count > 0
         {
             selectedTime = listOfTimes.first!
         }
         timePicker.reloadAllComponents()
     }
-    
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -187,10 +191,10 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     
     func setupViews()
     {
-        
-        reserveButton.setTitle("RESERVE | 15% OFF", for: .normal)
-        reserveButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 19)//UIFont.systemFont(ofSize: 19, weight: .semibold)
-        reserveButton.backgroundColor = UIColor.LLGreen//UIColor.black.withAlphaComponent(0.8)
+        reserveButton.backgroundColor = UIColor.white//UIColor.black.withAlphaComponent(0.8)
+        reserveButton.setTitleColor(.goldmember, for: .normal)
+        reserveButton.layer.borderColor = UIColor.LLDiv.cgColor
+        reserveButton.layer.borderWidth = 1
         
         view.addSubview(titleLabel)
         titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60).isActive = true
@@ -261,6 +265,34 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         {
             selectedTime = listOfTimes[row]
         }
+        
+        updateDiscount()
+    }
+    
+    func updateDiscount()
+    {
+        var selectedId : Int = 0
+        var discount : Int = 0
+        for res in assocData
+        {
+            if res.timeStr == selectedTime
+            {
+                selectedId = res.restId
+                break
+            }
+        }
+        
+        for res in restaurant.reservations
+        {
+            if selectedId == res.tableId
+            {
+                discount = res.discount
+                break
+            }
+        }
+        
+        let buttonTitle = String(format: "RESERVE | %d%% OFF", discount)
+        reserveButton.setTitle(buttonTitle, for: .normal)
     }
     
     @IBAction func selectedReservation(_ sender: Any) {
@@ -312,6 +344,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         else
         {
             likeBtn.image = #imageLiteral(resourceName: "like_active_nav").withRenderingMode(.alwaysOriginal)
+            AppDelegate.shared().registerForPushNotifications()
             LRServer.shared.addFavorite(restaurant, completion: {
                 DispatchQueue.main.async {
                     //           self.updateTabVC()

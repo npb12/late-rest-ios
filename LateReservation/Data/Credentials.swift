@@ -14,13 +14,13 @@ struct LoginInfo
     let password : String
 }
 
-struct RegistrationInfo
+class RegistrationInfo
 {
-    let email : String
-    let password : String
-    let confirm : String
-    let first : String
-    let phone : String
+    var email : String = ""
+    var password : String = ""
+    var confirm : String = ""
+    var first : String = ""
+    var phone : String = ""
 }
 
 class Credentials

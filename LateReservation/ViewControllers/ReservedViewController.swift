@@ -17,8 +17,8 @@ class ReservedViewController : UIViewController
     
     let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica-Bold",size:25)
-        label.textColor = UIColor.black
+        label.font = UIFont(name:"SourceSansPro-Regular",size:28)
+        label.textColor = UIColor.header
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,30 +27,45 @@ class ReservedViewController : UIViewController
     
     let venueLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:20)//UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
-        label.textColor = UIColor.subheader
+        label.font = UIFont(name:"SourceSansPro-Light",size:20)//UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
+        label.textColor = UIColor.header
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let discLabel : UILabel = {
+    let discountLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica-Bold",size:25)
-        label.textColor = UIColor.black
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:35)
+        label.textColor = .LRRed
         label.textAlignment = .center
-        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let discountFormatter : UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
+        label.textColor = .LRRed
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 0.75
+        paragraphStyle.alignment = .center
+        let attributedString = NSMutableAttributedString(string: "%\noff")
+        attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+        label.attributedText = attributedString
         return label
     }()
     
     let directionsButton : UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.clear
+        button.backgroundColor = UIColor.mapColor
         button.setTitle("Get Directions", for: .normal)
-        button.setTitleColor(UIColor.blueLiteTwo, for: .normal)
-        button.titleLabel?.font = UIFont(name: "Helvetica", size: 18)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: "SourceSansPro-Regular", size: 18)
        // button.addTarget(self, action: #selector(forgotTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -82,14 +97,14 @@ class ReservedViewController : UIViewController
         formatter.timeZone = TimeZone.current
         let dateString = formatter.string(from: res.reservationTime!)
         venueLabel.text = String(format: "Today, %@\nTable for %d", dateString, res.party)
-        discLabel.text = String(format: "%d%% Off", res.discount)
+        discountLabel.text = String(format: "%d", res.discount)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = false
         
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica-Bold", size: 16)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!]
         
         guard let res = reservation else {return}
         if let restaurant = res.restaurant
@@ -109,16 +124,19 @@ class ReservedViewController : UIViewController
         venueLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         venueLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
-        view.addSubview(discLabel)
-        discLabel.topAnchor.constraint(equalTo: venueLabel.bottomAnchor, constant: 20).isActive = true
-        discLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        discLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        view.addSubview(discountLabel)
+        discountLabel.topAnchor.constraint(equalTo: venueLabel.bottomAnchor, constant: 20).isActive = true
+        discountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -5).isActive = true
         
+        view.addSubview(discountFormatter)
+        discountFormatter.topAnchor.constraint(equalTo: discountLabel.topAnchor, constant: 5).isActive = true
+        discountFormatter.leadingAnchor.constraint(equalTo: discountLabel.trailingAnchor, constant: 2).isActive = true
         
         view.addSubview(directionsButton)
-        directionsButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-        directionsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        directionsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        directionsButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -0).isActive = true
+        directionsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        directionsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -0).isActive = true
+        directionsButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.1).isActive = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -133,7 +151,6 @@ class ReservedViewController : UIViewController
     @IBAction func goBack(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
-    
     
     @IBAction func liked(_ sender: Any) {
         

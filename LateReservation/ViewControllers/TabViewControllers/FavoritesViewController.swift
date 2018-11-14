@@ -114,7 +114,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
         collectionView.dataSource = self
         collectionView.bounces = true
         collectionView.register(FavoriteCell.self, forCellWithReuseIdentifier: "favoriteCell")
-        collectionView.register(CollectionHeader.self, forSupplementaryViewOfKind:
+        collectionView.register(FavoriteHeaderCell.self, forSupplementaryViewOfKind:
             UICollectionElementKindSectionHeader, withReuseIdentifier: "header")
         
         view.addSubview(collectionView)
@@ -132,6 +132,8 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
         view.addSubview(emptyImageView)
         emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emptyImageView.bottomAnchor.constraint(equalTo: emptyLabel.topAnchor, constant: -15).isActive = true
+        
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -171,8 +173,8 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = UIScreen.main.bounds.width * 0.3
-        let height = UIScreen.main.bounds.height * 0.25
+        let width = self.collectionView.frame.width * 0.27
+        let height = UIScreen.main.bounds.height * 0.225
         return CGSize(width: width, height: height)
     }
     
@@ -183,7 +185,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind:
         String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier:
-            "header", for: indexPath) as! CollectionHeader
+            "header", for: indexPath) as! FavoriteHeaderCell
         
         header.headerLabel.text = "Favorites"
         header.descLabel.text = "Get notified for exclusive tables"

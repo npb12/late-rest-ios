@@ -32,9 +32,9 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
     
     let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica-Bold",size:35)
-        label.textColor = UIColor.black
-        label.text = "Late Reservation"
+        label.font = UIFont(name:"SourceSansPro-Bold",size:35)
+        label.textColor = UIColor.header
+        label.text = "Reservation"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,8 +43,8 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
     
     let descLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:16)//UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
-        label.textColor = UIColor.subheader
+        label.font = UIFont(name:"SourceSansPro-Regular",size:20)//UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
+        label.textColor = UIColor.header
         label.textAlignment = .center
         label.text = "Last minute discounted dining at high end venues"
         label.numberOfLines = 0
@@ -66,47 +66,66 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
         return view
     }()
     
-    let emailField : UITextField = {
-        let field = UITextField()
+    let btnShadow : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.shadowColor = UIColor.LRPinkShadow.cgColor
+        view.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        view.layer.shadowOpacity = 0.4;
+        view.layer.shadowRadius = 5.0;
+       // view.layer.masksToBounds = false
+        return view
+    }()
+    
+    let emailField : VersatileTextField = {
+        let field = VersatileTextField()
         field.backgroundColor = UIColor.clear
-        field.font = UIFont(name:"Helvetica",size:18)//UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
-        field.textColor = UIColor.black
+        field.font = UIFont(name:"SourceSansPro-SemiBold",size:18)
+        field.placeholderFont = UIFont(name:"SourceSansPro-SemiBold",size:16)
         field.tag = Fields.email.rawValue
-        field.attributedPlaceholder = NSAttributedString(string: "email",
-                                                         attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
+        field.textColor = UIColor.black
+        field.lineColor = UIColor.grayBg
+        field.placeholderColor = UIColor.LRLightGray
+        field.selectedLineColor = UIColor.header
+        field.selectedTitleColor = UIColor.blackBg
+        field.placeholder = "email"
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
     let divLine : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.lightGray
+        view.backgroundColor = UIColor.clear
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let passField : UITextField = {
-        let field = UITextField()
+    let passField : VersatileTextField = {
+        let field = VersatileTextField()
         field.backgroundColor = UIColor.clear
         field.isSecureTextEntry = true
-        field.font = UIFont(name:"Helvetica",size:18)//UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
         field.textColor = UIColor.black
-        field.tag = Fields.password.rawValue
-        field.attributedPlaceholder = NSAttributedString(string: "password",
-                                                               attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
+        field.lineColor = UIColor.grayBg
+        field.placeholderColor = UIColor.LRLightGray
+        field.selectedLineColor = UIColor.header
+        field.selectedTitleColor = UIColor.blackBg
+        field.placeholder = "password"
+        field.font = UIFont(name:"SourceSansPro-SemiBold",size:18)
+        field.placeholderFont = UIFont(name:"SourceSansPro-SemiBold",size:16)
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
     
     let loginButton : UIButton = {
         let button = UIButton()
-        button.setTitle("Login", for: .normal)
-        button.backgroundColor = UIColor.white
-        button.setTitleColor(UIColor.LLGreen, for: .normal)
-        button.titleLabel?.font = UIFont(name:"Helvetica-Bold",size:18)//UIFont.boldSystemFont(ofSize: 16)
-        button.layer.borderColor = UIColor.LLGray.cgColor
+        button.setTitle("SIGN IN", for: .normal)
+        button.backgroundColor = UIColor.LRPink
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = UIFont(name:"SourceSansPro-SemiBold",size:16)//UIFont.boldSystemFont(ofSize: 16)
+        button.layer.borderColor = UIColor.LRPink.cgColor
         button.layer.borderWidth = 0.5
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 5
         button.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -122,8 +141,8 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
     
     let registerLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:17)//UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.regular)
-        label.textColor = UIColor.subheader
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:17)//UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.regular)
+        label.textColor = UIColor.LRLightGray
         label.textAlignment = .center
         let attributedString = NSMutableAttributedString(string:"Need an account? Register.")
         let linkWasSet = attributedString.setAsLink(textToFind: "Register")
@@ -147,8 +166,8 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
     
     let forgotPasswordLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:13)//UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
-        label.textColor = UIColor.blueLiteTwo
+        label.font = UIFont(name:"SourceSansPro-Regular",size:15)//UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        label.textColor = UIColor.header
         label.textAlignment = .center
         label.text = "Forgot your password?"
         label.numberOfLines = 1
@@ -171,9 +190,9 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
    //     titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         view.addSubview(descLabel)
-        descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15).isActive = true
-        descLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        descLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5).isActive = true
+        descLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
+        descLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
         
         view.addSubview(emailContainer)
         emailContainer.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: offset * 0.55).isActive = true
@@ -194,7 +213,7 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
         divLine.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         
         view.addSubview(passwordContainer)
-        passwordContainer.topAnchor.constraint(equalTo: divLine.bottomAnchor, constant: offset * 0.0).isActive = true
+        passwordContainer.topAnchor.constraint(equalTo: divLine.bottomAnchor, constant: offset * 0.25).isActive = true
         passwordContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         passwordContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         passwordContainer.heightAnchor.constraint(equalToConstant: offset * 0.55).isActive = true
@@ -204,18 +223,24 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
         passField.bottomAnchor.constraint(equalTo: passwordContainer.bottomAnchor, constant: 0).isActive = true
         passField.leadingAnchor.constraint(equalTo: passwordContainer.leadingAnchor, constant: 20).isActive = true
         passField.trailingAnchor.constraint(equalTo: passwordContainer.trailingAnchor, constant: -20).isActive = true
+
+        view.addSubview(btnShadow)
+        btnShadow.topAnchor.constraint(equalTo: passwordContainer.bottomAnchor, constant: offset * 0.25).isActive = true
+        btnShadow.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        btnShadow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        btnShadow.heightAnchor.constraint(equalToConstant: offset * 0.65).isActive = true
         
-        view.addSubview(loginButton)
-        loginButton.topAnchor.constraint(equalTo: passwordContainer.bottomAnchor, constant: offset * 0.25).isActive = true
-        loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: offset * 0.6).isActive = true
-        
+        btnShadow.addSubview(loginButton)
+        loginButton.topAnchor.constraint(equalTo: btnShadow.topAnchor).isActive = true
+        loginButton.leadingAnchor.constraint(equalTo: btnShadow.leadingAnchor, constant: 0).isActive = true
+        loginButton.trailingAnchor.constraint(equalTo: btnShadow.trailingAnchor, constant:0).isActive = true
+        loginButton.bottomAnchor.constraint(equalTo: btnShadow.bottomAnchor).isActive = true
+
         view.addSubview(forgotButton)
         forgotButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 15).isActive = true
         forgotButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         forgotButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        forgotButton.heightAnchor.constraint(equalToConstant: offset * 0.2).isActive = true
+        forgotButton.heightAnchor.constraint(equalToConstant: offset * 0.3).isActive = true
         
         forgotButton.addSubview(forgotPasswordLabel)
         forgotPasswordLabel.topAnchor.constraint(equalTo: forgotButton.topAnchor, constant: 0).isActive = true
@@ -354,8 +379,7 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
     
     func didSuccessfullyLogin(_ sender: LoginViewController){}
     
-    func didSuccessfullyRegister(_ sender: RegisterViewController) {
-        
+    func didSuccessfullyRegister(_ sender: OnboardingViewController) {
         DispatchQueue.main.async {
             self.dismiss(animated: false, completion: {
                 self.delegate?.didSuccessfullyRegister(sender)
@@ -370,7 +394,7 @@ class LoginViewController: BaseViewController, UITextFieldDelegate, DidAuthorize
     {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if let registerViewController = segue.destination as? RegisterViewController
+        if let registerViewController = segue.destination as? OnboardingViewController
         {
             registerViewController.delegate = self
         }
@@ -389,8 +413,10 @@ extension NSMutableAttributedString {
         let foundRange = self.mutableString.range(of: textToFind)
         if foundRange.location != NSNotFound {
            // self.addAttribute(.underlineColor, value: UIColor.blueLiteOne, range: foundRange)
-            self.addAttribute(.link, value: "", range: foundRange)
-            self.addAttribute(.font, value: UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.semibold), range: foundRange)
+            //self.addAttribute(.link, value: "", range: foundRange)
+            self.addAttribute(.font, value: UIFont(name:"SourceSansPro-Bold",size:17), range: foundRange)
+            self.addAttribute(.foregroundColor, value: UIColor.header, range: foundRange)
+            self.addAttribute(NSAttributedStringKey.underlineStyle, value: NSUnderlineStyle.styleSingle.rawValue, range: foundRange)
             return true
         }
         return false

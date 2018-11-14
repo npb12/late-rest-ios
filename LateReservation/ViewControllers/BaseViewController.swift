@@ -69,7 +69,7 @@ class BaseViewController : UIViewController {
     
     let loadingLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica-Bold", size: 18)
+        label.font = UIFont(name: "SourceSansPro-SemiBold", size: 18)
         label.textColor = UIColor.white
         label.textAlignment = .center
         label.numberOfLines = 1

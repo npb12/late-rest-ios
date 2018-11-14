@@ -19,7 +19,7 @@ protocol DidAuthorizeDelegate {
     // this method -- and hopefully do something in
     // that definition.
     func didSuccessfullyLogin(_ sender:LoginViewController)
-    func didSuccessfullyRegister(_ sender:RegisterViewController)
+    func didSuccessfullyRegister(_ sender:OnboardingViewController)
 }
 
 protocol LocationDelegate {

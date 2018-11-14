@@ -12,13 +12,13 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
 {
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.unselectedItemTintColor = UIColor.darkGray
+        tabBar.unselectedItemTintColor = UIColor.header
         UITabBar.appearance().shadowImage = UIImage()
         UITabBar.appearance().backgroundImage = UIImage()
         
         drawLine(onLayer: tabBar.layer, fromPoint: CGPoint(x: 0, y: 0), toPoint: CGPoint(x: UIScreen.main.bounds.width, y: 0))
-        tabBar.backgroundColor = UIColor.black
-        tabBar.barTintColor = UIColor.black
+        tabBar.backgroundColor = UIColor.white
+        tabBar.barTintColor = UIColor.white
         
         /*
          let frost = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
@@ -34,6 +34,7 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
         super.viewDidAppear(animated)
         
         checkForLoginStatus()
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,6 +69,8 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+       // performSegue(withIdentifier: "nearbySegue", sender: self)
     }
     
     func drawLine(onLayer layer: CALayer, fromPoint start: CGPoint, toPoint end: CGPoint) {
@@ -91,10 +94,25 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
     func didSuccessfullyLogin(_ sender: LoginViewController)
     {
         checkForLoginStatus()
+        
+        if !Defaults.returningUser()
+        {
+            showNearbyList()
+        }
     }
     
-    func didSuccessfullyRegister(_ sender: RegisterViewController) {
+    func showNearbyList()
+    {
+        performSegue(withIdentifier: "nearbySegue", sender: self)
+    }
+    
+    func didSuccessfullyRegister(_ sender: OnboardingViewController) {
         checkForLoginStatus()
+        
+        if !Defaults.returningUser()
+        {
+            performSegue(withIdentifier: "nearbySegue", sender: self)
+        }
     }
     
     func reservationSucceeded(_ sender: DetailViewController, _ success : Bool) {

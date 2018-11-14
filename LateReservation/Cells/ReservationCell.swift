@@ -45,7 +45,7 @@ class MyReservationsCell: UICollectionViewCell {
             }
             
             if let discount = reservation?.discount{
-                discountLabel.text = String(format: "%d%% Off", discount)
+                discountLabel.text = String(format: "%d%% off", discount)
             }
         }
     }
@@ -97,9 +97,8 @@ class MyReservationsCell: UICollectionViewCell {
     
     let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica-Bold",size:20)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:22)
         label.textColor = UIColor.title
-        label.text = "Title"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -107,8 +106,8 @@ class MyReservationsCell: UICollectionViewCell {
     
     let locationLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:11)
-        label.textColor = .lightGray
+        label.font = UIFont(name:"SourceSansPro-Regular",size:11)
+        label.textColor = .LRLightGray
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -116,9 +115,8 @@ class MyReservationsCell: UICollectionViewCell {
     
     let timeLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:14)
-        label.textColor = .LLGreen//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
-        label.text = "Description"
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:14)
+        label.textColor = .LRBlue//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -126,9 +124,8 @@ class MyReservationsCell: UICollectionViewCell {
     
     let discountLabel : UITextView = {
         let label = UITextView()
-        label.font = UIFont(name:"Helvetica-Bold",size:12)
-        label.textColor = .subheader//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
-        label.backgroundColor = .main
+        label.font = UIFont(name:"SourceSansPro-Bold",size:14)
+        label.textColor = .LRRed//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
         label.isScrollEnabled = false
         label.textAlignment = .center
         label.isUserInteractionEnabled = false
@@ -149,7 +146,7 @@ class MyReservationsCell: UICollectionViewCell {
         
         viewContainer.addSubview(imageView)
         imageView.topAnchor.constraint(equalTo: viewContainer.topAnchor, constant: 10).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor, constant: 10).isActive = true
+        imageView.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor, constant: 15).isActive = true
         let size = UIScreen.main.bounds.height * 0.1
         imageView.heightAnchor.constraint(equalToConstant: size).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: size).isActive = true
@@ -170,7 +167,7 @@ class MyReservationsCell: UICollectionViewCell {
         titleLabel.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -5).isActive = true
         
         viewContainer.addSubview(locationLabel)
-        locationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2.5).isActive = true
+        locationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0).isActive = true
         locationLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 0).isActive = true
         
         viewContainer.addSubview(timeLabel)
@@ -178,7 +175,7 @@ class MyReservationsCell: UICollectionViewCell {
         timeLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 0).isActive = true
         
         viewContainer.addSubview(discountLabel)
-        discountLabel.bottomAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 0).isActive = true
+        discountLabel.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 0).isActive = true
         discountLabel.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -10).isActive = true
         
         //      layer.drawLine(fromPoint: CGPoint(x: 0, y: viewContainer.frame.minY), toPoint: CGPoint(x: UIScreen.main.bounds.width, y: viewContainer.frame.minY))

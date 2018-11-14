@@ -45,19 +45,6 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
         return label
     }()
     
-    let createButton : UIButton = {
-        let button = UIButton()
-        button.setTitle("Create a business or startup", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Helvetica", size: 16)
-        button.backgroundColor = UIColor.clear
-        button.layer.cornerRadius = 5
-        button.isHidden = true
-        button.setTitleColor(UIColor.blueDarkOne, for: .normal)
-     //   button.addTarget(self, action: #selector(addStartupAction), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     @objc func infoTapped() {
         // let infoVC = InfoView()
         //  infoVC.modalPresentationStyle = .overCurrentContext
@@ -157,12 +144,6 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
         view.addSubview(emptyImageView)
         emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         emptyImageView.bottomAnchor.constraint(equalTo: emptyLabel.topAnchor, constant: -15).isActive = true
-        
-        view.addSubview(createButton)
-        createButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        createButton.topAnchor.constraint(equalTo: emptyLabel.bottomAnchor, constant: 0).isActive = true
-        createButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        createButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.75).isActive = true
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -222,7 +203,7 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
         {
             cell.discountLabel.isHidden = false
             cell.alpha = 1.0
-            cell.timeLabel.textColor = .LLGreen
+            cell.timeLabel.textColor = .LRBlue
         }
         
         return cell

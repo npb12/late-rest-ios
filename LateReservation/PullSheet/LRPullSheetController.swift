@@ -633,35 +633,33 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         if restaurant.reservations.count > 0
         {
             let tables = restaurant.reservations
-            cell.discountLabel.text = String(format: "%d%% Off", tables[0].discount)
+            cell.discountLabel.text = String(format: "%d", tables[0].discount)
+            cell.discountFormatter.isHidden = false
+            cell.discountLabel.isHidden = false
+            cell.timeLabel.textColor = .LRBlue
+            cell.timeLabel.font = UIFont(name:"SourceSansPro-Bold",size:13)
+            cell.discountView.isHidden = false
+            cell.emptyView.isHidden = true
             
-            let formatter = DateFormatter()
-            formatter.dateFormat = "h:mm a"
-            formatter.timeZone = TimeZone.current
-            
-            if restaurant.reservations.count > 1
-            {
-                if let time1 = tables.first?.reservationTime
-                {
-                    if let time2 = tables.last?.reservationTime
-                    {
-                        let dateString1 = formatter.string(from: time1)
-                        let dateString2 = formatter.string(from: time2)
-                        
-                        cell.timeLabel.text = String(format: "Available from\n%@ - %@", dateString1, dateString2)
-                    }
-                }
-                
-                
-            }
-            else
-            {
-                if let time = tables.first?.reservationTime
-                {
-                    let dateString = formatter.string(from: time)
-                    cell.timeLabel.text = String(format: "Available\n%@", dateString)
-                }
-            }
+            /*
+            cell.timesView.containerType = ContainerType.nearby
+            cell.timesView.tables?.removeAll()
+            cell.timesView.tables = restaurant.reservations
+            cell.timesView.collectionView.reloadData()
+            */
+ 
+            cell.timeLabel.text = String(format: "Available + %d More", tables.count)
+
+        }
+        else
+        {
+            cell.timeLabel.text = "Nothing Listed Right Now"
+            cell.timeLabel.textColor = .LRLightGray
+            cell.discountFormatter.isHidden = true
+            cell.discountLabel.isHidden = true
+            cell.discountView.isHidden = true
+            cell.timeLabel.font = UIFont(name:"SourceSansPro-Regular",size:13)
+            cell.emptyView.isHidden = false
         }
         
         return cell
@@ -703,6 +701,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         else
         {
             cell.likeImg.image = #imageLiteral(resourceName: "like_active")
+            AppDelegate.shared().registerForPushNotifications()
             LRServer.shared.addFavorite(rest, completion: {
                 DispatchQueue.main.async {
                     self.updateTabVC()

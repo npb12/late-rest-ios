@@ -25,7 +25,7 @@ class TableHeader: UITableViewCell  {
     
     let headerLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica-Bold",size:32)
+        label.font = UIFont(name:"SourceSansPro-Bold",size:32)
         label.textColor = UIColor.header
         label.numberOfLines = 1
         label.backgroundColor = .clear
