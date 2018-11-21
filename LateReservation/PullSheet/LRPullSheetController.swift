@@ -38,7 +38,6 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet var containerHeight: NSLayoutConstraint!
     
     var nearby = [Restaurant]()
-
     
     let fullViewOffset: CGFloat = 0
     var agentInfoHeight: CGFloat = 39
@@ -138,8 +137,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     
     func updateData(_ data : [Restaurant])
     {
-        nearby = data
-        
+        nearby = data        
         if nearby.count > 0
         {
             changeSheetPosition(.open)
@@ -591,7 +589,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func horizontalOffset() -> CGFloat
     {
-        let offset:CGFloat = UIScreen.main.bounds.height * 0.45
+        let offset:CGFloat = UIScreen.main.bounds.height * 0.46
         return offset
     }
     
@@ -629,6 +627,17 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         }
         cell.likeButton.isHidden = false
         cell.likeImg.isHidden = false
+        
+        if let lastLocation = Defaults.getLastLocation()
+        {
+            let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
+            let locationText = String(format: "%@  •  %.1f mi", restaurant.location, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+            cell.locationLabel.text = locationText
+        }
+        else
+        {
+            cell.locationLabel.text = restaurant.location
+        }
         
         if restaurant.reservations.count > 0
         {

@@ -12,13 +12,13 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
 {
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.unselectedItemTintColor = UIColor.header
+        tabBar.unselectedItemTintColor = UIColor.darkGray
         UITabBar.appearance().shadowImage = UIImage()
         UITabBar.appearance().backgroundImage = UIImage()
         
         drawLine(onLayer: tabBar.layer, fromPoint: CGPoint(x: 0, y: 0), toPoint: CGPoint(x: UIScreen.main.bounds.width, y: 0))
-        tabBar.backgroundColor = UIColor.white
-        tabBar.barTintColor = UIColor.white
+        tabBar.backgroundColor = UIColor.black
+        tabBar.barTintColor = UIColor.black
         
         /*
          let frost = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
@@ -63,6 +63,9 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
             if let reservation = sender as? LateReservation
             {
                 reservedViewController.reservation = reservation
+                reservedViewController.modalPresentationStyle = .overFullScreen
+                reservedViewController.view.backgroundColor = UIColor.clear
+                reservedViewController.view.isOpaque = false
             }
         }
     }

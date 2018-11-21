@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 class DetailViewController : BaseViewController, ReservationAvailableDelegate
 {
@@ -37,6 +38,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         link.setTitleColor(UIColor.blueLiteTwo, for: .normal)
         link.titleLabel?.font = UIFont(name: "SourceSansPro-Light", size: 16)
         link.backgroundColor = .clear
+        link.addTarget(self, action: #selector(linkTapped), for: .touchUpInside)
         link.titleLabel?.textAlignment = .left
         link.translatesAutoresizingMaskIntoConstraints = false
         return link
@@ -46,9 +48,8 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
         label.font = UIFont(name:"SourceSansPro-Regular",size:26)
-       // label.text = "Dijon's Chophouse"
-        label.textAlignment = .left
         label.textColor = UIColor.title
+        label.textAlignment = .left
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -79,7 +80,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     let locationLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-Regular",size:12)
-        label.textColor = .lightGray
+        label.textColor = .subheader
         label.textAlignment = .left
      //   label.text = "2.1 mi - Melbourne Beach"
         label.numberOfLines = 0
@@ -114,10 +115,14 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         return view
     }()
 
-    @objc func reserveTapped() {
-        // let infoVC = InfoView()
-        //  infoVC.modalPresentationStyle = .overCurrentContext
-        //  present(infoVC, animated: true, completion: nil)
+    @objc func linkTapped() {
+        if let url = URL(string: restaurant.website), UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
     }
     
     override func viewDidLoad() {
@@ -151,7 +156,6 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     {
         reserveButton.titleLabel?.font = UIFont(name: "SourceSansPro-Bold", size: 19)//UIFont.systemFont(ofSize: 19, weight: .semibold)
         reserveButton.backgroundColor = UIColor.white//UIColor.black.withAlphaComponent(0.8)
-        reserveButton.addTarget(self, action: #selector(reserveTapped), for: .touchUpInside)
         reserveButton.setTitleColor(.goldmember, for: .normal)
         reserveButton.layer.borderColor = UIColor.LLDiv.cgColor
         reserveButton.layer.borderWidth = 1
@@ -201,7 +205,6 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     func setData()
     {
         titleLabel.text = restaurant.restaurantName
-        locationLabel.text = String(format: "%@", restaurant.location)
         imgView.imageFromURL(urlString: restaurant.photo)
         webLink.setTitle(restaurant.website, for: .normal)
         descLabel.text = restaurant.description
@@ -236,6 +239,26 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         {
             likeBtn.image = #imageLiteral(resourceName: "favorite_icon").withRenderingMode(.alwaysOriginal)
         }
+        
+        if let lastLocation = Defaults.getLastLocation()
+        {
+            let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
+            let locationText = String(format: "%@  •  %.1f mi", restaurant.location, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+            locationLabel.text = locationText
+        }
+        else
+        {
+            locationLabel.text = restaurant.location
+        }
+        
+        if timesView.tables.count > 0
+        {
+            timesView.emptyLabel.isHidden = true
+        }
+        else
+        {
+            timesView.emptyLabel.isHidden = false
+        }
     }
 
     func setReservationData()
@@ -257,43 +280,42 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         
         reserveButton.isUserInteractionEnabled = true
         reserveButton.alpha = 1.0
-        timesView.tables?.removeAll()
-        timesView.tables = restaurant.reservations
+        timesView.tables.removeAll()
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        formatter.timeZone = TimeZone.current
+        
+        //remove duplicates for instead of showing a bunch of repeats
+        for res in restaurant.reservations
+        {
+            if let resTime = res.reservationTime
+            {
+                let dateString = formatter.string(from: resTime)
+                timesView.tables.appendIfNotContains(dateString)
+            }
+        }
+        
         timesView.collectionView.reloadData()
         
         //3 = 1 row, so view needs to be expanded
-        if restaurant.reservations.count > 3
+        if timesView.tables.count > 3
         {
-            let offset : CGFloat = CGFloat(restaurant.reservations.count / 3) + 1
+            let offset : CGFloat = CGFloat(timesView.tables.count / 3) + 1
             let size = (UIScreen.main.bounds.height * 0.05) * offset
             timesViewHeight?.isActive = false
             timesViewHeight = timesView.heightAnchor.constraint(equalToConstant: size)
             timesViewHeight?.isActive = true
         }
         
-        /*
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        formatter.timeZone = TimeZone.current
-        
-        var str = ""
-        for res in restaurant.reservations
+        if timesView.tables.count > 0
         {
-            if let time = res.reservationTime
-            {
-                let dateString = formatter.string(from: time)
-                if str.isEmpty
-                {
-                    str = dateString
-                }
-                else
-                {
-                    str = str + " " + dateString
-                }
-            }
+            timesView.emptyLabel.isHidden = true
         }
-        
-        timesLabel.text = str */
+        else
+        {
+            timesView.emptyLabel.isHidden = false
+        }
     }
     
     @IBAction func goBack(_ sender: Any) {

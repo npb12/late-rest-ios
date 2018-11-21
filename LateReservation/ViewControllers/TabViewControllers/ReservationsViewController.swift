@@ -191,20 +191,6 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
         let row = indexPath.row
         let reservation = reservations[row]
         cell.reservation = reservation
-
-        
-        if cell.isExpired
-        {
-            cell.alpha = 0.3
-            cell.discountLabel.isHidden = true
-            cell.timeLabel.textColor = .LLGray
-        }
-        else
-        {
-            cell.discountLabel.isHidden = false
-            cell.alpha = 1.0
-            cell.timeLabel.textColor = .LRBlue
-        }
         
         return cell
     }

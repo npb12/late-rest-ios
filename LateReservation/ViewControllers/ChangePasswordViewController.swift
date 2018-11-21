@@ -21,7 +21,7 @@ class ChangePasswordViewController : BaseViewController
     let passLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.subheader
-        label.font = UIFont(name:"Helvetica-Bold",size:15)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
         label.text = "Password"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +39,7 @@ class ChangePasswordViewController : BaseViewController
     let confirmLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.subheader
-        label.font = UIFont(name:"Helvetica-Bold",size:15)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
         label.text = "Confirm Passowrd"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,8 +50,8 @@ class ChangePasswordViewController : BaseViewController
         let button = UIButton()
         button.setTitle("Save Changes", for: .normal)
         button.backgroundColor = UIColor.clear
-        button.setTitleColor(UIColor.header, for: .normal)
-        button.titleLabel?.font = UIFont(name:"Helvetica-Bold",size:18)
+        button.setTitleColor(UIColor.LRRed, for: .normal)
+        button.titleLabel?.font = UIFont(name:"SourceSansPro-SemiBold",size:18)
         button.addTarget(self, action: #selector(saveChanges), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -61,8 +61,8 @@ class ChangePasswordViewController : BaseViewController
         let field = UITextField()
         field.backgroundColor = UIColor.clear
         field.isSecureTextEntry = true
-        field.font = UIFont(name:"Helvetica",size:18)//UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
-        field.textColor = UIColor.black
+        field.font = UIFont(name:"SourceSansPro-Regular",size:18)//UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
+        field.textColor = UIColor.header
         field.tag = 0
         field.attributedPlaceholder = NSAttributedString(string: "password",
                                                          attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
@@ -74,8 +74,8 @@ class ChangePasswordViewController : BaseViewController
         let field = UITextField()
         field.backgroundColor = UIColor.clear
         field.isSecureTextEntry = true
-        field.font = UIFont(name:"Helvetica",size:18)//UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
-        field.textColor = UIColor.black
+        field.font = UIFont(name:"SourceSansPro-Regular",size:18)//UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
+        field.textColor = UIColor.header
         field.tag = 0
         field.attributedPlaceholder = NSAttributedString(string: "password",
                                                          attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
@@ -156,7 +156,7 @@ class ChangePasswordViewController : BaseViewController
         self.navigationController?.isNavigationBarHidden = false
         
         self.navigationController?.navigationBar.topItem?.title = "Change Password"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica-Bold", size: 16)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!]
     }
     
     @objc func saveChanges()

@@ -67,6 +67,7 @@
 		8C5B04CA2159437000CFB814 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04C92159437000CFB814 /* DetailViewController.swift */; };
 		8C5B04CC2159485B00CFB814 /* ReservationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04CB2159485B00CFB814 /* ReservationCell.swift */; };
 		8C5B04CE21594E8B00CFB814 /* DetailCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04CD21594E8B00CFB814 /* DetailCardCell.swift */; };
+		8CB1228421A227570009CF42 /* LRAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB1228321A227570009CF42 /* LRAnnotationView.swift */; };
 		8CC07C0C2189028500013923 /* AllRestaurantsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC07C0B2189028500013923 /* AllRestaurantsCell.swift */; };
 		8CC07C0E21890ABE00013923 /* AllHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC07C0D21890ABE00013923 /* AllHeaderCell.swift */; };
 		8CD77BE9215D6C0400D03EB6 /* ChooseReservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD77BE8215D6C0400D03EB6 /* ChooseReservationViewController.swift */; };
@@ -172,6 +173,7 @@
 		8C5B04C92159437000CFB814 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		8C5B04CB2159485B00CFB814 /* ReservationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationCell.swift; sourceTree = "<group>"; };
 		8C5B04CD21594E8B00CFB814 /* DetailCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCardCell.swift; sourceTree = "<group>"; };
+		8CB1228321A227570009CF42 /* LRAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LRAnnotationView.swift; sourceTree = "<group>"; };
 		8CC07C0B2189028500013923 /* AllRestaurantsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllRestaurantsCell.swift; sourceTree = "<group>"; };
 		8CC07C0D21890ABE00013923 /* AllHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllHeaderCell.swift; sourceTree = "<group>"; };
 		8CD77BE8215D6C0400D03EB6 /* ChooseReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseReservationViewController.swift; sourceTree = "<group>"; };
@@ -268,7 +270,6 @@
 				8CD77BEC2161961700D03EB6 /* Data */,
 				8C213C0C215ADB51003554CC /* UUHelpers */,
 				8C213C05215ACD65003554CC /* ViewControllers */,
-				8C5B04C12158116700CFB814 /* Models */,
 				8C1ECEAC2152CD4C00ED0A27 /* Extensions+Views */,
 				8C1ECEA92152CC7B00ED0A27 /* Cells */,
 				8C1ECE942152B34400ED0A27 /* PullSheet */,
@@ -378,6 +379,7 @@
 				8C1DAC6E2175292A00BC02E5 /* FlowLayout.swift */,
 				8C1DAC7021754D5100BC02E5 /* GradientView.swift */,
 				8C08252E219BA6F800886168 /* ArrayExt.swift */,
+				8CB1228321A227570009CF42 /* LRAnnotationView.swift */,
 			);
 			path = "Extensions+Views";
 			sourceTree = "<group>";
@@ -429,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				8CD77C0E216BB56400D03EB6 /* CoreData */,
+				8C5B04C12158116700CFB814 /* Models */,
 				8CD77C0521628FC400D03EB6 /* Credentials.swift */,
 				8CD77C0121628E1D00D03EB6 /* LRParser.swift */,
 				8CD77C0221628E1D00D03EB6 /* LRServer.swift */,
@@ -690,6 +693,7 @@
 				8C08252921977FEB00886168 /* TablesContainerCell.swift in Sources */,
 				8C213C09215ACD82003554CC /* LoginViewController.swift in Sources */,
 				8C1ECEB02152CE8700ED0A27 /* ImageLoader.swift in Sources */,
+				8CB1228421A227570009CF42 /* LRAnnotationView.swift in Sources */,
 				8C1DAC6A216EB85400BC02E5 /* NotificationNames.swift in Sources */,
 				8C213C0B215ACDA4003554CC /* LRDelegate.swift in Sources */,
 				8C1ECEBE2156B65E00ED0A27 /* ViewLayer.swift in Sources */,

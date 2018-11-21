@@ -67,8 +67,9 @@ public extension MKMapView
             var boundingBox : MKCoordinateRegion = MKCoordinateRegion()
             boundingBox.center.latitude = minLat + ((maxLat - minLat) / 2.0)
             boundingBox.center.longitude = minLng + ((maxLng - minLng) / 2.0)
-            boundingBox.span.latitudeDelta = fabs(maxLat - minLat)
-            boundingBox.span.longitudeDelta = fabs(maxLng - minLng)
+            boundingBox.span.latitudeDelta = 0.2
+            boundingBox.span.longitudeDelta = 0.2
+
             return boundingBox
         }
         else

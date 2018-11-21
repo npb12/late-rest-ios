@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ReservationSuccessDelegate
 {
@@ -161,6 +162,17 @@ class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDele
             cell.discountView.isHidden = true
             cell.timeLabel.font = UIFont(name:"SourceSansPro-Regular",size:13)
             cell.emptyView.isHidden = false
+        }
+        
+        if let lastLocation = Defaults.getLastLocation()
+        {
+            let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
+            let locationText = String(format: "%@  •  %.1f mi", restaurant.location, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+            cell.locationLabel.text = locationText
+        }
+        else
+        {
+            cell.locationLabel.text = restaurant.location
         }
         
         return cell

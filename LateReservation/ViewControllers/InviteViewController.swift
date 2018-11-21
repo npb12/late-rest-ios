@@ -53,7 +53,7 @@ class InviteViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.navigationController?.isNavigationBarHidden = false
         
         self.navigationController?.navigationBar.topItem?.title = "Invite Friends"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica-Bold", size: 16)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!]
     }
     
     func setupNavbar()
@@ -296,8 +296,8 @@ class ContactCell: UITableViewCell {
     
     let nameLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 18)
-        label.textColor = UIColor.black
+        label.font = UIFont(name: "SourceSansPro-Regular", size: 18)
+        label.textColor = UIColor.header
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

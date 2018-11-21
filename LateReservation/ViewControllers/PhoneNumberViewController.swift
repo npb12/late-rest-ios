@@ -22,7 +22,7 @@ class PhoneNumberViewController : UIViewController
     let accountLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.subheader
-        label.font = UIFont(name:"Helvetica-Bold",size:15)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
         label.text = "Contact Number"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +32,7 @@ class PhoneNumberViewController : UIViewController
     let credentialLabel : UILabel = {
         let label = UILabel()
         label.textColor = UIColor.header
-        label.font = UIFont(name:"Helvetica-Bold",size:17)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:17)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -78,7 +78,7 @@ class PhoneNumberViewController : UIViewController
         self.navigationController?.isNavigationBarHidden = false
         
         self.navigationController?.navigationBar.topItem?.title = "Phone Contact"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica-Bold", size: 16)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!]
     }
     
     

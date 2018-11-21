@@ -32,6 +32,7 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
         
         mapView.showsUserLocation = false
         mapView.delegate = self
+        mapView.showsPointsOfInterest = false
         
         /*
          NotificationCenter.default.addObserver(self, selector: #selector(refreshMapPins), name: SBNotifications.refreshMapPins, object: nil)
@@ -61,7 +62,7 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
             var visibleRegion:MKCoordinateRegion = mapView.convert(visibleRect!, toRegionFrom: view)
             
             let latDiff = mapView.centerCoordinate.latitude - visibleRegion.center.latitude
-            
+
             //
             // visibleRect is the visible area of the map view above the pull up
             // drawer
@@ -101,6 +102,11 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
          }
          }
          } */
+    }
+    
+    public func zoomToAll(animated: Bool, center: CLLocationCoordinate2D? = nil)
+    {
+        
     }
     
     public func zoomToAnnotations(animated: Bool, center: CLLocationCoordinate2D? = nil)
@@ -219,24 +225,24 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
          
          for rest in mapData
          {
-         let coord: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: rest.lat, longitude: rest.lon)
-         if (CLLocationCoordinate2DIsValid(coord))
-         {
-         let annotation = LRRestAnnotation(rest: rest)
-         mapView.addAnnotation(annotation)
-         
-         if (center == nil)
-         {
-         center = annotation.coordinate
+            let coord: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: rest.lat, longitude: rest.lon)
+            if (CLLocationCoordinate2DIsValid(coord))
+            {
+                let annotation = LRRestAnnotation(rest: rest)
+                mapView.addAnnotation(annotation)
+                
+                if (center == nil)
+                {
+                    center = annotation.coordinate
+                }
+            }
+            else
+            {
+                //UUDebugLog("Invalid location for listing: \(listing)")
+            }
          }
-         }
-         else
-         {
-         //UUDebugLog("Invalid location for listing: \(listing)")
-         }
-         }
-         
-         zoomToAnnotations(animated: true, center: center)
+        
+       zoomToAnnotations(animated: true, center: center)
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView)
@@ -277,17 +283,42 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?
     {
+
         if annotation is LRRestAnnotation
         {
             let lrAnnotation = annotation as! LRRestAnnotation
 
-            let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+            let annotationView = LRAnnotationView(annotation: annotation, reuseIdentifier: "pin") as LRAnnotationView
             
-            annotationView.markerTintColor = UIColor.mapColor
+           // annotationView.markerTintColor = UIColor.mapColor
             
             if lrAnnotation.rest.reservations.count > 0
             {
-                annotationView.glyphText = String(format: "%d", lrAnnotation.rest.reservations.count)
+                var high = 0
+                for reservation in lrAnnotation.rest.reservations
+                {
+                    if reservation.discount > high
+                    {
+                        high = reservation.discount
+                    }
+                }
+                
+                if high > 0
+                {
+                    annotationView.image = mapPinImage
+                    annotationView.label.isHidden = false
+                    annotationView.label.text = String(format: "%d%%", high)
+                }
+                else
+                {
+                    annotationView.image = mapNoDiscountImage
+                    annotationView.label.isHidden = true
+                }
+            }
+            else
+            {
+                annotationView.image = mapNoDiscountImage
+                annotationView.label.isHidden = true
             }
             
             return annotationView

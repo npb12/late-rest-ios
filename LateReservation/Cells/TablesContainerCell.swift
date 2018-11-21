@@ -18,7 +18,7 @@ enum ContainerType
 
 class TablesContainerView : UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 {
-    var tables : [LateReservation]?
+    var tables = [String]()
     var containerType : ContainerType = ContainerType.nearby
     
     let collectionView : UICollectionView = {
@@ -30,6 +30,18 @@ class TablesContainerView : UIView, UICollectionViewDelegate, UICollectionViewDa
         view.showsHorizontalScrollIndicator = false
         view.isPagingEnabled = false
         return view
+    }()
+    
+    let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name:"SourceSansPro-Regular",size:13)
+        label.textAlignment = .left
+        label.textColor = UIColor.subheader
+        label.text = "Nothing listed right now"
+        label.numberOfLines = 1
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     override init(frame: CGRect) {
@@ -54,6 +66,10 @@ class TablesContainerView : UIView, UICollectionViewDelegate, UICollectionViewDa
         collectionView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        
+        addSubview(emptyLabel)
+        emptyLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        emptyLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,12 +92,7 @@ class TablesContainerView : UIView, UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        if let tables = self.tables
-        {        
-            return tables.count
-        }
-        
-        return 0
+        return tables.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -92,21 +103,8 @@ class TablesContainerView : UIView, UICollectionViewDelegate, UICollectionViewDa
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tableCell", for: indexPath) as! TablesCollectionCell
         
-        if let tables = self.tables
-        {
-            let table = tables[indexPath.row]
-            
-            if let resTime = table.reservationTime
-            {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "h:mm a"
-                formatter.timeZone = TimeZone.current
-                let dateString = formatter.string(from: resTime)
-                cell.slot.text = dateString
-                //cell.slot.backgroundColor = .LRBlue
-            }
-        }
-        
+        cell.slot.text = tables[indexPath.row]
+
         return cell
     }
     

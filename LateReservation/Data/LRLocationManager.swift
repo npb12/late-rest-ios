@@ -92,4 +92,10 @@ class LRLocationManager: NSObject, CLLocationManagerDelegate {
                        error)
         }
     }
+    
+    static func distanceBetween(userLocation location1: CLLocation, restaurantLocation location2: CLLocation) -> Double
+    {
+        let distanceInMeters = location1.distance(from: location2)
+        return distanceInMeters/1609.344
+    }
 }

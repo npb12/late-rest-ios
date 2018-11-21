@@ -20,7 +20,7 @@ class PrivacyViewController : UIViewController
         self.navigationController?.isNavigationBarHidden = false
         
         self.navigationController?.navigationBar.topItem?.title = "Privacy Policy"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica-Bold", size: 16)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!]
     }
     
     @IBAction func goBack(_ sender: Any)

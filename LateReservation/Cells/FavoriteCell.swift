@@ -58,20 +58,23 @@ class FavoriteCell : LateTableCell
         titleLabel.font = UIFont(name:"SourceSansPro-Regular",size:16)
         titleLabel.textAlignment = .center
         
+        /*
         imageView.addSubview(emptyView)
         emptyView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
         emptyView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
         emptyView.trailingAnchor.constraint(equalTo: imageView.trailingAnchor).isActive = true
         emptyView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
-        emptyView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        emptyView.backgroundColor = UIColor.black.withAlphaComponent(0.2) */
         
-        emptyView.addSubview(likeImg)
-        likeImg.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
-        likeImg.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        /*
+        viewContainer.addSubview(likeImg)
+        likeImg.centerXAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -15).isActive = true
+        likeImg.centerYAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -15).isActive = true
         likeImg.heightAnchor.constraint(equalToConstant: 22.5).isActive = true
         likeImg.widthAnchor.constraint(equalToConstant: 22.5).isActive = true
-        likeImg.image = UIImage.init(named: "like_active_nav")
+        likeImg.image = UIImage.init(named: "favorite_active")
         emptyView.isHidden = false
+        likeImg.alpha = 0.7 */
      //   imageView.topAnchor.constraint(equalTo: viewContainer.topAnchor).isActive = true
      //   imageView.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor).isActive = true
      //   imageView.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor).isActive = true

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct Defaults {
     
@@ -15,8 +16,8 @@ struct Defaults {
     static let userLoggedinKey = "userLogin"
     static let returningUserKey = "returningUserKey"
     static let userModeKey = "userMode"
-    static let syncConstantsKey = "syncConstants"
-
+    static let lastLocationKey = "lastLocation"
+    
     struct UserModel : Codable {
         var user: Int?
         var id: Int?
@@ -24,7 +25,8 @@ struct Defaults {
         var first : String?
         var number : String?
     }
-
+    
+    
     static func isLoggedIn() -> Bool
     {
         return UserDefaults.standard.bool(forKey: userLoggedinKey)
@@ -45,10 +47,21 @@ struct Defaults {
         UserDefaults.standard.set(status, forKey: userLoggedinKey)
     }
     
-    static func setLastSync()
+    static func getLastLocation() -> CLLocation?
     {
-        let now = NSDate().timeIntervalSince1970 * 1000
-        UserDefaults.standard.set(now, forKey: syncConstantsKey)
+        if let locationDictionary = UserDefaults.standard.dictionary(forKey: lastLocationKey) as? Dictionary<String,NSNumber> {
+            let locationLat = locationDictionary["lat"]!.doubleValue
+            let locationLon = locationDictionary["lon"]!.doubleValue
+            return CLLocation(latitude: locationLat, longitude: locationLon)
+        }
+        
+        return nil
+    }
+    
+    static func setLastLocation(location: CLLocation)
+    {
+        let dict = ["lat": location.coordinate.latitude, "lon": location.coordinate.longitude]
+        UserDefaults.standard.set(dict, forKey: lastLocationKey)
     }
     
     static func saveUser(user: Int, id: Int, email: String, first: String, number: String)

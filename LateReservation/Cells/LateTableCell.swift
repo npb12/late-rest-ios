@@ -37,10 +37,11 @@ class LateTableCell: UICollectionViewCell {
                 //discountLabel.text = "15% Off"
             } */
             
+            /*
             if let location = card?.location
             {
                 locationLabel.text = location
-            }
+            } */
             
             /*
             if let time = card?.time
@@ -151,7 +152,7 @@ class LateTableCell: UICollectionViewCell {
     let locationLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-Regular",size:13)
-        label.textColor = .LRLightGray
+        label.textColor = .subheader
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -246,7 +247,7 @@ class LateTableCell: UICollectionViewCell {
     
     let emptyView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.55)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
         return view

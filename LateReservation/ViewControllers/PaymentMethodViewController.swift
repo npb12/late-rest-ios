@@ -13,15 +13,15 @@ class PaymentMethodViewController : UIViewController
 {
     let line : UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = .header
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     let headerLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica-Bold",size:20)
-        label.textColor = UIColor.black
+        label.font = UIFont(name:"SourceSansPro-Regular",size:18)
+        label.textColor = UIColor.header
         label.text = "Late Reservation is currently free to use. Enjoy!"
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -40,7 +40,7 @@ class PaymentMethodViewController : UIViewController
         self.navigationController?.isNavigationBarHidden = false
         
         self.navigationController?.navigationBar.topItem?.title = "Payment Method"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica-Bold", size: 16)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!]
     }
     
     func setupviews()

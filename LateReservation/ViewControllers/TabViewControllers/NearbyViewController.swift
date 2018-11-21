@@ -130,7 +130,7 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
             manager!.fetchWithCompletion {location, error in
                 // fetch location or an error
                 if let loc = location {
-                    
+                    Defaults.setLastLocation(location: loc)
                     LRLocationManager.fetchCityAndCountry(location: loc) { city, error in
                         guard let city = city, error == nil else { return }
                         DispatchQueue.main.async {

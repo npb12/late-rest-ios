@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 
 class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate, UIPickerViewDataSource, ConfirmReservationDelegate
@@ -30,9 +31,9 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Bold",size:26)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:26)
         label.textAlignment = .center
-        label.textColor = UIColor.title
+        label.textColor = UIColor.header
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -48,23 +49,29 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         return label
     }()
     
-    let todayLabel : UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-Regular",size:17)
-        label.textColor = .title
+    let todayLabel : UITextView = {
+        let label = UITextView()
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:17)
+        label.textColor = .white//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.backgroundColor = UIColor.LRBlue
+        label.isScrollEnabled = false
+        label.isUserInteractionEnabled = false
         label.textAlignment = .center
-        label.text = "Today"
-        label.numberOfLines = 0
+        label.layer.borderColor = UIColor.LRBlue.cgColor
+        label.layer.borderWidth = 1
+        label.layer.cornerRadius = 2.5
+        label.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     
     let partyLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-Regular",size:17)
         label.textColor = .lightGray
         label.textAlignment = .center
-        label.text = "Party of"
+        label.text = "Max Party"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -133,6 +140,17 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
             let btnTitle = String(format: "RESERVE | %d%% OFF", reservations[0].discount)
             reserveButton.setTitle(btnTitle, for: .normal)
         }
+        
+        if let lastLocation = Defaults.getLastLocation()
+        {
+            let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
+            let locationText = String(format: "%@  •  %.1f mi", restaurant.location, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+            locationLabel.text = locationText
+        }
+        else
+        {
+            locationLabel.text = restaurant.location
+        }
     }
     
     func orderTimes(_ selectedParty : String)
@@ -164,16 +182,15 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         listOfTimes = listOfTimes.sorted{ $0 > $1 }
         if listOfTimes.count > 0
         {
-            selectedTime = listOfTimes.first!
+            selectedTime = listOfTimes[0]
         }
+        todayLabel.text = String(format: "Today %@", selectedTime)
         timePicker.reloadAllComponents()
     }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-      //  self.navigationController?.navigationBar.topItem?.title = "Dijon's Steak & Lobster House"
-     //   self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Didot-Italic", size: 16)!]
+        self.navigationItem.title = restaurant.restaurantName
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -208,8 +225,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         
         view.addSubview(todayLabel)
         todayLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10).isActive = true
-        todayLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
-        todayLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30).isActive = true
+        todayLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         
         view.addSubview(partyPicker)
         partyPicker.topAnchor.constraint(equalTo: todayLabel.bottomAnchor, constant: 15).isActive = true
