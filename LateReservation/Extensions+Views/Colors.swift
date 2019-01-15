@@ -12,6 +12,9 @@ extension UIColor {
     
     //f9f9f9
     static let main = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.0)
+    
+    //247, 247, 247
+    static let tabColor = UIColor(red:0.97, green:0.97, blue:0.97, alpha:1.0)
 
     //#5a60ff
     static let purpleMain = UIColor(red:0.35, green:0.38, blue:1.00, alpha:1.0)
@@ -32,8 +35,8 @@ extension UIColor {
     //vue.js colors
     //B1DDFE
     static let blueLiteOne = UIColor(red:0.69, green:0.87, blue:1.00, alpha:1.0)
-    //80C6FD
-    static let blueLiteTwo = UIColor(red:0.22, green:0.60, blue:0.95, alpha:1.0)
+    //ff4864
+    static let LROffTone = UIColor(red:1.00, green:0.28, blue:0.39, alpha:1.0)
     //226ABA
     static let blueDarkOne = UIColor(red:0.13, green:0.42, blue:0.73, alpha:1.0)
     //B1DDFE
@@ -83,6 +86,6 @@ extension UIColor {
     //476873
     static let mapColor = UIColor(red:0.28, green:0.41, blue:0.45, alpha:1.0)
     
-    //d34a4a
-    static let LRRed = UIColor(red:0.83, green:0.29, blue:0.29, alpha:1.0)
+    //00C57D
+    static let LRGreen = UIColor(red:0.00, green:0.77, blue:0.49, alpha:1.0)
 }

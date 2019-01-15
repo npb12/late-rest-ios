@@ -15,7 +15,7 @@ struct OnboardingPages {
     let placeholder : String
 }
 
-let pages = [OnboardingPages(title: "Step 1 of 5", placeholder: "Name"),
+let pages = [OnboardingPages(title: "Step 1 of 5", placeholder: "Full Name"),
              OnboardingPages(title: "Step 2 of 5", placeholder: "Phone Number"),
              OnboardingPages(title: "Step 3 of 5", placeholder: "Email"),
              OnboardingPages(title: "Step 4 of 5", placeholder: "Password"),

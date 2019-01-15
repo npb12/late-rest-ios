@@ -18,6 +18,8 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
         let catSlider = UICollectionView(frame: .zero, collectionViewLayout: layout)
         catSlider.translatesAutoresizingMaskIntoConstraints = false
         catSlider.backgroundColor = UIColor.clear
+        catSlider.alwaysBounceVertical = true
+        catSlider.bounces = true
         catSlider.showsVerticalScrollIndicator = false
         catSlider.isPagingEnabled = false
         return catSlider
@@ -34,11 +36,11 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
     
     let emptyLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:18)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:18)
         label.textColor = UIColor.header
         label.textAlignment = .center
         label.isHidden = true
-        label.text = "No Reservations"
+        label.text = "No Discounted Tables"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isHidden = true
@@ -71,15 +73,15 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
     
     public func reservationSuccess()
     {
-       showResult("Reservation Confirmed", true, completion: {
+       showResult("Booking Confirmed", true, completion: {
         self.hideIndicator()
        })
     }
     
     public func getData()
     {
-        if Defaults.isLoggedIn()
-        {
+     //   if Defaults.isLoggedIn()
+     //   {
             LRServer.shared.getMyReservations() {
                 (reservations: [LateReservation]?, error: Error?) in
                 DispatchQueue.main.async {
@@ -114,9 +116,14 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
                          self.favorites = list
                          self.collectionView.reloadData() */
                     }
+                    else
+                    {
+                        self.emptyLabel.isHidden = false
+                        self.emptyImageView.isHidden = false
+                    }
                 }
             }
-        }
+     //   }
 
     }
     
@@ -209,7 +216,7 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier:
             "header", for: indexPath) as! CollectionHeader
         
-        header.headerLabel.text = "Reservations"
+        header.headerLabel.text = "Tables"
         header.descLabel.text = "Booked by you"
         
         return header

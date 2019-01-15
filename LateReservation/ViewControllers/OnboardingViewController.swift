@@ -11,6 +11,8 @@ import UIKit
 class OnboardingViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate
 {
     
+    var startBottom : NSLayoutConstraint?
+    
     var delegate:DidAuthorizeDelegate?
     var currentIndex = 0
     var nextLastButton = false
@@ -24,6 +26,37 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
         collectionView?.isScrollEnabled = false
         
         registrationInfo = RegistrationInfo()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(makeSpaceForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(makeSpaceForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        view.addSubview(startButton)
+        startButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.1).isActive = true
+        startButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
+        startBottom = startButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: UIScreen.main.bounds.height * 0.1)
+        startBottom?.isActive = true
+    }
+    
+    @objc func makeSpaceForKeyboard(notification: NSNotification) {
+        let info = notification.userInfo!
+        let keyboardHeight:CGFloat = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size.height
+        let duration:Double = info[UIKeyboardAnimationDurationUserInfoKey] as! Double
+        
+        if notification.name == NSNotification.Name.UIKeyboardWillShow {
+            UIView.animate(withDuration: duration, animations: { () -> Void in
+                if let bottom = self.startBottom
+                {
+                    bottom.constant = -keyboardHeight
+                }
+            })
+        } else {
+            UIView.animate(withDuration: duration, animations: { () -> Void in
+                if let bottom = self.startBottom
+                {
+                    bottom.constant = UIScreen.main.bounds.height * 0.1
+                }
+            })
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -34,6 +67,22 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             cell.textField.becomeFirstResponder()
         }
     }
+    
+    let startButton : UIButton = {
+        let button = UIButton()
+        button.setTitle("Next", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = UIFont(name:"SourceSansPro-SemiBold",size:18)//UIFont.boldSystemFont(ofSize: 16)
+        button.backgroundColor = UIColor.LRPink
+        button.layer.borderColor = UIColor.LRPink.cgColor
+        button.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
+        button.layer.borderWidth = 0.5
+        button.alpha = 0.2
+        button.isUserInteractionEnabled = false
+        //button.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pages.count
@@ -60,13 +109,12 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             }
         }
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pageId", for: indexPath) as! OnboardingItemView
         cell.onboardingPageInfo = pages[indexPath.row]
         cell.textField.delegate = self
         cell.textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
-        cell.startButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
         cell.closeButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         
         if let info = registrationInfo
@@ -75,6 +123,7 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             {
             case 0:
                 cell.textField.text = info.first
+                cell.textField.autocapitalizationType = .words
                 break
             case 1:
                 cell.textField.text = info.phone
@@ -95,21 +144,21 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
         
         if indexPath.row < 4
         {
-            cell.startButton.setTitle("Next", for: .normal)
+            startButton.setTitle("Next", for: .normal)
         }
         else
         {
-            cell.startButton.setTitle("Get Started", for: .normal)
+            startButton.setTitle("Get Started", for: .normal)
         }
         
-        if indexPath.row > 2
+        if indexPath.row == 1
         {
-            cell.textField.isSecureTextEntry = true
             cell.textField.keyboardType = .numberPad
         }
-        else if indexPath.row == 1
+        else if indexPath.row > 2
         {
-            cell.textField.keyboardType = .numberPad
+            cell.textField.keyboardType = .default
+            cell.textField.isSecureTextEntry = true
         }
         else
         {
@@ -165,7 +214,7 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             registerTapped()
             return
         }
-
+        
         currentIndex += 1
         collectionView?.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .centeredHorizontally, animated: true)
     }
@@ -182,6 +231,10 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if currentIndex == 1{
+            
+            let cell = collectionView?.cellForItem(at: IndexPath(row: currentIndex, section: 0)) as! OnboardingItemView
+            verifyFieldInput(cell, textField.text!, currentIndex)
+            
             let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
             let components = newString.components(separatedBy: NSCharacterSet.decimalDigits.inverted)
             
@@ -262,10 +315,10 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
         case 1:
             valid = true
             /*
-            if Credentials.validPhoneNumber(str: text)
-            {
-                valid = true
-            } */
+             if Credentials.validPhoneNumber(str: text)
+             {
+             valid = true
+             } */
             break
         case 2:
             if Credentials.isValidEmail(text)
@@ -285,13 +338,13 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
         
         if valid
         {
-            cell.startButton.alpha = 1.0
-            cell.startButton.isUserInteractionEnabled = true
+            startButton.alpha = 1.0
+            startButton.isUserInteractionEnabled = true
         }
         else
         {
-            cell.startButton.alpha = 0.2
-            cell.startButton.isUserInteractionEnabled = false
+            startButton.alpha = 0.2
+            startButton.isUserInteractionEnabled = false
         }
     }
     
@@ -299,11 +352,9 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
     {
         guard let info = registrationInfo else { return }
         
-        let cell = collectionView?.cellForItem(at: IndexPath(row: currentIndex, section: 0)) as! OnboardingItemView
-        
         if Credentials.isValidRegistration(info: info)
         {
-            cell.startButton.isEnabled = false;
+            startButton.isEnabled = false;
             showIndicator("Signing up", 0.0, completion: {})
             
             LRServer.shared.register(info) {
@@ -312,7 +363,7 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
                 if let err = error
                 {
                     DispatchQueue.main.async {
-                        cell.startButton.isEnabled = true
+                        self.startButton.isEnabled = true
                         self.hideIndicator()
                         let alert = UIAlertController(title: "Registration Error", message: err.localizedDescription, preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
@@ -324,7 +375,7 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
                 else
                 {
                     DispatchQueue.main.async {
-                        cell.startButton.isEnabled = true
+                        self.startButton.isEnabled = true
                         self.loadingIndicator.stopAnimating()
                         self.dismiss(animated: false, completion: {
                             if let registerDelegate = self.delegate

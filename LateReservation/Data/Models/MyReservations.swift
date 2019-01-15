@@ -26,11 +26,17 @@ class MyReservations : LateReservation
         {
             let tableData = obj[JsonKeys.tableJson]
             let restaurantData = obj[JsonKeys.restaurantJson]
-            
+
             let restaurant = Restaurant.parseRestaurant(restaurantData)
             let table = parseReservation(restaurant, tableData)
-            reservations.append(table)
+            
+            if table.restaurantId > 0
+            {
+                reservations.append(table)
+            }
         }
+        
+        
 
         return reservations
     }

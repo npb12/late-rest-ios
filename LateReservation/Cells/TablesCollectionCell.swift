@@ -36,16 +36,16 @@ class TablesCollectionCell : UICollectionViewCell
     
     let slot : UITextView = {
         let label = UITextView()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:14)
-        label.textColor = .white//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
-        label.backgroundColor = UIColor.LRBlue
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:16)
+        label.textColor = .header//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.backgroundColor = UIColor.main
         label.isScrollEnabled = false
         label.isUserInteractionEnabled = false
         label.textAlignment = .center
-        label.layer.borderColor = UIColor.LRBlue.cgColor
+        label.layer.borderColor = UIColor.LLDiv.cgColor
         label.layer.borderWidth = 1
         label.layer.cornerRadius = 2.5
-        label.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        label.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -71,7 +71,6 @@ class TablesCollectionCell : UICollectionViewCell
         slot.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: 0).isActive = true
         slot.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor, constant: 0).isActive = true
         slot.topAnchor.constraint(equalTo: viewContainer.topAnchor, constant: 0).isActive = true
-        slot.bottomAnchor.constraint(equalTo: viewContainer.bottomAnchor, constant: 0).isActive = true
     }
 
 }

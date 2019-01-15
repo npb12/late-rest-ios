@@ -23,6 +23,8 @@
 		8C08252B219780AD00886168 /* TablesCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C08252A219780AD00886168 /* TablesCollectionCell.swift */; };
 		8C08252D2198759200886168 /* FavoriteHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C08252C2198759200886168 /* FavoriteHeaderCell.swift */; };
 		8C08252F219BA6F800886168 /* ArrayExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C08252E219BA6F800886168 /* ArrayExt.swift */; };
+		8C1406D121DEFAEE0057CC49 /* LRCalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1406D021DEFAEE0057CC49 /* LRCalloutView.swift */; };
+		8C1406D321DEFAFC0057CC49 /* LRCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C1406D221DEFAFC0057CC49 /* LRCalloutView.xib */; };
 		8C1DAC68216D2B4000BC02E5 /* MyReservations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DAC67216D2B4000BC02E5 /* MyReservations.swift */; };
 		8C1DAC6A216EB85400BC02E5 /* NotificationNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DAC69216EB85400BC02E5 /* NotificationNames.swift */; };
 		8C1DAC6C2170EFBB00BC02E5 /* NearbyRestaurantsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DAC6B2170EFBB00BC02E5 /* NearbyRestaurantsViewController.swift */; };
@@ -63,6 +65,7 @@
 		8C213C0B215ACDA4003554CC /* LRDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C213C0A215ACDA4003554CC /* LRDelegate.swift */; };
 		8C213C0E215ADD4D003554CC /* UUMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C213C0D215ADD4D003554CC /* UUMapView.swift */; };
 		8C213C10215B1D26003554CC /* ReservedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C213C0F215B1D25003554CC /* ReservedViewController.swift */; };
+		8C45BC0D21C4806600A03E6A /* Pacifico-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C45BC0C21C4806500A03E6A /* Pacifico-Regular.ttf */; };
 		8C5B04C3215811B000CFB814 /* LateReservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04C2215811B000CFB814 /* LateReservation.swift */; };
 		8C5B04CA2159437000CFB814 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04C92159437000CFB814 /* DetailViewController.swift */; };
 		8C5B04CC2159485B00CFB814 /* ReservationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04CB2159485B00CFB814 /* ReservationCell.swift */; };
@@ -123,6 +126,8 @@
 		8C08252A219780AD00886168 /* TablesCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TablesCollectionCell.swift; sourceTree = "<group>"; };
 		8C08252C2198759200886168 /* FavoriteHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteHeaderCell.swift; sourceTree = "<group>"; };
 		8C08252E219BA6F800886168 /* ArrayExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExt.swift; sourceTree = "<group>"; };
+		8C1406D021DEFAEE0057CC49 /* LRCalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LRCalloutView.swift; sourceTree = "<group>"; };
+		8C1406D221DEFAFC0057CC49 /* LRCalloutView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LRCalloutView.xib; sourceTree = "<group>"; };
 		8C1DAC67216D2B4000BC02E5 /* MyReservations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReservations.swift; sourceTree = "<group>"; };
 		8C1DAC69216EB85400BC02E5 /* NotificationNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNames.swift; sourceTree = "<group>"; };
 		8C1DAC6B2170EFBB00BC02E5 /* NearbyRestaurantsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyRestaurantsViewController.swift; sourceTree = "<group>"; };
@@ -169,6 +174,7 @@
 		8C213C0A215ACDA4003554CC /* LRDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LRDelegate.swift; sourceTree = "<group>"; };
 		8C213C0D215ADD4D003554CC /* UUMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UUMapView.swift; sourceTree = "<group>"; };
 		8C213C0F215B1D25003554CC /* ReservedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedViewController.swift; sourceTree = "<group>"; };
+		8C45BC0C21C4806500A03E6A /* Pacifico-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pacifico-Regular.ttf"; sourceTree = "<group>"; };
 		8C5B04C2215811B000CFB814 /* LateReservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LateReservation.swift; sourceTree = "<group>"; };
 		8C5B04C92159437000CFB814 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		8C5B04CB2159485B00CFB814 /* ReservationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationCell.swift; sourceTree = "<group>"; };
@@ -232,6 +238,7 @@
 		8C0824E921913D8400886168 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
+				8C45BC0C21C4806500A03E6A /* Pacifico-Regular.ttf */,
 				8C0824EB21913DB200886168 /* SourceSansPro-SemiBold.ttf */,
 				8C0824F22191464000886168 /* SourceSansPro-Bold.ttf */,
 				8C0824EC21913DC000886168 /* SourceSansPro-Regular.ttf */,
@@ -380,6 +387,8 @@
 				8C1DAC7021754D5100BC02E5 /* GradientView.swift */,
 				8C08252E219BA6F800886168 /* ArrayExt.swift */,
 				8CB1228321A227570009CF42 /* LRAnnotationView.swift */,
+				8C1406D021DEFAEE0057CC49 /* LRCalloutView.swift */,
+				8C1406D221DEFAFC0057CC49 /* LRCalloutView.xib */,
 			);
 			path = "Extensions+Views";
 			sourceTree = "<group>";
@@ -576,6 +585,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C1406D321DEFAFC0057CC49 /* LRCalloutView.xib in Resources */,
 				8C0824F32191466700886168 /* SourceSansPro-Bold.ttf in Resources */,
 				8C0824EE21913F4D00886168 /* SourceSansPro-SemiBold.ttf in Resources */,
 				8C0824F021913F4D00886168 /* SourceSansPro-Regular.ttf in Resources */,
@@ -585,6 +595,7 @@
 				8C1ECE5F2152A5E400ED0A27 /* Assets.xcassets in Resources */,
 				8C1ECE5D2152A5E000ED0A27 /* Main.storyboard in Resources */,
 				8C1ECE992152B36600ED0A27 /* LRPullSheetController.xib in Resources */,
+				8C45BC0D21C4806600A03E6A /* Pacifico-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,6 +750,7 @@
 				8C08252F219BA6F800886168 /* ArrayExt.swift in Sources */,
 				8C1ECEAE2152CD8200ED0A27 /* Colors.swift in Sources */,
 				8C1ECE9C2152B36600ED0A27 /* LRVerticalPanGesture.swift in Sources */,
+				8C1406D121DEFAEE0057CC49 /* LRCalloutView.swift in Sources */,
 				8CD77BE9215D6C0400D03EB6 /* ChooseReservationViewController.swift in Sources */,
 				8C5B04CC2159485B00CFB814 /* ReservationCell.swift in Sources */,
 				8CD77C0421628E1D00D03EB6 /* LRServer.swift in Sources */,
@@ -936,7 +948,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.appworks.LateReservation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -956,7 +968,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.appworks.LateReservation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -45,7 +45,7 @@ class RegisterViewController: BaseViewController, UITextFieldDelegate {
         let label = UILabel()
         label.font = UIFont(name:"Helvetica-Bold",size:35)
         label.textColor = UIColor.black
-        label.text = "Late Reservation"
+        label.text = "11th Table"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false

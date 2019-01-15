@@ -11,6 +11,7 @@ import MapKit
 
 public let mapPinImage = UIImage(named: "annotation_closed")!
 public let mapNoDiscountImage = UIImage(named: "annotation_no_discount")!
+private let kRestaurantMapAnimationTime = 0.300
 
 class LRAnnotationView: MKAnnotationView {
     
@@ -18,8 +19,8 @@ class LRAnnotationView: MKAnnotationView {
     var label: UILabel
 
     // data
-  //  weak var personDetailDelegate: PersonDetailMapViewDelegate?
- //   weak var customCalloutView: PersonDetailMapView?
+    weak var restaurantDetailDelegate: RestaurantDetailMapViewDelegate?
+    weak var customCalloutView: LRCalloutView?
     override var annotation: MKAnnotation? {
         willSet {
             //customCalloutView?.removeFromSuperview()
@@ -46,25 +47,14 @@ class LRAnnotationView: MKAnnotationView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) not implemented!")
     }
-    /*
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.canShowCallout = false // This is important: Don't show default callout.
-        //self.image = kPersonMapPinImage
-    } */
-    
-    // MARK: - callout showing and hiding
-    // Important: the selected state of the annotation view controls when the
-    // view must be shown or not. We should show it when selected and hide it
-    // when de-selected.
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        /*
+
         if selected {
             self.customCalloutView?.removeFromSuperview() // remove old custom callout (if any)
             
-            if let newCustomCalloutView = loadPersonDetailMapView() {
+            if let newCustomCalloutView = loadDistanceView() {
                 // fix location from top-left to its right place.
                 newCustomCalloutView.frame.origin.x -= newCustomCalloutView.frame.width / 2.0 - (self.frame.width / 2.0)
                 newCustomCalloutView.frame.origin.y -= newCustomCalloutView.frame.height
@@ -72,11 +62,11 @@ class LRAnnotationView: MKAnnotationView {
                 // set custom callout view
                 self.addSubview(newCustomCalloutView)
                 self.customCalloutView = newCustomCalloutView
-                
+                self.label.font = UIFont(name:"SourceSansPro-Bold",size:14)
                 // animate presentation
                 if animated {
                     self.customCalloutView!.alpha = 0.0
-                    UIView.animate(withDuration: kPersonMapAnimationTime, animations: {
+                    UIView.animate(withDuration: kRestaurantMapAnimationTime, animations: {
                         self.customCalloutView!.alpha = 1.0
                     })
                 }
@@ -84,45 +74,34 @@ class LRAnnotationView: MKAnnotationView {
         } else {
             if customCalloutView != nil {
                 if animated { // fade out animation, then remove it.
-                    UIView.animate(withDuration: kPersonMapAnimationTime, animations: {
+                    UIView.animate(withDuration: kRestaurantMapAnimationTime, animations: {
                         self.customCalloutView!.alpha = 0.0
+                        self.label.font = UIFont(name:"SourceSansPro-Regular",size:14)
                     }, completion: { (success) in
                         self.customCalloutView!.removeFromSuperview()
                     })
                 } else { self.customCalloutView!.removeFromSuperview() } // just remove it.
             }
-        } */
+        }
     }
     
-    /*
-    func loadPersonDetailMapView() -> PersonDetailMapView? {
-        if let views = Bundle.main.loadNibNamed("PersonDetailMapView", owner: self, options: nil) as? [PersonDetailMapView], views.count > 0 {
-            let personDetailMapView = views.first!
-            personDetailMapView.delegate = self.personDetailDelegate
-            if let personAnnotation = annotation as? PersonWishListAnnotation {
-                let person = personAnnotation.person
-                personDetailMapView.configureWithPerson(person: person)
+    func loadDistanceView() -> LRCalloutView? {
+        if let views = Bundle.main.loadNibNamed("LRCalloutView", owner: self, options: nil) as? [LRCalloutView], views.count > 0 {
+            let restaurantDetailMapView = views.first!
+            restaurantDetailMapView.delegate = self.restaurantDetailDelegate
+            if let restaurantAnnotation = annotation as? LRRestAnnotation {
+                if let person = restaurantAnnotation.rest
+                {
+                    restaurantDetailMapView.setRestaurant(person)
+                }
             }
-            return personDetailMapView
+            return restaurantDetailMapView
         }
         return nil
     }
-    
     
     override func prepareForReuse() {
         super.prepareForReuse()
         self.customCalloutView?.removeFromSuperview()
     }
-    
-    // MARK: - Detecting and reaction to taps on custom callout.
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // if super passed hit test, return the result
-        if let parentHitView = super.hitTest(point, with: event) { return parentHitView }
-        else { // test in our custom callout.
-            if customCalloutView != nil {
-                return customCalloutView!.hitTest(convert(point, to: customCalloutView!), with: event)
-            } else { return nil }
-        }
-    } */
 }

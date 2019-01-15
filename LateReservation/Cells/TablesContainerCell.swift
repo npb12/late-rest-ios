@@ -109,10 +109,10 @@ class TablesContainerView : UIView, UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.size.width * 0.29, height: UIScreen.main.bounds.height * 0.045)
+        return CGSize(width: UIScreen.main.bounds.width * 0.35, height: UIScreen.main.bounds.height * 0.045)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
+        return 7.5
     }
 }

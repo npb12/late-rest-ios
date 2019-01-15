@@ -69,21 +69,13 @@ class AllRestaurantsCell : LateTableCell
         viewContainer.addSubview(discountView)
         //    bottomView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.15).isActive = true
         discountView.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -15).isActive = true
-        discountView.centerYAnchor.constraint(equalTo: bottomView.topAnchor).isActive = true
-        discountView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.16).isActive = true
-        discountView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.16).isActive = true
+        discountView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 0).isActive = true
         
         discountView.addSubview(discountLabel)
-        discountLabel.centerYAnchor.constraint(equalTo: discountView.centerYAnchor, constant: 0).isActive = true
-        discountLabel.trailingAnchor.constraint(equalTo: discountView.centerXAnchor, constant: 5).isActive = true
-        
-        discountView.addSubview(discountFormatter)
-        discountFormatter.centerYAnchor.constraint(equalTo: discountView.centerYAnchor).isActive = true
-        discountFormatter.leadingAnchor.constraint(equalTo: discountLabel.trailingAnchor, constant: 1).isActive = true
-        
-        //  discountLabel.leadingAnchor.constraint(equalTo: discountView.leadingAnchor, constant: 10).isActive = true
-        
-        setupDiscountShadow()
+        discountLabel.leadingAnchor.constraint(equalTo: discountView.leadingAnchor, constant: 0).isActive = true
+        discountLabel.trailingAnchor.constraint(equalTo: discountView.trailingAnchor, constant: 0).isActive = true
+        discountLabel.topAnchor.constraint(equalTo: discountView.topAnchor, constant: 0).isActive = true
+        discountLabel.bottomAnchor.constraint(equalTo: discountView.bottomAnchor, constant: 0).isActive = true
         
         
         viewContainer.addSubview(likeButton)
@@ -115,6 +107,8 @@ class AllRestaurantsCell : LateTableCell
         gradient.locations = [NSNumber(value: 1.0),NSNumber(value: 0.2),NSNumber(value: 0.0)]
         gradient.frame = gradientView.bounds
         gradientView.layer.mask = gradient
+        
+        bottomView.layer.borderWidth = 0
     }
     
     override func applyShadow(width: CGFloat, height: CGFloat) {

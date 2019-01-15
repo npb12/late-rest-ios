@@ -22,7 +22,7 @@ class PaymentMethodViewController : UIViewController
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-Regular",size:18)
         label.textColor = UIColor.header
-        label.text = "Late Reservation is currently free to use. Enjoy!"
+        label.text = "11th Table is currently free to use.\nEnjoy!"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false

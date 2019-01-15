@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LateReservation/ViewControllers/RegisterViewController.swift"
-            timestampString = "563922552.013043"
+            timestampString = "568672748.492591"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "399"
@@ -26,28 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LateReservation/ViewControllers/RegisterViewController.swift"
-            timestampString = "563922552.01311"
+            timestampString = "568672748.492653"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "430"
             endingLineNumber = "430"
             landmarkName = "registerTapped()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LateReservation/PullSheet/LRPullSheetController.swift"
-            timestampString = "564380333.642913"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
-            landmarkName = "changeSheetPosition(_:animated:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

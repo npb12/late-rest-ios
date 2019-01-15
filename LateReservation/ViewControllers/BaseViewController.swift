@@ -51,6 +51,14 @@ class BaseViewController : UIViewController {
         return label
     }()
     
+    let fullView : UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     let loadingView : UIView = {
         let view = UIView()
         view.isHidden = true
@@ -84,6 +92,12 @@ class BaseViewController : UIViewController {
     
     private func setupView()
     {
+        view.addSubview(fullView)
+        fullView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        fullView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        fullView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        fullView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
         view.addSubview(loadingView)
         loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20).isActive = true
@@ -115,6 +129,7 @@ class BaseViewController : UIViewController {
         self.loadingView.isHidden = false
         self.loadingIndicator.isHidden = false
         self.checkImageView.isHidden = true
+        fullView.isHidden = false
         self.loadingLabel.text = message
         self.view.bringSubview(toFront: self.loadingView)
         self.loadingIndicator.startAnimating()
@@ -128,6 +143,7 @@ class BaseViewController : UIViewController {
     {
         self.loadingIndicator.stopAnimating()
         loadingView.isHidden = true
+        fullView.isHidden = true
     }
     
     func showResult(_ message : String, _ success : Bool,  completion: @escaping () -> Void)
@@ -136,6 +152,7 @@ class BaseViewController : UIViewController {
         loadingView.isHidden = false
         loadingIndicator.isHidden = true
         checkImageView.isHidden = false
+        fullView.isHidden = true
         loadingLabel.text = message
         view.bringSubview(toFront: loadingView)
 

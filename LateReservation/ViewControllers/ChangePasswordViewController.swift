@@ -49,8 +49,8 @@ class ChangePasswordViewController : BaseViewController
     let saveButton : UIButton = {
         let button = UIButton()
         button.setTitle("Save Changes", for: .normal)
-        button.backgroundColor = UIColor.clear
-        button.setTitleColor(UIColor.LRRed, for: .normal)
+        button.backgroundColor = UIColor.LROffTone
+        button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont(name:"SourceSansPro-SemiBold",size:18)
         button.addTarget(self, action: #selector(saveChanges), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -145,10 +145,10 @@ class ChangePasswordViewController : BaseViewController
         
         
         view.addSubview(saveButton)
-        saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
-        saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        saveButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.075).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        saveButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.085).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -165,6 +165,16 @@ class ChangePasswordViewController : BaseViewController
         
         if pass1 == pass2
         {
+            if !Credentials.validPassword(str: pass1)
+            {
+                let alert = UIAlertController(title: "Password Error", message: Credentials.infoErr.passwordFormat.rawValue, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                    self.passField.text = ""
+                    self.confirmField.text = ""
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+            
             showIndicator("Changing Password", 2.0, completion: {
                 LRServer.shared.changePassword(pass1) {
                     (error: Error?) in

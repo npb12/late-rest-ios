@@ -30,7 +30,7 @@ class AllHeaderCell: UICollectionViewCell  {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-Regular",size:16)
         label.textColor = UIColor.subheader
-        label.text = "Like your favorites restaurants to get notified for exclusive discounts"
+        label.text = "Like your favorite restaurants to get notified for exclusive discounts"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -39,9 +39,9 @@ class AllHeaderCell: UICollectionViewCell  {
     let doneButton : UIButton = {
         let button = UIButton()
         button.setTitle("Done", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 16)
+        button.titleLabel?.font = UIFont(name: "SourceSansPro-SemiBold", size: 16)
         button.backgroundColor = UIColor.clear
-        button.setTitleColor(UIColor.blueLiteTwo, for: .normal)
+        button.setTitleColor(UIColor.LROffTone, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

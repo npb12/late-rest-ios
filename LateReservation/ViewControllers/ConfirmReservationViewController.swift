@@ -19,7 +19,7 @@ class ConfirmReservationViewController : UIViewController
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Regular",size:22)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:22)
         label.textColor = UIColor.header
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -39,12 +39,12 @@ class ConfirmReservationViewController : UIViewController
     let timeLabel : UITextView = {
         let label = UITextView()
         label.font = UIFont(name:"SourceSansPro-SemiBold",size:14)
-        label.textColor = .white//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
-        label.backgroundColor = UIColor.LRBlue
+        label.textColor = .header//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.backgroundColor = UIColor.main
         label.isScrollEnabled = false
         label.isUserInteractionEnabled = false
         label.textAlignment = .center
-        label.layer.borderColor = UIColor.LRBlue.cgColor
+        label.layer.borderColor = UIColor.LLDiv.cgColor
         label.layer.borderWidth = 1
         label.layer.cornerRadius = 2.5
         label.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
@@ -65,7 +65,7 @@ class ConfirmReservationViewController : UIViewController
     let alphaView : UIButton = {
         let view = UIButton()
         view.backgroundColor = UIColor.black
-        view.alpha = 0.45
+        view.alpha = 0.65
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -85,9 +85,10 @@ class ConfirmReservationViewController : UIViewController
         button.setTitle("CONFIRM", for: .normal)
         button.backgroundColor = UIColor.white
         button.titleLabel?.font = UIFont(name:"SourceSansPro-Bold",size:18)//
-        button.setTitleColor(UIColor.blueLiteTwo, for: .normal)
+        button.setTitleColor(UIColor.LROffTone, for: .normal)
         button.layer.borderColor = UIColor.LLDiv.cgColor
         button.layer.borderWidth = 1
+        button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(confirmTapped), for: .touchUpInside)
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -113,13 +114,18 @@ class ConfirmReservationViewController : UIViewController
             imageView.imageFromURL(urlString: restaurant.photo)
         }
         
-        whoLabel.text = String(format: "%d people at %d%% off", party, reservation.discount)
+        let ppl = party > 1 ? "people" : "person"
+        
+        whoLabel.text = String(format: "%d %@ at %d%% off", party, ppl, reservation.discount)
 
         let formatter = DateFormatter()
-        formatter.dateFormat = "'at' h:mm a"
+        formatter.dateFormat = "h:mm"
         formatter.timeZone = TimeZone.current
-        let dateString = formatter.string(from: reservation.reservationTime!)
-        timeLabel.text = String(format: "Today %@", dateString)
+        let startString = formatter.string(from: reservation.startTime!)
+        let endString = formatter.string(from: reservation.endTime!)
+        formatter.dateFormat = "a"
+        let am_pm = formatter.string(from: reservation.endTime!)
+        timeLabel.text = String(format: "Today from %@ - %@ %@", startString, endString, am_pm)
     }
     
     func setupView()
@@ -130,7 +136,7 @@ class ConfirmReservationViewController : UIViewController
         alphaView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         alphaView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        view.addSubview(cancelButton)
+        view.insertSubview(cancelButton, belowSubview: containerFrame)
         cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -140,9 +146,7 @@ class ConfirmReservationViewController : UIViewController
         containerFrame.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         containerFrame.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
         containerFrame.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
-        
-        setupContainerShadow()
-        
+                
         let imgSize = UIScreen.main.bounds.width * 0.3
         view.addSubview(imageView)
         imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true

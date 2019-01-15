@@ -62,34 +62,6 @@ class OnboardingItemView: UICollectionViewCell {
         return label
     }()
     
-    let btnShadow : UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.clear
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.shadowColor = UIColor.LRPinkShadow.cgColor
-        view.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-        view.layer.shadowOpacity = 0.4;
-        view.layer.shadowRadius = 5.0;
-        // view.layer.masksToBounds = false
-        return view
-    }()
-    
-    let startButton : UIButton = {
-        let button = UIButton()
-        button.setTitle("Next", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.titleLabel?.font = UIFont(name:"SourceSansPro-SemiBold",size:18)//UIFont.boldSystemFont(ofSize: 16)
-        button.backgroundColor = UIColor.LRPink
-        button.layer.borderColor = UIColor.LRPink.cgColor
-        button.layer.borderWidth = 0.5
-        button.alpha = 0.2
-        button.isUserInteractionEnabled = false
-        button.layer.cornerRadius = 10
-        //button.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -125,20 +97,6 @@ class OnboardingItemView: UICollectionViewCell {
         textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         textField.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        
-        let offset = UIScreen.main.bounds.height * 0.125
-        addSubview(btnShadow)
-        btnShadow.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: offset * 0.3).isActive = true
-        btnShadow.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        btnShadow.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        btnShadow.heightAnchor.constraint(equalToConstant: offset * 0.65).isActive = true
-        
-        
-        btnShadow.addSubview(startButton)
-        startButton.topAnchor.constraint(equalTo: btnShadow.topAnchor).isActive = true
-        startButton.bottomAnchor.constraint(equalTo: btnShadow.bottomAnchor).isActive = true
-        startButton.leadingAnchor.constraint(equalTo: btnShadow.leadingAnchor, constant: 0).isActive = true
-        startButton.trailingAnchor.constraint(equalTo: btnShadow.trailingAnchor, constant: 0).isActive = true
         
         // Setup Contraints and Views
         addSubview(titleLabel)

@@ -35,6 +35,36 @@
                                     <segue destination="WN3-zy-Pnj" kind="embed" identifier="embedPullSheetController" id="x3W-Gm-jCZ"/>
                                 </connections>
                             </containerView>
+                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="isK-gg-obb">
+                                <rect key="frame" x="15" y="313" width="81.5" height="40.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Full List" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHp-re-BeP">
+                                        <rect key="frame" x="15" y="10" width="51.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" name="SourceSansPro-Regular" family="Source Sans Pro" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3CX-nx-Rn7">
+                                        <rect key="frame" x="0.0" y="0.0" width="81.5" height="40.5"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal">
+                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="125" id="1lF-KL-m2J"/>
+                                    <constraint firstAttribute="bottom" secondItem="3CX-nx-Rn7" secondAttribute="bottom" id="4kd-sm-L6F"/>
+                                    <constraint firstAttribute="bottom" secondItem="qHp-re-BeP" secondAttribute="bottom" constant="10" id="5kO-D9-ERF"/>
+                                    <constraint firstItem="qHp-re-BeP" firstAttribute="leading" secondItem="isK-gg-obb" secondAttribute="leading" constant="15" id="Drh-JJ-8Tp"/>
+                                    <constraint firstAttribute="trailing" secondItem="3CX-nx-Rn7" secondAttribute="trailing" id="OaW-Ub-1jP"/>
+                                    <constraint firstItem="3CX-nx-Rn7" firstAttribute="leading" secondItem="isK-gg-obb" secondAttribute="leading" id="S5E-ao-Y4u"/>
+                                    <constraint firstItem="3CX-nx-Rn7" firstAttribute="top" secondItem="isK-gg-obb" secondAttribute="top" id="X9J-Rl-knT"/>
+                                    <constraint firstAttribute="trailing" secondItem="qHp-re-BeP" secondAttribute="trailing" constant="15" id="gpe-bK-Lcv"/>
+                                    <constraint firstItem="qHp-re-BeP" firstAttribute="centerY" secondItem="isK-gg-obb" secondAttribute="centerY" id="qYX-NE-2GD"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5jU-Lv-WjE">
                                 <rect key="frame" x="320" y="30" width="45" height="45"/>
                                 <subviews>
@@ -83,6 +113,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="isK-gg-obb" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="15" id="0By-gY-3GZ"/>
                             <constraint firstItem="5jU-Lv-WjE" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="10" id="7Bg-aF-xYD"/>
                             <constraint firstItem="7dr-Ad-18R" firstAttribute="top" secondItem="tsR-hK-woN" secondAttribute="top" id="A7C-kJ-KcP"/>
                             <constraint firstItem="7Rn-TK-rag" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="10" id="LAr-xn-2O7"/>
@@ -99,7 +130,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="nearby_icon" selectedImage="nearby_icon" id="acW-dT-cKf">
+                    <tabBarItem key="tabBarItem" title="" image="nearby_icon_inactive" selectedImage="nearby_icon_active" id="acW-dT-cKf">
                         <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
                     </tabBarItem>
                     <connections>
@@ -124,7 +155,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="O1u-W8-tvY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="favorite_icon" selectedImage="favorite_icon" id="cPa-gy-q4n">
+                    <tabBarItem key="tabBarItem" title="" image="favorite_icon_inactive" selectedImage="favorite_active" id="cPa-gy-q4n">
                         <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
                     </tabBarItem>
                 </viewController>
@@ -142,7 +173,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="xCP-UX-hHA"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="reserved_icon" selectedImage="reserved_icon" id="9LG-yJ-7dh">
+                    <tabBarItem key="tabBarItem" title="" image="reserved_icon_inactive" selectedImage="reserved_icon_active" id="9LG-yJ-7dh">
                         <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
                     </tabBarItem>
                 </viewController>
@@ -160,7 +191,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="pTz-Xe-qpa"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="profile_icon" selectedImage="profile_icon" id="fbr-Ew-a2Q">
+                    <tabBarItem key="tabBarItem" title="" image="profile_icon_Inactive" selectedImage="profile_icon_active" id="fbr-Ew-a2Q">
                         <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
                     </tabBarItem>
                 </viewController>
@@ -265,7 +296,7 @@
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
@@ -274,13 +305,13 @@
                         <segue destination="bMp-ss-6C3" kind="relationship" relationship="viewControllers" id="fVQ-cK-CZR"/>
                         <segue destination="f0p-cG-tAM" kind="show" identifier="detailSegue" id="Tdp-In-X95"/>
                         <segue destination="Nwu-oP-med" kind="presentation" identifier="loginSegue" modalTransitionStyle="flipHorizontal" id="II1-QE-dQK"/>
-                        <segue destination="YnL-gk-oeu" kind="presentation" identifier="reservedSegue" animates="NO" id="SDD-MV-kE2"/>
                         <segue destination="glL-87-vas" kind="show" identifier="inviteSegue" id="L4B-x5-Y6u"/>
                         <segue destination="dOu-Jk-Vdr" kind="show" identifier="privacySegue" id="V3n-1d-3QL"/>
                         <segue destination="XBA-Wt-vDt" kind="show" identifier="changePassSegue" id="8Jv-op-TzK"/>
                         <segue destination="72E-dV-GAH" kind="show" identifier="phoneSegue" id="giU-bg-MNS"/>
                         <segue destination="Y8Q-6a-qjb" kind="show" identifier="paymentSegue" id="mDv-Ld-HBz"/>
                         <segue destination="liC-pk-B29" kind="presentation" identifier="nearbySegue" id="JHP-Ka-Za8"/>
+                        <segue destination="OdW-pP-cuy" kind="presentation" identifier="reservedSegue" animates="NO" id="Wx3-1N-7kX"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -512,23 +543,6 @@
             </objects>
             <point key="canvasLocation" x="5444" y="766"/>
         </scene>
-        <!--Reserved View Controller-->
-        <scene sceneID="FPf-9g-mms">
-            <objects>
-                <viewController id="YnL-gk-oeu" customClass="ReservedViewController" customModule="LateReservation" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="3rh-L7-dvM">
-                        <barButtonItem key="leftBarButtonItem" image="back_icon" id="Sgm-7a-cK4">
-                            <color key="tintColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="favorite_icon" id="LUO-1w-tDT">
-                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </barButtonItem>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Cd4-dL-ymg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5828" y="1606"/>
-        </scene>
         <!--Payment Method View Controller-->
         <scene sceneID="Lid-Ey-5K2">
             <objects>
@@ -551,6 +565,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ll7-DI-yR1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4631" y="1877"/>
+        </scene>
+        <!--ReservedViewController-->
+        <scene sceneID="CHN-Vr-wMt">
+            <objects>
+                <viewController id="OdW-pP-cuy" userLabel="ReservedViewController" customClass="ReservedViewController" customModule="LateReservation" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RNk-6U-Ma2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="w4Q-k0-e3J"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Title" id="oJs-IC-RHV">
+                        <barButtonItem key="leftBarButtonItem" image="back_icon" id="PeF-bK-NC2">
+                            <color key="tintColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="goBack:" destination="OdW-pP-cuy" id="Q7o-o6-qWe"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="favorite_icon" id="0OK-IC-HCP">
+                            <color key="tintColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="likeRest:" destination="OdW-pP-cuy" id="ZVh-em-3ao"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="likeBtn" destination="0OK-IC-HCP" id="uuG-R9-Ndr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B2u-CW-0k5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6086" y="1925"/>
         </scene>
         <!--Phone Number View Controller-->
         <scene sceneID="Ddv-6M-Wgp">
@@ -594,12 +640,17 @@
         </scene>
     </scenes>
     <resources>
-        <image name="back_icon" width="12" height="21"/>
+        <image name="back_icon" width="13" height="19"/>
+        <image name="favorite_active" width="27" height="26"/>
         <image name="favorite_icon" width="25" height="24"/>
-        <image name="menu_icon" width="20" height="20"/>
-        <image name="nearby_icon" width="30" height="21"/>
-        <image name="profile_icon" width="24" height="24"/>
-        <image name="reserved_icon" width="23" height="24"/>
+        <image name="favorite_icon_inactive" width="24" height="22"/>
+        <image name="menu_icon" width="21" height="17"/>
+        <image name="nearby_icon_active" width="22" height="24"/>
+        <image name="nearby_icon_inactive" width="21" height="23"/>
+        <image name="profile_icon_Inactive" width="22" height="23"/>
+        <image name="profile_icon_active" width="22" height="23"/>
+        <image name="reserved_icon_active" width="21" height="22"/>
+        <image name="reserved_icon_inactive" width="21" height="23"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Tdp-In-X95"/>

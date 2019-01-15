@@ -35,8 +35,8 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     
     let webLink : UIButton = {
         let link = UIButton()
-        link.setTitleColor(UIColor.blueLiteTwo, for: .normal)
-        link.titleLabel?.font = UIFont(name: "SourceSansPro-Light", size: 16)
+        link.setTitleColor(UIColor.header, for: .normal)
+        link.titleLabel?.font = UIFont(name: "SourceSansPro-Regular", size: 16)
         link.backgroundColor = .clear
         link.addTarget(self, action: #selector(linkTapped), for: .touchUpInside)
         link.titleLabel?.textAlignment = .left
@@ -47,7 +47,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Regular",size:26)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:26)
         label.textColor = UIColor.title
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -57,7 +57,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     
     let descHeaderLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:12)
         label.textColor = .header
         label.text = "About"
         label.numberOfLines = 0
@@ -90,7 +90,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     
     let availableHeaderLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:12)
         label.textColor = .header
         label.text = "Available Times"
         label.numberOfLines = 0
@@ -113,6 +113,36 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         let view = TablesContainerView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    let emptyView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.55)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        return view
+    }()
+    
+    let emptyLabel : UILabel = {
+        let label = UILabel()
+        //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:18)
+        label.textColor = UIColor.white
+        label.text = "No Discounts"
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let emptyLabel2 : UILabel = {
+        let label = UILabel()
+        //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
+        label.font = UIFont(name:"SourceSansPro-Light",size:15)
+        label.textColor = UIColor.white
+        label.text = "Today"
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     @objc func linkTapped() {
@@ -155,16 +185,31 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     func setupView()
     {
         reserveButton.titleLabel?.font = UIFont(name: "SourceSansPro-Bold", size: 19)//UIFont.systemFont(ofSize: 19, weight: .semibold)
-        reserveButton.backgroundColor = UIColor.white//UIColor.black.withAlphaComponent(0.8)
-        reserveButton.setTitleColor(.goldmember, for: .normal)
-        reserveButton.layer.borderColor = UIColor.LLDiv.cgColor
-        reserveButton.layer.borderWidth = 1
+        reserveButton.backgroundColor = UIColor.LROffTone//UIColor.black.withAlphaComponent(0.8)
+        reserveButton.setTitleColor(.white, for: .normal)
+      //  reserveButton.layer.borderColor = UIColor.LLDiv.cgColor
+      //  reserveButton.layer.borderWidth = 1
         
         containerView.addSubview(imgView)
         imgView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
         imgView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
         imgView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
         imgView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.3).isActive = true
+        
+        imgView.addSubview(emptyView)
+        emptyView.topAnchor.constraint(equalTo: imgView.topAnchor).isActive = true
+        emptyView.leadingAnchor.constraint(equalTo: imgView.leadingAnchor).isActive = true
+        emptyView.trailingAnchor.constraint(equalTo: imgView.trailingAnchor).isActive = true
+        emptyView.bottomAnchor.constraint(equalTo: imgView.bottomAnchor).isActive = true
+        
+        
+        emptyView.addSubview(emptyLabel)
+        emptyLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
+        emptyLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
+        
+        emptyView.addSubview(emptyLabel2)
+        emptyLabel2.topAnchor.constraint(equalTo: emptyLabel.bottomAnchor).isActive = true
+        emptyLabel2.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
         
         containerView.addSubview(titleLabel)
         titleLabel.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: 20).isActive = true
@@ -183,7 +228,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         containerView.addSubview(timesView)
         timesView.topAnchor.constraint(equalTo: availableHeaderLabel.bottomAnchor, constant: 5).isActive = true
         timesView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
-        timesView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -30).isActive = true
+        timesView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UIScreen.main.bounds.width * 0.195).isActive = true
         timesViewHeight = timesView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.05)
         timesViewHeight?.isActive = true
         
@@ -206,7 +251,10 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     {
         titleLabel.text = restaurant.restaurantName
         imgView.imageFromURL(urlString: restaurant.photo)
-        webLink.setTitle(restaurant.website, for: .normal)
+        let webText = String(format: "%@ website", restaurant.restaurantName)
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: webText)
+        attributeString.addAttribute(NSAttributedStringKey.underlineStyle, value: 1, range: NSMakeRange(0, attributeString.length))
+        webLink.setAttributedTitle(attributeString, for: .normal)
         descLabel.text = restaurant.description
         
         if restaurant.reservations.count > 0
@@ -216,7 +264,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         else
         {
             //timesLabel.text = "No tables available currently"
-            reserveButton.setTitle("RESERVE", for: .normal)
+            reserveButton.setTitle("BOOK IT", for: .normal)
             reserveButton.isUserInteractionEnabled = false
             reserveButton.alpha = 0.2
             
@@ -254,10 +302,16 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         if timesView.tables.count > 0
         {
             timesView.emptyLabel.isHidden = true
+            emptyView.isHidden = true
+            emptyLabel.isHidden = true
+            emptyLabel2.isHidden = true
         }
         else
         {
             timesView.emptyLabel.isHidden = false
+            emptyView.isHidden = false
+            emptyLabel.isHidden = false
+            emptyLabel2.isHidden = false
         }
     }
 
@@ -274,7 +328,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
                 }
             }
             
-            let buttonTitle = String(format: "RESERVE | %d%% OFF", high)
+            let buttonTitle = String(format: "BOOK IT | %d%% OFF", high)
             reserveButton.setTitle(buttonTitle, for: .normal)
         }
         
@@ -283,25 +337,32 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         timesView.tables.removeAll()
 
         let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
+        formatter.dateFormat = "h:mm"
         formatter.timeZone = TimeZone.current
+        
+        let ampmformatter = DateFormatter()
+        ampmformatter.dateFormat = "a"
+        ampmformatter.timeZone = TimeZone.current
         
         //remove duplicates for instead of showing a bunch of repeats
         for res in restaurant.reservations
         {
-            if let resTime = res.reservationTime
+            if let startTime = res.startTime, let endTime = res.endTime
             {
-                let dateString = formatter.string(from: resTime)
-                timesView.tables.appendIfNotContains(dateString)
+                let startString = formatter.string(from: startTime)
+                let endString = formatter.string(from: endTime)
+                let am_pm = ampmformatter.string(from: endTime)
+                let fullStr = String(format: "%@ - %@ %@", startString, endString, am_pm)
+                timesView.tables.appendIfNotContains(fullStr)
             }
         }
         
         timesView.collectionView.reloadData()
         
-        //3 = 1 row, so view needs to be expanded
-        if timesView.tables.count > 3
+        //2 = 1 row, so view needs to be expanded
+        if timesView.tables.count > 2
         {
-            let offset : CGFloat = CGFloat(timesView.tables.count / 3) + 1
+            let offset : CGFloat = CGFloat(timesView.tables.count / 2) + 1
             let size = (UIScreen.main.bounds.height * 0.05) * offset
             timesViewHeight?.isActive = false
             timesViewHeight = timesView.heightAnchor.constraint(equalToConstant: size)
@@ -311,10 +372,16 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         if timesView.tables.count > 0
         {
             timesView.emptyLabel.isHidden = true
+            emptyView.isHidden = true
+            emptyLabel.isHidden = true
+            emptyLabel2.isHidden = true
         }
         else
         {
             timesView.emptyLabel.isHidden = false
+            emptyView.isHidden = false
+            emptyLabel.isHidden = false
+            emptyLabel2.isHidden = false
         }
     }
     
@@ -324,30 +391,59 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     
     @IBAction func likeRest(_ sender: Any)
     {
-        if Favorites.isFavorited(id: restaurant.id)
+        
+        if Defaults.isLoggedIn()
         {
-            likeBtn.image = #imageLiteral(resourceName: "favorite_icon").withRenderingMode(.alwaysOriginal)
-            if let favId = Favorites.getFavoritedId(id: restaurant.id)
+            if Favorites.isFavorited(id: restaurant.id)
             {
-                LRServer.shared.deleteFavorite(favId, completion: {
+                likeBtn.image = #imageLiteral(resourceName: "favorite_icon").withRenderingMode(.alwaysOriginal)
+                if let favId = Favorites.getFavoritedId(id: restaurant.id)
+                {
+                    LRServer.shared.deleteFavorite(favId, completion: {
+                        DispatchQueue.main.async {
+                            //             self.updateTabVC()
+                        }
+                    })
+                }
+            }
+            else
+            {
+                likeBtn.image = #imageLiteral(resourceName: "like_active_nav").withRenderingMode(.alwaysOriginal)
+                AppDelegate.shared().registerForPushNotifications()
+                LRServer.shared.addFavorite(restaurant, completion: {
                     DispatchQueue.main.async {
-           //             self.updateTabVC()
+                        //           self.updateTabVC()
                     }
                 })
             }
+            
+            LRServer.shared.getFavorites() {
+                (favorites: [Favorite]?, error: Error?) in
+            }
+            
+            NotificationCenter.default.post(name: Notification.Name.favoritesDidChange, object: nil)
         }
         else
         {
-            likeBtn.image = #imageLiteral(resourceName: "like_active_nav").withRenderingMode(.alwaysOriginal)
-            AppDelegate.shared().registerForPushNotifications()
-            LRServer.shared.addFavorite(restaurant, completion: {
-                DispatchQueue.main.async {
-         //           self.updateTabVC()
-                }
-            })
+            showLoginOption("favorite a restaurant")
         }
+    }
+    
+    func showLoginOption(_ str : String)
+    {
+        let alert = UIAlertController(title: "Logged Out", message: "Your must be logged in to \(str). Log In?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (_) in
+            CATransaction.begin()
+            self.navigationController?.popViewController(animated: true)
+            CATransaction.setCompletionBlock({ [weak self] in
+                NotificationCenter.default.post(name: Notification.Name.userNeedsLogin, object: nil) })
+            CATransaction.commit()
+        }))
+        alert.addAction(UIAlertAction(title: "NO", style: .default, handler: { (_) in
+            alert.dismiss(animated: false, completion: nil)
+        }))
         
-        NotificationCenter.default.post(name: Notification.Name.favoritesDidChange, object: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -360,7 +456,14 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
     
     @IBAction func reserveAction(_ sender: Any)
     {
-        performSegue(withIdentifier: "chooseSegue", sender: self)
+        if Defaults.isLoggedIn()
+        {
+            performSegue(withIdentifier: "chooseSegue", sender: self)
+        }
+        else
+        {
+            showLoginOption("book a discount")
+        }
     }
     
     func reservationIsAvailable(_ sender: ChooseReservationViewController, _ tableId: Int, _ available: Bool) {
@@ -374,7 +477,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         }
         else
         {
-            showIndicator("Reserving Table", 2.0, completion: {
+            showIndicator("Booking Table", 2.0, completion: {
                 LRServer.shared.reserve(tableId) {
                     (error: Error?) in
                     DispatchQueue.main.async {

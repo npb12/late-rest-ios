@@ -31,7 +31,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Regular",size:26)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:26)
         label.textAlignment = .center
         label.textColor = UIColor.header
         label.numberOfLines = 0
@@ -52,12 +52,12 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     let todayLabel : UITextView = {
         let label = UITextView()
         label.font = UIFont(name:"SourceSansPro-SemiBold",size:17)
-        label.textColor = .white//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
-        label.backgroundColor = UIColor.LRBlue
+        label.textColor = .header//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.backgroundColor = UIColor.main
         label.isScrollEnabled = false
         label.isUserInteractionEnabled = false
         label.textAlignment = .center
-        label.layer.borderColor = UIColor.LRBlue.cgColor
+        label.layer.borderColor = UIColor.LLDiv.cgColor
         label.layer.borderWidth = 1
         label.layer.cornerRadius = 2.5
         label.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
@@ -71,7 +71,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         label.font = UIFont(name:"SourceSansPro-Regular",size:17)
         label.textColor = .lightGray
         label.textAlignment = .center
-        label.text = "Max Party"
+        label.text = "Party Of"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -82,7 +82,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         label.font = UIFont(name:"SourceSansPro-Regular",size:17)
         label.textColor = .lightGray
         label.textAlignment = .center
-        label.text = "Reservation time"
+        label.text = "Deal time"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -113,7 +113,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         titleLabel.text = restaurant.restaurantName
         locationLabel.text = restaurant.location
         reserveButton.titleLabel?.font = UIFont(name: "SourceSansPro-Bold", size: 19)//UIFont.systemFont(ofSize: 19, weight: .semibold)
-        let buttonTitle = String(format: "RESERVE | %d%% OFF", (restaurant.reservations[0].discount))
+        let buttonTitle = String(format: "BOOK IT | %d%% OFF", (restaurant.reservations[0].discount))
         reserveButton.setTitle(buttonTitle, for: .normal)
         
         
@@ -130,14 +130,25 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         let reservations = restaurant.reservations
         if reservations.count > 0
         {
+            var highest = 0
             for res in reservations
             {
-                listOfParty.appendIfNotContains(String(res.party))
+                if res.party > highest
+                {
+                    highest = res.party
+                }
             }
+            
+            while highest > 0
+            {
+                listOfParty.append(String(highest))
+                highest -= 1
+            }
+            
             listOfParty.sort()
             partyPicker.reloadAllComponents()
             orderTimes(listOfParty[0])
-            let btnTitle = String(format: "RESERVE | %d%% OFF", reservations[0].discount)
+            let btnTitle = String(format: "BOOK IT | %d%% OFF", reservations[0].discount)
             reserveButton.setTitle(btnTitle, for: .normal)
         }
         
@@ -168,18 +179,22 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
                     {
                         var data = ReservationTracker()
                         let formatter = DateFormatter()
-                        formatter.dateFormat = "h:mm a"
+                        formatter.dateFormat = "h:mm"
                         formatter.timeZone = TimeZone.current
-                        let dateString = formatter.string(from: res.reservationTime!)
+                        let startString = formatter.string(from: res.startTime!)
+                        let endString = formatter.string(from: res.endTime!)
+                        formatter.dateFormat = "a"
+                        let am_pm = formatter.string(from: res.endTime!)
                         data.restId = res.tableId
-                        data.timeStr = dateString
+                        let fullStr = String(format: "%@ - %@ %@", startString, endString, am_pm)
+                        data.timeStr = fullStr
                         assocData.append(data)
-                        listOfTimes.append(dateString)
+                        listOfTimes.appendIfNotContains(fullStr)
                     }
                 }
             }
         }
-        listOfTimes = listOfTimes.sorted{ $0 > $1 }
+        listOfTimes = listOfTimes.sorted{ $0 < $1 }
         if listOfTimes.count > 0
         {
             selectedTime = listOfTimes[0]
@@ -190,7 +205,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.title = restaurant.restaurantName
+        self.navigationItem.title = "Choose Booking"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -208,10 +223,10 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     
     func setupViews()
     {
-        reserveButton.backgroundColor = UIColor.white//UIColor.black.withAlphaComponent(0.8)
-        reserveButton.setTitleColor(.goldmember, for: .normal)
-        reserveButton.layer.borderColor = UIColor.LLDiv.cgColor
-        reserveButton.layer.borderWidth = 1
+        reserveButton.backgroundColor = UIColor.LROffTone//UIColor.black.withAlphaComponent(0.8)
+        reserveButton.setTitleColor(.white, for: .normal)
+     //   reserveButton.layer.borderColor = UIColor.LLDiv.cgColor
+     //   reserveButton.layer.borderWidth = 1
         
         view.addSubview(titleLabel)
         titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60).isActive = true
@@ -258,6 +273,24 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         }
         
         return listOfTimes.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var label = UILabel()
+        if let v = view {
+            label = v as! UILabel
+        }
+        if pickerView == partyPicker {
+            label.font = UIFont (name: "SourceSansPro-Regular", size: 22)
+            label.text = listOfParty[row]
+        }
+        else
+        {
+            label.font = UIFont (name: "SourceSansPro-Regular", size: 18)
+            label.text = listOfTimes[row]
+        }
+        label.textAlignment = .center
+        return label
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -307,7 +340,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
             }
         }
         
-        let buttonTitle = String(format: "RESERVE | %d%% OFF", discount)
+        let buttonTitle = String(format: "BOOK IT | %d%% OFF", discount)
         reserveButton.setTitle(buttonTitle, for: .normal)
     }
     
@@ -366,6 +399,10 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
                     //           self.updateTabVC()
                 }
             })
+        }
+        
+        LRServer.shared.getFavorites() {
+            (favorites: [Favorite]?, error: Error?) in
         }
         
         NotificationCenter.default.post(name: Notification.Name.favoritesDidChange, object: nil)

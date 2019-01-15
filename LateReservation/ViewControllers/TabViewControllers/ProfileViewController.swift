@@ -107,19 +107,28 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell", for: indexPath) as! ProfileCell
             cell.backgroundColor = UIColor.white
             cell.imgView.image = #imageLiteral(resourceName: "profile_image")
-            
+            cell.selectionStyle = .none
+
             let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleImageTap))
             cell.imgView.addGestureRecognizer(tap)
             
-            if let model = Defaults.getUser()
+            if Defaults.isLoggedIn()
             {
-                if let first = model.first
+                if let model = Defaults.getUser()
                 {
-                    cell.nameLabel.text = first
+                    if let first = model.first
+                    {
+                        cell.nameLabel.text = first
+                    }
                 }
+                
+                cell.changeLabel.text = "change password"
             }
-            
-            cell.changeLabel.text = "change password"
+            else
+            {
+                cell.nameLabel.text = "Profile"
+                cell.changeLabel.text = "Login to get started"
+            }
 
             /*
             if let model = Defaults.getUser()
@@ -149,6 +158,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "accountCell", for: indexPath) as! AccountCell
             
+            cell.selectionStyle = .none
+            
             cell.accountLabel.text = labels[indexPath.row]
             cell.iconImg.image = icons[indexPath.row]
             cell.accessoryType = .disclosureIndicator
@@ -158,7 +169,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "accountCell", for: indexPath) as! AccountCell
-            
+            cell.selectionStyle = .none
+
             cell.accountLabel.text = labels[indexPath.row + indexPath.section]
             cell.iconImg.image = icons[indexPath.row + indexPath.section]
             cell.accessoryType = .disclosureIndicator
@@ -168,7 +180,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         else
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "accountCell", for: indexPath) as! AccountCell
-            
+            cell.selectionStyle = .none
             cell.backgroundColor = UIColor.white
             cell.accessoryType = .disclosureIndicator
             cell.accountLabel.text = labels[indexPath.section + 1]
@@ -222,12 +234,32 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch indexPath.section
         {
         case 0:
-            changePassword()
+            if Defaults.isLoggedIn()
+            {
+                changePassword()
+            }
+            else
+            {
+                if let tabBar: TabBarController = self.tabBarController as? TabBarController
+                {
+                    tabBar.goToLogin()
+                }
+            }
             break
         case 1:
             if indexPath.row == 0
             {
-                phoneNumber()
+                if Defaults.isLoggedIn()
+                {
+                    phoneNumber()
+                }
+                else
+                {
+                    if let tabBar: TabBarController = self.tabBarController as? TabBarController
+                    {
+                        tabBar.goToLogin()
+                    }
+                }
             }
             else
             {
@@ -321,29 +353,54 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     private func viewPrivacy()
     {
-        if let tabBar: TabBarController = self.tabBarController as? TabBarController
-        {
-            tabBar.goToPrivacy()
+        if let url = URL(string: "https://11thtable.com"), UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
         }
     }
     
     private func logout()
     {
-        let alert = UIAlertController(title: "Logout", message: "Logout of Late Reservation?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (_) in
-           
-            AuthorizationKeychain.shared.removeAuthCode()
-            Defaults.setLoginStatus(status: false)
-            Defaults.clearUserData()
-            if let tabBar: TabBarController = self.tabBarController as? TabBarController
-            {
-                tabBar.checkForLoginStatus()
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "NO", style: .default, handler: { (_) in
-            alert.dismiss(animated: false, completion: nil)
-        }))
-        present(alert, animated: true, completion: nil)
+        if Defaults.isLoggedIn()
+        {
+            let alert = UIAlertController(title: "Logout", message: "Logout of 11th Table?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (_) in
+                
+                AuthorizationKeychain.shared.removeAuthCode()
+                Defaults.setLoginStatus(status: false)
+                Defaults.clearUserData()
+                if let tabBar: TabBarController = self.tabBarController as? TabBarController
+                {
+                    tabBar.updateFavorites()
+                    tabBar.updateReservations()
+                    tabBar.updateProfile()
+                    tabBar.checkForLoginStatus()
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "NO", style: .default, handler: { (_) in
+                alert.dismiss(animated: false, completion: nil)
+            }))
+            present(alert, animated: true, completion: nil)
+        }
+        else
+        {
+            let alert = UIAlertController(title: "Logged Out", message: "Your are currently logged out. Log In?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (_) in
+                
+                if let tabBar: TabBarController = self.tabBarController as? TabBarController
+                {
+                    tabBar.goToLogin()
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "NO", style: .default, handler: { (_) in
+                alert.dismiss(animated: false, completion: nil)
+            }))
+            
+            present(alert, animated: true, completion: nil)
+        }
     }
     
     /*
@@ -528,5 +585,4 @@ class ProfileCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("")
     }
-    
 }

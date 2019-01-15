@@ -22,7 +22,8 @@ public class LateReservation
         static let tableID = "id"
         static let party = "party"
         static let minParty = "minParty"
-        static let time = "time"
+        static let startTime = "startTime"
+        static let endTime = "endTime"
         static let discount = "discount"
     }
     
@@ -32,7 +33,8 @@ public class LateReservation
     var party : Int = 0
     var minParty : Int = 0
     var discount : Int = 0
-    var reservationTime : Date? = nil
+    var startTime : Date? = nil
+    var endTime : Date? = nil
 
     /*
      public static func toJson(_ startup: Startup) -> Parameters
@@ -94,13 +96,15 @@ public class LateReservation
             reservation.discount = discount
         }
         
-        let dateStr = object[JsonKeys.time].stringValue
+        let startStr = object[JsonKeys.startTime].stringValue
+        let endStr = object[JsonKeys.endTime].stringValue
         //2018-10-02T22:57:49Z
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        reservation.reservationTime = dateFormatter.date(from: dateStr)
-        
+        reservation.startTime = dateFormatter.date(from: startStr)
+        reservation.endTime = dateFormatter.date(from: endStr)
+
         return reservation
     }
     
@@ -139,12 +143,14 @@ public class LateReservation
                 reservation.discount = discount
             }
             
-            let dateStr = object[JsonKeys.time].stringValue
+            let startStr = object[JsonKeys.startTime].stringValue
+            let endStr = object[JsonKeys.endTime].stringValue
             //2018-10-02T22:57:49Z
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
             dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            reservation.reservationTime = dateFormatter.date(from: dateStr)
+            reservation.startTime = dateFormatter.date(from: startStr)
+            reservation.endTime = dateFormatter.date(from: endStr)
             restaurant.reservations.append(reservation)
         }
     }

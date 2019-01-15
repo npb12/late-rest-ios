@@ -47,4 +47,16 @@ class LRParser: NSObject
             completion(error)
         }
     }
+    
+    public static func getCity(_ restaurant : Restaurant) -> String
+    {
+        var arr = restaurant.location.components(separatedBy: ",")
+        
+        if arr.count > 1
+        {
+            return arr[1]
+        }
+        
+        return restaurant.location
+    }
 }

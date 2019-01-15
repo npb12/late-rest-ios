@@ -55,8 +55,9 @@ class FavoriteCell : LateTableCell
         titleLabel.centerXAnchor.constraint(equalTo: viewContainer.centerXAnchor).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 0).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 0).isActive = true
-        titleLabel.font = UIFont(name:"SourceSansPro-Regular",size:16)
+        titleLabel.font = UIFont(name:"SourceSansPro-SemiBold",size:16)
         titleLabel.textAlignment = .center
+        
         
         /*
         imageView.addSubview(emptyView)

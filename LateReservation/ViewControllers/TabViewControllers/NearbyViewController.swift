@@ -15,7 +15,6 @@ class LRPassThroughContainer:UIView
 {
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool
     {
-        
         for subview in subviews
         {
             if !subview.isHidden && subview.alpha > 0 && subview.isUserInteractionEnabled && subview.point(inside: convert(point, to: subview), with: event)
@@ -44,8 +43,7 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
     @IBOutlet var locationContainer: UIView!
     @IBOutlet var locationLabel: UILabel!
     @IBOutlet var locationTop: NSLayoutConstraint!
-    
-    
+        
     let statusView : UIVisualEffectView = {
         let visualEffect = UIVisualEffectView()
         visualEffect.effect = UIBlurEffect(style: .regular)
@@ -105,6 +103,8 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
         
         
         self.hideKeyboardOnTap(#selector(self.dismissKeyboard))
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(getData), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
 
         locationContainer.isHidden = true
         view.addSubview(statusView)
@@ -121,58 +121,69 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
         })
     }
     
-    func getData()
+    @objc func getData()
     {
-        if Defaults.isLoggedIn()
-        {
-            showIndicator("Finding Options", 0.0, completion: {})
-            manager = LRLocationManager()
-            manager!.fetchWithCompletion {location, error in
-                // fetch location or an error
-                if let loc = location {
-                    Defaults.setLastLocation(location: loc)
-                    LRLocationManager.fetchCityAndCountry(location: loc) { city, error in
-                        guard let city = city, error == nil else { return }
-                        DispatchQueue.main.async {
-                            self.locationLabel.text = city
-                            self.locationContainer.isHidden = false
-                        }
+        showIndicator("Finding Options", 0.0, completion: {})
+        manager = LRLocationManager()
+        manager!.fetchWithCompletion {location, error in
+            // fetch location or an error
+            if let loc = location {
+                Defaults.setLastLocation(location: loc)
+                LRLocationManager.fetchCityAndCountry(location: loc) { city, error in
+                    guard let city = city, error == nil else { return }
+                    DispatchQueue.main.async {
+                        self.locationLabel.text = city
+                        self.locationContainer.isHidden = false
                     }
                     
-                    LRServer.shared.getFavorites() {
-                        (favorites: [Favorite]?, error: Error?) in
-                        LRServer.shared.getNearbyRestaurants(loc, false) {
-                            (data: [Restaurant]?, error: Error?) in
-                            DispatchQueue.main.async {
-                                
-                                if let favs = favorites
-                                {
-                                    if favs.count > 0
-                                    {
-                                        AppDelegate.shared().registerForPushNotifications()
-                                    }
-                                }
-                                
-                                self.hideIndicator()
-                                // nearby = restaurants
-                                // self.
-                                if let restaurants = data
-                                {
-                                    if let sheet = self.pullSheetController
-                                    {
-                                        sheet.updateData(restaurants)
-                                    }
+                    if Defaults.isLoggedIn()
+                    {
+                        LRServer.shared.getFavorites() {
+                            (favorites: [Favorite]?, error: Error?) in
+                                DispatchQueue.main.async {
                                     
-                                    if let map = self.mapController
+                                    if let favs = favorites
                                     {
-                                        map.refreshMapPins(restaurants)
+                                        if favs.count > 0
+                                        {
+                                            AppDelegate.shared().registerForPushNotifications()
+                                        }
                                     }
                                 }
-                            }
+                            
+                            self.getNearby(loc)
+
                         }
+                        
+                    }
+                    else
+                    {
+                        self.getNearby(loc)
                     }
                 }
-                
+            }
+        }
+    }
+    
+    func getNearby(_ loc : CLLocation)
+    {
+        LRServer.shared.getNearbyRestaurants(loc, false) {
+            (data: [Restaurant]?, error: Error?) in
+            DispatchQueue.main.async {
+        
+                self.hideIndicator()
+                if let restaurants = data
+                {
+                    if let sheet = self.pullSheetController
+                    {
+                        sheet.updateData(restaurants)
+                    }
+                    
+                    if let map = self.mapController
+                    {
+                        map.refreshMapPins(restaurants)
+                    }
+                }
             }
         }
     }
@@ -204,6 +215,7 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
         if (segue.identifier == "embedPullSheetController")
         {
             pullSheetController = segue.destination as? LRPullSheetController
+            pullSheetController?.parentVC = self
             pullSheetController?.modalPresentationStyle = .currentContext
             pullSheetController?.view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
             pullSheetController?.positionDelegate = self
@@ -232,7 +244,7 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
     
     func mapPinTapped(listing: Restaurant)
     {
-        //pullSheetController?.transitionToDetail(listing: listing, forceScrollToRating: false)
+        pullSheetController?.mapPinTapped(listing)
     }
     
     @objc func dismissKeyboard() {
@@ -261,11 +273,25 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
         //   }
     }
     
+    public func getTabBar() -> UITabBar?
+    {
+        if let controller: TabBarController = self.tabBarController as? TabBarController
+        {
+            return controller.tabBar
+        }
+        
+        return nil
+    }
+    
     @IBAction func listAction(_ sender: Any)
     {
         if let tabBar: TabBarController = self.tabBarController as? TabBarController
         {
             tabBar.showNearbyList()
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

@@ -11,4 +11,6 @@ import Foundation
 extension Notification.Name {
     static let favoritesDidChange = Notification.Name("favoritesDidChange")
     static let authDidExpire = Notification.Name("authDidExpire")
+    static let userNeedsLogin = Notification.Name("userNeedsLogin")
+
 }

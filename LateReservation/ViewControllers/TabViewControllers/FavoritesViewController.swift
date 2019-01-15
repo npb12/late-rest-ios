@@ -20,6 +20,8 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
         let catSlider = UICollectionView(frame: .zero, collectionViewLayout: layout)
         catSlider.translatesAutoresizingMaskIntoConstraints = false
         catSlider.backgroundColor = UIColor.clear
+        catSlider.alwaysBounceVertical = true
+        catSlider.bounces = true
         catSlider.showsVerticalScrollIndicator = false
         catSlider.isPagingEnabled = false
         return catSlider
@@ -36,7 +38,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
     
     let emptyLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"Helvetica",size:18)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:18)
         label.textColor = UIColor.header
         label.textAlignment = .center
         label.isHidden = true
@@ -62,8 +64,8 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
     
     @objc func getData()
     {
-        if Defaults.isLoggedIn()
-        {
+      //  if Defaults.isLoggedIn()
+      //  {
             LRServer.shared.getFavorites() {
                 (favorites: [Favorite]?, error: Error?) in
                 DispatchQueue.main.async {
@@ -98,9 +100,14 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
                         self.favorites = list
                         self.collectionView.reloadData() */
                     }
+                    else
+                    {
+                        self.emptyLabel.isHidden = false
+                        self.emptyImageView.isHidden = false
+                    }
                 }
             }
-        }
+        //}
     }
 
     override func didReceiveMemoryWarning() {
@@ -192,6 +199,5 @@ class FavoritesViewController: UIViewController, UICollectionViewDelegate, UICol
         
         return header
     }
-
 }
 

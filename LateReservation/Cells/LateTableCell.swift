@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreMotion
+import CoreLocation
 
 class LateTableCell: UICollectionViewCell {
     
@@ -19,6 +20,7 @@ class LateTableCell: UICollectionViewCell {
     
     var card : Restaurant? {
         didSet {
+            
             if let name = card?.restaurantName
             {
                 titleLabel.text = name
@@ -27,6 +29,15 @@ class LateTableCell: UICollectionViewCell {
             if let img = card?.photo {
                 
                 imageView.imageFromURL(urlString: img)
+            }
+            
+            if let restaurant = card
+            {                
+                if let lastLocation = Defaults.getLastLocation()
+                {
+                    let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
+                    distanceLabel.text = String(format: "%.1f mi", LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+                }
             }
             
             /*
@@ -134,6 +145,8 @@ class LateTableCell: UICollectionViewCell {
     let bottomView : UIView = {
         let view = UIView()
         view.backgroundColor = .main
+        view.layer.borderColor = UIColor.LLGray.cgColor
+        view.layer.borderWidth = 1
         //   view.effect = UIBlurEffect(style: .dark)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -142,7 +155,7 @@ class LateTableCell: UICollectionViewCell {
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Regular",size:22)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:18)
         label.textColor = UIColor.title
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -151,9 +164,19 @@ class LateTableCell: UICollectionViewCell {
     
     let locationLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-Regular",size:13)
+        label.font = UIFont(name:"SourceSansPro-Light",size:13)
         label.textColor = .subheader
-        label.numberOfLines = 0
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let distanceLabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name:"SourceSansPro-Light",size:13)
+        label.textColor = .subheader
+        label.textAlignment = .center
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -171,7 +194,7 @@ class LateTableCell: UICollectionViewCell {
     
     let partyLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "SourceSansPro-Regular", size: 13)
+        label.font = UIFont(name: "SourceSansPro-Light", size: 13)
         label.textColor = .subheader//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
         label.text = "Party: 2"
         label.numberOfLines = 0
@@ -189,7 +212,7 @@ class LateTableCell: UICollectionViewCell {
     
     let discountView : UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
         //   view.effect = UIBlurEffect(style: .dark)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -197,26 +220,10 @@ class LateTableCell: UICollectionViewCell {
     
     let discountLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:26)
-        label.textColor = .LRRed
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:18)
+        label.textColor = UIColor.LROffTone
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let discountFormatter : UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:11)
-        label.textColor = .LRRed
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 0.75
-        paragraphStyle.alignment = .center
-        let attributedString = NSMutableAttributedString(string: "%\noff")
-        attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
-        label.attributedText = attributedString
         return label
     }()
     
@@ -238,8 +245,8 @@ class LateTableCell: UICollectionViewCell {
     
     let timeLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-Bold",size:13)
-        label.textColor = .LRBlue//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.font = UIFont(name:"SourceSansPro-Light",size:13)
+        label.textColor = .LRLightGray//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -256,7 +263,7 @@ class LateTableCell: UICollectionViewCell {
     let emptyLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Bold",size:18)
+        label.font = UIFont(name:"SourceSansPro-Regular",size:18)
         label.textColor = UIColor.white
         label.text = "No Discounts"
         label.numberOfLines = 1
@@ -267,7 +274,7 @@ class LateTableCell: UICollectionViewCell {
     let emptyLabel2 : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Regular",size:15)
+        label.font = UIFont(name:"SourceSansPro-Light",size:15)
         label.textColor = UIColor.white
         label.text = "Today"
         label.numberOfLines = 1
@@ -293,6 +300,7 @@ class LateTableCell: UICollectionViewCell {
         imageView.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor).isActive = true
         imageView.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: bottomView.topAnchor).isActive = true
+        setupImageShadow()
         
         imageView.addSubview(emptyView)
         emptyView.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
@@ -310,40 +318,41 @@ class LateTableCell: UICollectionViewCell {
         emptyLabel2.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
 
         
-        bottomView.addSubview(timeLabel)
-        timeLabel.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: -10).isActive = true
-        timeLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
-        timeLabel.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -self.bounds.width * 0.2).isActive = true
-        
         bottomView.addSubview(locationLabel)
-        locationLabel.bottomAnchor.constraint(equalTo: timeLabel.topAnchor, constant: -15).isActive = true
+        locationLabel.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: -10).isActive = true
         locationLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
-        locationLabel.trailingAnchor.constraint(equalTo: timeLabel.trailingAnchor, constant: 0).isActive = true
+        locationLabel.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -self.bounds.width * 0.2).isActive = true
+        
+        bottomView.addSubview(distanceLabel)
+        distanceLabel.centerYAnchor.constraint(equalTo: locationLabel.centerYAnchor, constant: 0).isActive = true
+        distanceLabel.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -20).isActive = true
+        
+        bottomView.addSubview(timeLabel)
+        timeLabel.bottomAnchor.constraint(equalTo: locationLabel.topAnchor, constant: -15).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -15).isActive = true
         
         bottomView.addSubview(titleLabel)
-        titleLabel.bottomAnchor.constraint(equalTo: locationLabel.topAnchor, constant: 0).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: timeLabel.topAnchor, constant: 0).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: timeLabel.trailingAnchor, constant: 0).isActive = true
         titleLabel.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 10).isActive = true
+        titleLabel.numberOfLines = 1
         
         viewContainer.addSubview(discountView)
         //    bottomView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.15).isActive = true
-        discountView.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -15).isActive = true
-        discountView.centerYAnchor.constraint(equalTo: bottomView.topAnchor).isActive = true
-        discountView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.16).isActive = true
-        discountView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.16).isActive = true
+        discountView.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -20).isActive = true
+        discountView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 0).isActive = true
         
         discountView.addSubview(discountLabel)
-        discountLabel.centerYAnchor.constraint(equalTo: discountView.centerYAnchor, constant: 0).isActive = true
-        discountLabel.trailingAnchor.constraint(equalTo: discountView.centerXAnchor, constant: 5).isActive = true
-        
-        discountView.addSubview(discountFormatter)
-        discountFormatter.centerYAnchor.constraint(equalTo: discountView.centerYAnchor, constant: 2.5).isActive = true
-        discountFormatter.leadingAnchor.constraint(equalTo: discountLabel.trailingAnchor, constant: 1).isActive = true
+        discountLabel.leadingAnchor.constraint(equalTo: discountView.leadingAnchor, constant: 0).isActive = true
+        discountLabel.trailingAnchor.constraint(equalTo: discountView.trailingAnchor, constant: 0).isActive = true
+        discountLabel.topAnchor.constraint(equalTo: discountView.topAnchor, constant: 0).isActive = true
+        discountLabel.bottomAnchor.constraint(equalTo: discountView.bottomAnchor, constant: 0).isActive = true
         
       //  discountLabel.leadingAnchor.constraint(equalTo: discountView.leadingAnchor, constant: 10).isActive = true
         
-        setupDiscountShadow()
+        //setupDiscountShadow()
         
         viewContainer.addSubview(likeButton)
         likeButton.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -5).isActive = true
@@ -375,6 +384,25 @@ class LateTableCell: UICollectionViewCell {
         gradientView.layer.mask = gradient
     }
     
+    func setupImageShadow()
+    {
+        self.imageView.layoutIfNeeded()
+        let shadowView = UIView.init(frame: self.imageView.frame)
+        shadowView.backgroundColor = .clear
+        self.imageView.superview?.addSubview(shadowView)
+        shadowView.addSubview(self.imageView)
+        self.imageView.center = CGPoint(x: shadowView.frame.size.width / 2, y: shadowView.frame.size.height / 2)
+        
+        self.imageView.layer.masksToBounds = true
+        shadowView.layer.masksToBounds = false
+        
+        shadowView.layer.shadowRadius = 3
+        shadowView.layer.shadowOpacity = 0.25
+        shadowView.layer.shadowColor = UIColor.black.cgColor
+        shadowView.layer.shadowOffset = CGSize(width: 0 , height:3)
+        shadowView.clipsToBounds = false
+    }
+    
     func setupDiscountShadow()
     {
         self.discountView.layoutIfNeeded()
@@ -391,6 +419,8 @@ class LateTableCell: UICollectionViewCell {
         shadowView.layer.shadowOffset = .zero
         shadowView.layer.shadowOpacity = 0.1
         shadowView.layer.shadowRadius = 5
+        discountView.layer.borderColor = UIColor.main.cgColor
+        discountView.layer.borderWidth = 2
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.clipsToBounds = false
     }

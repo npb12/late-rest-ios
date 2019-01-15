@@ -22,23 +22,30 @@ class MyReservationsCell: UICollectionViewCell {
             if let img = reservation?.restaurant?.photo {
                 imageView.imageFromURL(urlString: img)
             }
-            if let time = reservation?.reservationTime {
+            if let startTime = reservation?.startTime, let endTime = reservation?.endTime {
                 let formatter = DateFormatter()
                 formatter.timeZone = TimeZone.current
 
-                if Calendar.current.isDateInToday(time) || time > Date()
+                if Calendar.current.isDateInToday(startTime) || endTime > Date()
                 {
                     isExpired = false
-                    timeLabel.backgroundColor = UIColor.LRBlue
-                    timeLabel.layer.borderColor = UIColor.LRBlue.cgColor
+                    timeLabel.backgroundColor = UIColor.main
+                    timeLabel.layer.borderColor = UIColor.LLDiv.cgColor
                     timeLabel.layer.borderWidth = 1
-                    timeLabel.textColor = UIColor.white
-                    formatter.dateFormat = "h:mm a"
+                    timeLabel.textColor = UIColor.header
+                    formatter.dateFormat = "h:mm"
                     self.alpha = 1.0
                     discountLabel.isHidden = false
                     discountFormatter.isHidden = false
                     timeLabel.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                     timeLabel.textAlignment = .center
+                    
+                    let startString = formatter.string(from: startTime)
+                    let endString = formatter.string(from: endTime)
+                    formatter.dateFormat = "a"
+                    let am_pm = formatter.string(from: endTime)
+                    timeLabel.text = String(format: "%@ - %@ %@", startString, endString, am_pm)
+                    directionsButton.isHidden = false
                 }
                 else
                 {
@@ -47,17 +54,19 @@ class MyReservationsCell: UICollectionViewCell {
                     timeLabel.textColor = UIColor.LRBlue
                     isExpired = true
                     timeLabel.textColor = UIColor.LLGray
-                    formatter.dateFormat = "MMMM dd 'at' h:mm a"
+                    formatter.dateFormat = "MMMM d"
+                    let dayString = formatter.string(from: startTime)
+                    formatter.dateFormat = "h:mm a"
+                    let startString = formatter.string(from: startTime)
+                    let endString = formatter.string(from: endTime)
                     self.alpha = 0.3
                     discountLabel.isHidden = true
                     discountFormatter.isHidden = true
                     timeLabel.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                     timeLabel.textAlignment = .left
-
+                    timeLabel.text = String(format: "%@", dayString)
+                    directionsButton.isHidden = true
                 }
-                
-                let dateString = formatter.string(from: time)
-                timeLabel.text = String(format: "%@", dateString)
             }
             
             if let location = reservation?.restaurant?.location {
@@ -117,7 +126,7 @@ class MyReservationsCell: UICollectionViewCell {
     
     let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-Regular",size:22)
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:18)
         label.textColor = UIColor.title
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -136,12 +145,12 @@ class MyReservationsCell: UICollectionViewCell {
     let timeLabel : UITextView = {
         let label = UITextView()
         label.font = UIFont(name:"SourceSansPro-SemiBold",size:14)
+        label.textColor = .header//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.backgroundColor = UIColor.main
         label.isScrollEnabled = false
         label.isUserInteractionEnabled = false
         label.textAlignment = .center
-        label.textColor = .white
-        label.backgroundColor = UIColor.LRBlue
-        label.layer.borderColor = UIColor.LRBlue.cgColor
+        label.layer.borderColor = UIColor.LLDiv.cgColor
         label.layer.borderWidth = 1
         label.layer.cornerRadius = 2.5
         label.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -160,7 +169,7 @@ class MyReservationsCell: UICollectionViewCell {
     let discountLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-SemiBold",size:16)
-        label.textColor = .LRRed
+        label.textColor = .LRGreen
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -169,7 +178,7 @@ class MyReservationsCell: UICollectionViewCell {
     let discountFormatter : UILabel = {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-SemiBold",size:8)
-        label.textColor = .LRRed
+        label.textColor = .LRGreen
         label.textAlignment = .center
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -180,6 +189,14 @@ class MyReservationsCell: UICollectionViewCell {
         attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
         label.attributedText = attributedString
         return label
+    }()
+    
+    let directionsButton : UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor.clear
+        //        button.addTarget(self, action: #selector(directionsTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     func setupViews() {

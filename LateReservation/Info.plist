@@ -2,15 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>SourceSansPro-Light.ttf</string>
-		<string>SourceSansPro-Regular.ttf</string>
-		<string>SourceSansPro-SemiBold.ttf</string>
-        <string>SourceSansPro-Bold.ttf</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>11th Table</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,11 +17,25 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.8</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow 11th Table to access your contacts to share nearby discounts with friends</string>
+	<key>NSLocationUsageDescription</key>
+	<string>NSLocation Usage Description</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>11th Table uses your location to find nearby deals</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Pacifico-Regular.ttf</string>
+		<string>SourceSansPro-Light.ttf</string>
+		<string>SourceSansPro-Regular.ttf</string>
+		<string>SourceSansPro-SemiBold.ttf</string>
+		<string>SourceSansPro-Bold.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -45,12 +54,6 @@
 			<false/>
 		</dict>
 	</dict>
-	<key>NSContactsUsageDescription</key>
-	<string>Allow Late Reservation to access your contacts</string>
-	<key>NSLocationUsageDescription</key>
-	<string>NSLocation Usage Description</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Late Reservation uses your location to find nearby deals</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

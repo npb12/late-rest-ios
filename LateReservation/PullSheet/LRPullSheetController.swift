@@ -21,7 +21,7 @@ enum LRPullSheetPosition
 protocol LRPullSheetDelegate
 {
     func pullSheetPositionChanged(height: CGFloat, position: LRPullSheetPosition)
-    func zoomToCurrentRestaurant(_ coord: CLLocationCoordinate2D)
+    func zoomToCurrentRestaurant(_ restaurant: Restaurant)
 }
 
 protocol LRSearchPositionDelegate
@@ -35,9 +35,13 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet var contentContainer: UIView!
     @IBOutlet var bgView: UIView!
     @IBOutlet var bgTopConstraint: NSLayoutConstraint!
-    @IBOutlet var containerHeight: NSLayoutConstraint!
+    @IBOutlet var containerHeight: NSLayoutConstraint?
+    @IBOutlet var gradientView: UIView!
+    @IBOutlet var gradientTop: NSLayoutConstraint!
     
     var nearby = [Restaurant]()
+    
+    var parentVC : NearbyViewController?
     
     let fullViewOffset: CGFloat = 0
     var agentInfoHeight: CGFloat = 39
@@ -46,8 +50,8 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     {
         return 66 * UIScreen.main.scale
     }
-    let sortByBarHeight:CGFloat = 39
     let pullSheetOffset:CGFloat = 94
+    var barsOffset : CGFloat = 0
 
     var currentChild: LRPullSheetChildController? = nil
     
@@ -55,11 +59,20 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     var positionDelegate: LRSearchPositionDelegate? = nil
     var cachedPosition: LRPullSheetPosition = .hidden
     
+    var collectionHeight : NSLayoutConstraint?
+    
   //  var originalHeight : CGFloat = 0
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        if let tabbar = self.parentVC?.getTabBar()
+        {
+            let window = UIApplication.shared.keyWindow
+            let topPadding:CGFloat = window?.safeAreaInsets.top ?? 0
+            barsOffset = tabbar.frame.size.height + topPadding
+        }
         
         originalViewHeight = self.view.frame.height
         
@@ -72,6 +85,8 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         setupView()
         
         self.view.setNeedsDisplay()
+        
+        
         
         /*
         NotificationCenter.default.addObserver(self, selector: #selector(transitionToTabs), name: SBNotifications.showTabs, object: nil)
@@ -109,30 +124,76 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         collectionView.register(LateTableCell.self, forCellWithReuseIdentifier: "nearbyCell")
         
         contentContainer.addSubview(collectionView)
+        
+        /*
         collectionView.topAnchor.constraint(equalTo: contentContainer.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 0).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: 0).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: contentContainer.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: 0).isActive = true */
+
+        collectionView.clipsToBounds = true
         
-        contentContainer.layoutIfNeeded()
+        setupShadowView()
+        /*
+        contentContainer.layer.masksToBounds = true
+        contentContainer.layer.cornerRadius = 5
+        contentContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+ 
+        contentContainer.layoutIfNeeded() */
        // collectionView.layer.applySketchShadow(color: .black, alpha: 0.9, x: 0, y: 0, blur: 0.5, spread: 0.7)
+        /*
         contentContainer.layer.masksToBounds = false
         contentContainer.layer.shadowOffset = CGSize(width: 0, height: 0)
         contentContainer.layer.shadowRadius = 5
         contentContainer.layer.shadowOpacity = 0.6
-        contentContainer.layer.shadowColor = UIColor.black.cgColor
-        /*
-         block1.layer.masksToBounds = NO;
-         block1.layer.shadowOffset = CGSizeMake(0, 0);
-         block1.layer.shadowRadius = 1;
-         block1.layer.shadowOpacity = 0.7;
-        */
+        contentContainer.layer.shadowColor = UIColor.black.cgColor */
+
+        
+        self.gradientView.layoutIfNeeded()
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor.white.withAlphaComponent(0.05).cgColor,
+        UIColor.white.withAlphaComponent(1.0).cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
+        gradientLayer.locations = [NSNumber(floatLiteral: 0.2), NSNumber(floatLiteral: 0.4), NSNumber(floatLiteral: 0.6), NSNumber(floatLiteral: 0.8), NSNumber(floatLiteral: 1.0)]
+        gradientLayer.frame = self.gradientView.bounds
+        
+        self.gradientView.layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
+    func setupShadowView()
+    {
+        let shadowView = UIView.init(frame: self.contentContainer.frame)
+        shadowView.backgroundColor = .clear
+        self.contentContainer.superview?.addSubview(shadowView)
+        shadowView.addSubview(self.contentContainer)
+        self.contentContainer.center = CGPoint(x: shadowView.frame.size.width / 2, y: shadowView.frame.size.height / 2)
+        
+        self.contentContainer.layer.masksToBounds = true
+        shadowView.layer.masksToBounds = false
+        
+        self.contentContainer.layer.cornerRadius = 5
+        self.contentContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        shadowView.layer.shadowOffset = .zero
+        shadowView.layer.shadowOpacity = 0.6
+        shadowView.layer.shadowRadius = 5
+        shadowView.layer.shadowColor = UIColor.black.cgColor
+        shadowView.clipsToBounds = false
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
      
        // originalHeight = (UIScreen.main.bounds.height)
+        
+        if self.collectionView.frame.height == 0
+        {
+            self.contentContainer.layoutIfNeeded()
+            
+            self.collectionView.frame = CGRect(x: 0, y: 0, width: self.contentContainer.frame.width, height: self.contentContainer.frame.height)
+            self.collectionView.layoutIfNeeded()
+            print("content container height \(self.contentContainer.frame.height)")
+            print("collectionview height \(self.collectionView.frame.height)")
+        }
     }
     
     func updateData(_ data : [Restaurant])
@@ -149,7 +210,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 else
                 {
-                    self.bgView.alpha = 0.85
+                    self.bgView.alpha = 1.00
                 }
             })
 
@@ -193,7 +254,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         {
             positionDelegate?.pullSheetEnteredFull(position: rect.minY)
             UIView.animate(withDuration: 0.2, animations: {
-                self.bgView.alpha = 0.85
+                self.bgView.alpha = 1.00
                 self.bgTopConstraint.constant = -40
             })
         }
@@ -207,7 +268,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 else
                 {
-                    self.bgView.alpha = 0.85
+                    self.bgView.alpha = 1.00
                 }
                 self.bgTopConstraint.constant = 40
             })
@@ -220,9 +281,18 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
                 {
                     UIView.animate(withDuration: 0.1, animations: {
                         layout.scrollDirection = .vertical
+                        self.collectionView.frame = CGRect(x: 0, y: 0, width: self.contentContainer.frame.width, height: self.contentContainer.frame.height)
+                   /*     self.collectionHeight?.isActive = false
+                        self.collectionHeight = self.collectionView.heightAnchor.constraint(equalToConstant: self.contentContainer.frame.height)
+                        self.collectionHeight?.isActive = true */
                         self.collectionView.decelerationRate = UIScrollViewDecelerationRateNormal
                         self.collectionView.layoutIfNeeded()
+                        print("content container height \(self.contentContainer.frame.height)")
+                        print("collectionview height \(self.collectionView.frame.height)")
+                      //  print(self.collectionView.contentSize.height)
                     })
+                    
+                    self.gradientTop.constant = 0
                 }
             }
         }
@@ -231,14 +301,22 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
             if let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 if layout.scrollDirection == .vertical
                 {
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.containerHeight.constant = UIScreen.main.bounds.height * 0.45
-                        self.contentContainer.layoutIfNeeded()
+                    UIView.animate(withDuration: 0.1, animations: {
+                    /*    self.collectionHeight?.isActive = false
+                        self.collectionHeight =
+                        self.collectionView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.38)
+                        self.collectionHeight?.isActive = true */
                         layout.scrollDirection = .horizontal
+                        self.collectionView.frame = CGRect(x: 0, y: 0, width: self.contentContainer.frame.width, height: UIScreen.main.bounds.height * 0.3775)
                         self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast
                         self.collectionView.layoutIfNeeded()
+                        print("content container height \(self.contentContainer.frame.height)")
+                        print("collectionview height \(self.collectionView.frame.height)")
+                       // self.collectionView.reloadData()
                         self.zoomToPin(0)
                     })
+                    
+                    self.gradientTop.constant = 50
                 }
             }
         }
@@ -277,12 +355,13 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         else if (mode == .open || mode == .full)
         {
             UIView.animate(withDuration: 0.0, animations: {
-                self.containerHeight.constant = self.originalViewHeight
-                self.contentContainer.layoutIfNeeded()
+               // self.containerHeight?.constant = self.originalViewHeight - self.barsOffset
+              //  self.contentContainer.layoutIfNeeded()
             })
             if mode == .open
             {
                 offset = openOffset()
+                self.collectionView.setContentOffset(CGPoint.zero, animated: true)
             }
             else
             {
@@ -361,7 +440,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
                     if offset < horizontalOffset()
                     {
                         UIView.animate(withDuration: 0.1, animations: {
-                            self.containerHeight.constant = self.originalViewHeight
+                        //    self.containerHeight?.constant = self.originalViewHeight - self.barsOffset
                             self.contentContainer.layoutIfNeeded()
                     //        print("collectionheight height: %d", self.collectionView.frame.height)
                     //        print("container height: %d", self.contentContainer.frame.height)
@@ -545,9 +624,9 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
 
         let window = UIApplication.shared.keyWindow
         let topPadding:CGFloat = window?.safeAreaInsets.top ?? 0
-        //let bottomPadding = window?.safeAreaInsets.bottom
+        var bottomPadding = window?.safeAreaInsets.bottom
         //UUDebugLog("\n\n\ntopPadding = \(topPadding)\nbottomPadding = \(bottomPadding)\n\n\n")
-        /*
+        
         if (topPadding > 0)
         {
             statusBarAndSafeArea = topPadding
@@ -555,11 +634,13 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         else
         {
             statusBarAndSafeArea = 28
-        } */
+        }
+        
+        var tabbarHeight : CGFloat = 0
 
-        let height:CGFloat = originalViewHeight - offsetToUse //- statusBarAndSafeArea
-
-        let min:CGFloat = 75//50 //value from constraints on SBHomeController
+        let height:CGFloat = originalViewHeight - statusBarAndSafeArea
+        
+        print("view height \(height)")
         
         let finalHeight = height //< min ? min : height
         
@@ -570,15 +651,14 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func openOffset() -> CGFloat
     {
-        let offset:CGFloat = UIScreen.main.bounds.height * 0.3 //- 94//(66 * 2)
+        let offset:CGFloat = UIScreen.main.bounds.height * 0.275 //- 94//(66 * 2)
         //UUDebugLog("\n\ncollapsed offset: \(offset)\noriginal \(originalViewHeight)\nagentInfo \(agentInfoHeight)\ntabBarHeight \(tabBarHeight)")
         return offset
     }
     
     private func listViewOffset() -> CGFloat
     {
-        let offset:CGFloat = 0//UIScreen.main.bounds.height * 0.1 //extra height for sort bar
-        //UUDebugLog("\n\npartial offset: \(offset)\nListingCell \(SBListingCell.height)\nsortByHeight \(sortByBarHeight)")
+        let offset:CGFloat = 0
         return offset
     }
     
@@ -589,7 +669,36 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func horizontalOffset() -> CGFloat
     {
-        let offset:CGFloat = UIScreen.main.bounds.height * 0.46
+        if let tabbar = self.parentVC?.getTabBar()
+        {
+            var statusBarAndSafeArea:CGFloat = 0
+            
+            let window = UIApplication.shared.keyWindow
+            let topPadding:CGFloat = window?.safeAreaInsets.top ?? 0
+            var bottomPadding = window?.safeAreaInsets.bottom ?? 0
+            //UUDebugLog("\n\n\ntopPadding = \(topPadding)\nbottomPadding = \(bottomPadding)\n\n\n")
+            
+            if (topPadding > 0)
+            {
+                statusBarAndSafeArea = topPadding
+            }
+            else
+            {
+                statusBarAndSafeArea = 28
+            }
+            
+            let cellHeight = UIScreen.main.bounds.height * 0.375
+            let shadowHeight : CGFloat = 26
+            //don't use all the bottom padding -- otherwise there's a more noticable gap on x+ devices
+            let bottom : CGFloat = bottomPadding * 0.75
+            
+            //10 just for a little extra spacing
+            let offset = (tabbar.frame.minY - cellHeight - bottom - shadowHeight) - 5
+            return offset
+        }
+        
+        let offset:CGFloat = UIScreen.main.bounds.height * 0.47
+        print("offset \(offset)")
         return offset
     }
     
@@ -628,44 +737,42 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         cell.likeButton.isHidden = false
         cell.likeImg.isHidden = false
         
+        let city = LRParser.getCity(restaurant)
+        
         if let lastLocation = Defaults.getLastLocation()
         {
             let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
-            let locationText = String(format: "%@  •  %.1f mi", restaurant.location, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+            //String(format: "%@  •  %.1f mi", city, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+            let locationText = city
             cell.locationLabel.text = locationText
+            cell.distanceLabel.text = String(format: "%.1f mi", LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
         }
         else
         {
-            cell.locationLabel.text = restaurant.location
+            cell.locationLabel.text = city
         }
         
         if restaurant.reservations.count > 0
         {
             let tables = restaurant.reservations
-            cell.discountLabel.text = String(format: "%d", tables[0].discount)
-            cell.discountFormatter.isHidden = false
-            cell.discountLabel.isHidden = false
-            cell.timeLabel.textColor = .LRBlue
-            cell.timeLabel.font = UIFont(name:"SourceSansPro-Bold",size:13)
+            cell.discountLabel.text = String(format: "%d%% Off", tables[0].discount)
+            cell.timeLabel.font = UIFont(name:"SourceSansPro-Regular",size:13)
             cell.discountView.isHidden = false
             cell.emptyView.isHidden = true
             
             /*
-            cell.timesView.containerType = ContainerType.nearby
-            cell.timesView.tables?.removeAll()
-            cell.timesView.tables = restaurant.reservations
-            cell.timesView.collectionView.reloadData()
-            */
- 
+             cell.timesView.containerType = ContainerType.nearby
+             cell.timesView.tables?.removeAll()
+             cell.timesView.tables = restaurant.reservations
+             cell.timesView.collectionView.reloadData()
+             */
+            
             cell.timeLabel.text = String(format: "Available + %d More", tables.count)
-
+            
         }
         else
         {
             cell.timeLabel.text = "Nothing Listed Right Now"
-            cell.timeLabel.textColor = .LRLightGray
-            cell.discountFormatter.isHidden = true
-            cell.discountLabel.isHidden = true
             cell.discountView.isHidden = true
             cell.timeLabel.font = UIFont(name:"SourceSansPro-Regular",size:13)
             cell.emptyView.isHidden = false
@@ -679,7 +786,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         {
             if layout.scrollDirection == .horizontal
             {
-                return CGSize(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.4)
+                return CGSize(width: UIScreen.main.bounds.width * 0.85, height: UIScreen.main.bounds.height * 0.375)
             }
         }
 
@@ -687,20 +794,41 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        {
+            if layout.scrollDirection == .horizontal
+            {
+                return 10
+            }
+        }
+        
         return 5
     }
     
     @objc func likeTapped(_ sender: UIButton) {
         
-        let indexPath = IndexPath.init(row: sender.tag, section: 0)
-        let rest = nearby[indexPath.row]
-        let cell = collectionView.cellForItem(at: indexPath) as! LateTableCell
-        if Favorites.isFavorited(id: rest.id)
+        if Defaults.isLoggedIn()
         {
-            cell.likeImg.image = #imageLiteral(resourceName: "like_img")
-            if let favId = Favorites.getFavoritedId(id: rest.id)
+            let indexPath = IndexPath.init(row: sender.tag, section: 0)
+            let rest = nearby[indexPath.row]
+            let cell = collectionView.cellForItem(at: indexPath) as! LateTableCell
+            if Favorites.isFavorited(id: rest.id)
             {
-                LRServer.shared.deleteFavorite(favId, completion: {
+                cell.likeImg.image = #imageLiteral(resourceName: "like_img")
+                if let favId = Favorites.getFavoritedId(id: rest.id)
+                {
+                    LRServer.shared.deleteFavorite(favId, completion: {
+                        DispatchQueue.main.async {
+                            self.updateTabVC()
+                        }
+                    })
+                }
+            }
+            else
+            {
+                cell.likeImg.image = #imageLiteral(resourceName: "like_active")
+                AppDelegate.shared().registerForPushNotifications()
+                LRServer.shared.addFavorite(rest, completion: {
                     DispatchQueue.main.async {
                         self.updateTabVC()
                     }
@@ -709,13 +837,10 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         }
         else
         {
-            cell.likeImg.image = #imageLiteral(resourceName: "like_active")
-            AppDelegate.shared().registerForPushNotifications()
-            LRServer.shared.addFavorite(rest, completion: {
-                DispatchQueue.main.async {
-                    self.updateTabVC()
-                }
-            })
+            if let tabBar: TabBarController = self.tabBarController as? TabBarController
+            {
+                tabBar.goToLogin()
+            }
         }
     }
     
@@ -727,6 +852,30 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
+    func mapPinTapped(_ restaurant : Restaurant)
+    {
+        changeSheetPosition(.horizontal, animated: true)
+        let indexPath = IndexPath(item: getRestaurantIndex(restaurant), section: 0)
+        self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .left], animated: true)
+    }
+    
+    func getRestaurantIndex(_ restaurant : Restaurant) -> Int
+    {
+        var index = 0
+        
+        for rest in nearby
+        {
+            if rest.id == restaurant.id
+            {
+                break
+            }
+            
+            index += 1
+        }
+        
+        
+        return index
+    }
 }
 
 extension LRPullSheetController: UIGestureRecognizerDelegate {
@@ -741,7 +890,17 @@ extension LRPullSheetController: UIGestureRecognizerDelegate {
 extension LRPullSheetController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let collectionView = scrollView as? UICollectionView {
-
+            if cachedPosition == .full
+            {
+                
+                if collectionView.contentOffset.y == 0
+                {
+                    if collectionView.panGestureRecognizer.translation(in: collectionView.superview).y > 0 {
+                        changeSheetPosition(.open, animated: true)
+                    }
+                    
+                }
+            }
         }
     }
     
@@ -789,10 +948,11 @@ extension LRPullSheetController: UIScrollViewDelegate {
         if nearby.count > row
         {
             let restaurant = nearby[row]
-            let coord = CLLocationCoordinate2D(latitude: restaurant.lat, longitude: restaurant.lon)
-            delegate?.zoomToCurrentRestaurant(coord)
+            delegate?.zoomToCurrentRestaurant(restaurant)
         }
     }
+    
+    
 }
 
 /*

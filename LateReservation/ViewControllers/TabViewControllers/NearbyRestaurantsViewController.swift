@@ -58,32 +58,45 @@ class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDele
     
     func getData()
     {
-        if Defaults.isLoggedIn()
-        {
-            showIndicator("Finding Restaurants", 0.0, completion: {})
-            manager = LRLocationManager()
-            manager!.fetchWithCompletion {location, error in
-                // fetch location or an error
-                if let loc = location {
-                    
+        
+        showIndicator("Finding Restaurants", 0.0, completion: {})
+        manager = LRLocationManager()
+        manager!.fetchWithCompletion {location, error in
+            // fetch location or an error
+            if let loc = location {
+                
+                if Defaults.isLoggedIn()
+                {
                     LRServer.shared.getFavorites() {
                         (favorites: [Favorite]?, error: Error?) in
-                        LRServer.shared.getNearbyRestaurants(loc, true) {
-                            (data: [Restaurant]?, error: Error?) in
-                            DispatchQueue.main.async {
-                                self.hideIndicator()
-                                // nearby = restaurants
-                                // self.
-                                if let restaurants = data
-                                {
-                                    self.nearby = restaurants
-                                    self.collectionView.reloadData()
-                                }
-                            }
+                        DispatchQueue.main.async {
+                            self.hideIndicator()
                         }
+                        
+                        self.getNearby(loc)
                     }
                 }
-                
+                else
+                {
+                    self.getNearby(loc)
+                }
+            }
+        }
+    }
+    
+    func getNearby(_ loc : CLLocation)
+    {
+        LRServer.shared.getNearbyRestaurants(loc, true) {
+            (data: [Restaurant]?, error: Error?) in
+            DispatchQueue.main.async {
+                self.hideIndicator()
+                // nearby = restaurants
+                // self.
+                if let restaurants = data
+                {
+                    self.nearby = restaurants
+                    self.collectionView.reloadData()
+                }
             }
         }
     }
@@ -141,38 +154,43 @@ class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDele
         cell.timesView.collectionView.reloadData()
         */
         
-        if restaurant.reservations.count > 0
-        {
-            let tables = restaurant.reservations
-            cell.discountLabel.text = String(format: "%d", tables[0].discount)
-            cell.discountFormatter.isHidden = false
-            cell.discountLabel.isHidden = false
-            cell.timeLabel.textColor = .LRBlue
-            cell.timeLabel.font = UIFont(name:"SourceSansPro-Bold",size:13)
-            cell.discountView.isHidden = false
-            cell.emptyView.isHidden = true
-            cell.timeLabel.text = String(format: "Available + %d More", tables.count)
-        }
-        else
-        {
-            cell.timeLabel.text = "Nothing Listed Right Now"
-            cell.timeLabel.textColor = .LRLightGray
-            cell.discountFormatter.isHidden = true
-            cell.discountLabel.isHidden = true
-            cell.discountView.isHidden = true
-            cell.timeLabel.font = UIFont(name:"SourceSansPro-Regular",size:13)
-            cell.emptyView.isHidden = false
-        }
+        let city = LRParser.getCity(restaurant)
         
         if let lastLocation = Defaults.getLastLocation()
         {
             let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
-            let locationText = String(format: "%@  •  %.1f mi", restaurant.location, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
+            let locationText = String(format: "%@  •  %.1f mi", city, LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
             cell.locationLabel.text = locationText
         }
         else
         {
-            cell.locationLabel.text = restaurant.location
+            cell.locationLabel.text = city
+        }
+        
+        if restaurant.reservations.count > 0
+        {
+            let tables = restaurant.reservations
+            cell.discountLabel.text = String(format: "%d%% OFF", tables[0].discount)
+            cell.timeLabel.font = UIFont(name:"SourceSansPro-Regular",size:13)
+            cell.discountView.isHidden = false
+            cell.emptyView.isHidden = true
+            
+            /*
+             cell.timesView.containerType = ContainerType.nearby
+             cell.timesView.tables?.removeAll()
+             cell.timesView.tables = restaurant.reservations
+             cell.timesView.collectionView.reloadData()
+             */
+            
+            cell.timeLabel.text = String(format: "Available + %d More", tables.count)
+            
+        }
+        else
+        {
+            cell.timeLabel.text = "Nothing Listed Right Now"
+            cell.discountView.isHidden = true
+            cell.timeLabel.font = UIFont(name:"SourceSansPro-Regular",size:13)
+            cell.emptyView.isHidden = false
         }
         
         return cell
@@ -214,15 +232,29 @@ class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDele
     
     @objc func likeTapped(_ sender: UIButton) {
         
-        let indexPath = IndexPath.init(row: sender.tag, section: 0)
-        let rest = nearby[indexPath.row]
-        let cell = collectionView.cellForItem(at: indexPath) as! AllRestaurantsCell
-        if Favorites.isFavorited(id: rest.id)
+        
+        if Defaults.isLoggedIn()
         {
-            cell.likeImg.image = #imageLiteral(resourceName: "like_img")
-            if let favId = Favorites.getFavoritedId(id: rest.id)
+            let indexPath = IndexPath.init(row: sender.tag, section: 0)
+            let rest = nearby[indexPath.row]
+            let cell = collectionView.cellForItem(at: indexPath) as! AllRestaurantsCell
+            if Favorites.isFavorited(id: rest.id)
             {
-                LRServer.shared.deleteFavorite(favId, completion: {
+                cell.likeImg.image = #imageLiteral(resourceName: "like_img")
+                if let favId = Favorites.getFavoritedId(id: rest.id)
+                {
+                    LRServer.shared.deleteFavorite(favId, completion: {
+                        DispatchQueue.main.async {
+                            self.updateTabVC()
+                        }
+                    })
+                }
+            }
+            else
+            {
+                cell.likeImg.image = #imageLiteral(resourceName: "like_active")
+                AppDelegate.shared().registerForPushNotifications()
+                LRServer.shared.addFavorite(rest, completion: {
                     DispatchQueue.main.async {
                         self.updateTabVC()
                     }
@@ -231,13 +263,10 @@ class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDele
         }
         else
         {
-            cell.likeImg.image = #imageLiteral(resourceName: "like_active")
-            AppDelegate.shared().registerForPushNotifications()
-            LRServer.shared.addFavorite(rest, completion: {
-                DispatchQueue.main.async {
-                    self.updateTabVC()
-                }
-            })
+            if let tabBar: TabBarController = self.tabBarController as? TabBarController
+            {
+                tabBar.goToLogin()
+            }
         }
     }
     
@@ -253,13 +282,13 @@ class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDele
         
         if success
         {
-            showResult("Reservation Confirmed", true, completion: {
+            showResult("Booking Confirmed", true, completion: {
                 self.hideIndicator()
             })
         }
         else
         {
-            showResult("Reservation Failed", false, completion: {
+            showResult("Booking Failed", false, completion: {
                 self.hideIndicator()
             })
         }

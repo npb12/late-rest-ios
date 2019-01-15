@@ -8,18 +8,20 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 class ReservedViewController : UIViewController
 {
     var reservation = LateReservation()
     
+    @IBOutlet var likeBtn: UIBarButtonItem!
     var delegate : ConfirmReservationDelegate?
     
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
-        label.font = UIFont(name:"SourceSansPro-Regular",size:22)
-        label.textColor = UIColor.header
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:30)
+        label.textColor = UIColor.white
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -28,13 +30,13 @@ class ReservedViewController : UIViewController
     
     let timeLabel : UITextView = {
         let label = UITextView()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:14)
-        label.textColor = .white//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
-        label.backgroundColor = UIColor.LRBlue
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:16)
+        label.textColor = .header//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.backgroundColor = UIColor.main
         label.isScrollEnabled = false
         label.isUserInteractionEnabled = false
         label.textAlignment = .center
-        label.layer.borderColor = UIColor.LRBlue.cgColor
+        label.layer.borderColor = UIColor.LLDiv.cgColor
         label.layer.borderWidth = 1
         label.layer.cornerRadius = 2.5
         label.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
@@ -44,9 +46,31 @@ class ReservedViewController : UIViewController
     
     let whoLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-Regular",size:18)
-        label.textColor = .title
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:22)
+        label.textColor = UIColor.white
         label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let instructionLabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name:"SourceSansPro-Regular",size:18)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "Present this to your waiting staff before receiving the bill"
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let pleaseLabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name:"SourceSansPro-Light",size:14)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "Remember to tip on the original amount!"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -64,39 +88,66 @@ class ReservedViewController : UIViewController
         let view = UIView()
         view.backgroundColor = UIColor.white
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 5
         view.layer.masksToBounds = true
         return view
     }()
     
-    let imageView : UIImageView = {
+    let imgView : UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
         return imageView
     }()
     
+    let chainView : UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(patternImage: UIImage.init(named: "chain_img")!)
+        return view
+    }()
     
-    let okButton : UIButton = {
+    
+    
+    let directionsButton : UIButton = {
         let button = UIButton()
-        button.setTitle("DONE", for: .normal)
-        button.backgroundColor = UIColor.white
-        button.titleLabel?.font = UIFont(name:"SourceSansPro-Bold",size:18)//
-        button.setTitleColor(UIColor.blueLiteTwo, for: .normal)
+        button.setTitle("Get Directions", for: .normal)
+        button.backgroundColor = UIColor.clear
+        button.titleLabel?.font = UIFont(name:"SourceSansPro-SemiBold",size:18)//
+        button.setTitleColor(UIColor.white, for: .normal)
         button.layer.borderColor = UIColor.LLDiv.cgColor
-        button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(confirmTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(directionsTapped), for: .touchUpInside)
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
+    let logoLabel : UILabel = {
+        let label = UILabel()
+        //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
+        label.font = UIFont(name:"Pacifico-Regular",size:14)
+        label.textColor = UIColor.white
+        label.text = "11th Table"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let cancelButton : UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         return button
+    }()
+    
+    let closeImage : UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage.init(imageLiteralResourceName: "close_icon")
+        return imageView
     }()
     
     override func viewDidLoad() {
@@ -108,16 +159,43 @@ class ReservedViewController : UIViewController
         if let restaurant = reservation.restaurant
         {
             titleLabel.text = String(format: "%@", restaurant.restaurantName)
-            imageView.imageFromURL(urlString: restaurant.photo)
+            imgView.imageFromURL(urlString: restaurant.photo)
+            
+            if Favorites.isFavorited(id: restaurant.id)
+            {
+                likeBtn.image = #imageLiteral(resourceName: "like_active_nav").withRenderingMode(.alwaysOriginal)
+            }
+            else
+            {
+                likeBtn.image = #imageLiteral(resourceName: "favorite_icon").withRenderingMode(.alwaysOriginal)
+            }
         }
         
         whoLabel.text = String(format: "%d people at %d%% off", reservation.party, reservation.discount)
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM dd 'at' h:mm a"
+        formatter.dateFormat = "MMMM d"
+        let dayString = formatter.string(from: reservation.startTime!)
+        formatter.dateFormat = "h:mm"
+        let startString = formatter.string(from: reservation.startTime!)
+        let endString = formatter.string(from: reservation.endTime!)
+        formatter.dateFormat = "a"
+        let am_pm = formatter.string(from: reservation.endTime!)
         formatter.timeZone = TimeZone.current
-        let dateString = formatter.string(from: reservation.reservationTime!)
-        timeLabel.text = String(format: "%@", dateString)
+        timeLabel.text = String(format: "%@ from %@ - %@ %@", dayString, startString, endString, am_pm)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+        /*
+        self.navigationController?.navigationBar.topItem?.title = "Booking"
+        
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!] */
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -126,62 +204,87 @@ class ReservedViewController : UIViewController
     
     func setupView()
     {
-        view.addSubview(alphaView)
-        alphaView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        alphaView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        alphaView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        alphaView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        view.addSubview(imgView)
+        imgView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        imgView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        imgView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        imgView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        view.addSubview(cancelButton)
-        cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         
+        view.addSubview(chainView)
+        chainView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        chainView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        chainView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        chainView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+       view.addSubview(cancelButton)
+        cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        cancelButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        cancelButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        cancelButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        cancelButton.addSubview(closeImage)
+        closeImage.centerXAnchor.constraint(equalTo: cancelButton.centerXAnchor).isActive = true
+        closeImage.centerYAnchor.constraint(equalTo: cancelButton.centerYAnchor).isActive = true
+        closeImage.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        closeImage.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        view.addSubview(logoLabel)
+        logoLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        logoLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        logoLabel.centerYAnchor.constraint(equalTo: closeImage.centerYAnchor, constant: 0).isActive = true
+
+        // imgView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.3).isActive = true
+        
+        /*
         view.addSubview(containerFrame)
-        containerFrame.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        containerFrame.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
-        containerFrame.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
+        containerFrame.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        containerFrame.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        containerFrame.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true */
         
-        setupContainerShadow()
-        
-        let imgSize = UIScreen.main.bounds.width * 0.3
-        view.addSubview(imageView)
-        imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
-        imageView.centerXAnchor.constraint(equalTo: containerFrame.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: containerFrame.topAnchor, constant: 10).isActive = true
-        //imageView.centerYAnchor.constraint(equalTo: viewContainer.centerYAnchor).isActive = true
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = imgSize / 2
-        imageView.layer.borderColor = UIColor.main.cgColor
-        imageView.layer.borderWidth = 2
+        view.addSubview(titleLabel)
+        titleLabel.topAnchor.constraint(equalTo: cancelButton.bottomAnchor, constant: UIScreen.main.bounds.height * 0.1).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         
-        containerFrame.addSubview(titleLabel)
-        titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 25).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -25).isActive = true
+        view.addSubview(timeLabel)
+        timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
+        timeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        
+
+        view.addSubview(whoLabel)
+        whoLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 20).isActive = true
+        whoLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        whoLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+
+        view.addSubview(pleaseLabel)
+        pleaseLabel.topAnchor.constraint(equalTo: whoLabel.bottomAnchor, constant: 20).isActive = true
+        pleaseLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        pleaseLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         
-        //   timeLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 30).isActive = true
-        //   timeLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -30).isActive = true
+
         
-        containerFrame.addSubview(whoLabel)
-        whoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        whoLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 30).isActive = true
-        whoLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -30).isActive = true
+        //   pleaseLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
         
-        containerFrame.addSubview(timeLabel)
-        timeLabel.topAnchor.constraint(equalTo: whoLabel.bottomAnchor, constant: 20).isActive = true
-        timeLabel.centerXAnchor.constraint(equalTo: containerFrame.centerXAnchor).isActive = true
+        /*
+
         
-        containerFrame.addSubview(okButton)
-        okButton.bottomAnchor.constraint(equalTo: containerFrame.bottomAnchor, constant: 0).isActive = true
-        okButton.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -0).isActive = true
-        okButton.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 0).isActive = true
-        okButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.08).isActive = true
-        okButton.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 35).isActive = true
+        
+*/
+        
+        view.addSubview(directionsButton)
+        directionsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        directionsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        directionsButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        directionsButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.1).isActive = true
+
+        view.addSubview(instructionLabel)
+        instructionLabel.bottomAnchor.constraint(equalTo: directionsButton.topAnchor, constant: -50).isActive = true
+        instructionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
+        instructionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
+        
     }
     
     func setupContainerShadow()
@@ -195,7 +298,7 @@ class ReservedViewController : UIViewController
         self.containerFrame.layer.masksToBounds = true
         shadowView.layer.masksToBounds = false
         
-        self.containerFrame.layer.cornerRadius = 5
+       // self.containerFrame.layer.cornerRadius = 5
         shadowView.layer.shadowOffset = .zero
         shadowView.layer.shadowOpacity = 0.075
         shadowView.layer.shadowRadius = 5
@@ -203,190 +306,58 @@ class ReservedViewController : UIViewController
         shadowView.clipsToBounds = false
     }
     
-    @objc func confirmTapped()
+    @objc func closeTapped()
     {
-        dismiss(animated: false, completion: {
-            //self.delegate?.didConfirmReservation(self, self.reservation.tableId)
-        })
+        self.dismiss(animated: false, completion: nil)
     }
     
-    @objc func cancelTapped()
+    @objc func directionsTapped()
     {
-        dismiss(animated: false, completion: nil)
-    }
-}
-
-/*    : UIViewController
-{
-    
-    var reservation : LateReservation?
-    @IBOutlet var likeBtn: UIBarButtonItem!
-    
-    let titleLabel : UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-Regular",size:28)
-        label.textColor = UIColor.header
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let venueLabel : UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-Light",size:20)//UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
-        label.textColor = UIColor.header
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let discountLabel : UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:35)
-        label.textColor = .LRRed
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let discountFormatter : UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
-        label.textColor = .LRRed
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 0.75
-        paragraphStyle.alignment = .center
-        let attributedString = NSMutableAttributedString(string: "%\noff")
-        attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
-        label.attributedText = attributedString
-        return label
-    }()
-    
-    let directionsButton : UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.mapColor
-        button.setTitle("Get Directions", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.titleLabel?.font = UIFont(name: "SourceSansPro-Regular", size: 18)
-       // button.addTarget(self, action: #selector(forgotTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupView()
-        
-        guard let res = reservation else {return}
-        
-        if let restaurant = res.restaurant
+        if let restaurant = self.reservation.restaurant
         {
-            titleLabel.text = restaurant.restaurantName
-            
-            if Favorites.isFavorited(id: restaurant.id)
-            {
-                likeBtn.image = #imageLiteral(resourceName: "like_active_nav").withRenderingMode(.alwaysOriginal)
-            }
-            else
-            {
-                likeBtn.image = #imageLiteral(resourceName: "favorite_icon").withRenderingMode(.alwaysOriginal)
-            }
+            let coordinate = CLLocationCoordinate2DMake(restaurant.lat, restaurant.lon)
+            let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, addressDictionary:nil))
+            mapItem.name = restaurant.restaurantName
+            mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving])
         }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM dd 'at' h:mm a"
-        formatter.timeZone = TimeZone.current
-        let dateString = formatter.string(from: res.reservationTime!)
-        venueLabel.text = String(format: "Today, %@\nTable for %d", dateString, res.party)
-        discountLabel.text = String(format: "%d", res.discount)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = false
-        
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "SourceSansPro-Regular", size: 16)!]
-        
-        guard let res = reservation else {return}
-        if let restaurant = res.restaurant
-        {
-            self.navigationController?.navigationBar.topItem?.title = restaurant.restaurantName
-        }
-    }
-    
-    func setupView()
-    {
-        view.addSubview(titleLabel)
-        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: UIScreen.main.bounds.height * 0.2).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        
-        view.addSubview(venueLabel)
-        venueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
-        venueLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        venueLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        
-        view.addSubview(discountLabel)
-        discountLabel.topAnchor.constraint(equalTo: venueLabel.bottomAnchor, constant: 20).isActive = true
-        discountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -5).isActive = true
-        
-        view.addSubview(discountFormatter)
-        discountFormatter.topAnchor.constraint(equalTo: discountLabel.topAnchor, constant: 5).isActive = true
-        discountFormatter.leadingAnchor.constraint(equalTo: discountLabel.trailingAnchor, constant: 2).isActive = true
-        
-        view.addSubview(directionsButton)
-        directionsButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -0).isActive = true
-        directionsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
-        directionsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -0).isActive = true
-        directionsButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.1).isActive = true
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    @objc func closeTapped() {
-        dismiss(animated: false, completion: nil)
     }
     
     @IBAction func goBack(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func liked(_ sender: Any) {
-        
-        guard let res = reservation?.restaurant else {return}
-        
-        if Favorites.isFavorited(id: res.id)
+    @IBAction func likeRest(_ sender: Any)
+    {
+        if let restaurant = reservation.restaurant
         {
-            likeBtn.image = #imageLiteral(resourceName: "favorite_icon").withRenderingMode(.alwaysOriginal)
-            if let favId = Favorites.getFavoritedId(id: res.id)
+            if Favorites.isFavorited(id: restaurant.id)
             {
-                LRServer.shared.deleteFavorite(favId, completion: {
+                likeBtn.image = #imageLiteral(resourceName: "favorite_icon").withRenderingMode(.alwaysOriginal)
+                if let favId = Favorites.getFavoritedId(id: restaurant.id)
+                {
+                    LRServer.shared.deleteFavorite(favId, completion: {
+                        DispatchQueue.main.async {
+                            //             self.updateTabVC()
+                        }
+                    })
+                }
+            }
+            else
+            {
+                likeBtn.image = #imageLiteral(resourceName: "like_active_nav").withRenderingMode(.alwaysOriginal)
+                AppDelegate.shared().registerForPushNotifications()
+                LRServer.shared.addFavorite(restaurant, completion: {
                     DispatchQueue.main.async {
-                        //             self.updateTabVC()
+                        //           self.updateTabVC()
                     }
                 })
             }
+            
+            LRServer.shared.getFavorites() {
+                (favorites: [Favorite]?, error: Error?) in
+            }
+            
+            NotificationCenter.default.post(name: Notification.Name.favoritesDidChange, object: nil)
         }
-        else
-        {
-            likeBtn.image = #imageLiteral(resourceName: "like_active_nav").withRenderingMode(.alwaysOriginal)
-            LRServer.shared.addFavorite(res, completion: {
-                DispatchQueue.main.async {
-                    //           self.updateTabVC()
-                }
-            })
-        }
-        
-        NotificationCenter.default.post(name: Notification.Name.favoritesDidChange, object: nil)
     }
-    
 }
-*/

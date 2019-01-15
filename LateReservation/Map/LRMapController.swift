@@ -11,7 +11,7 @@ import MapKit
 
 protocol LRMapControllerDelegate
 {
-    //func mapPinTapped(listing:SBListing)
+    func mapPinTapped(listing:Restaurant)
 }
 
 class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
@@ -52,6 +52,17 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
         var r = self.view.frame
         r.size.height = (UIScreen.main.bounds.size.height - height) + 70
         visibleRect = r
+        
+        if position != .horizontal
+        {
+            
+            let annotations = mapView.selectedAnnotations
+            
+            for selected in annotations
+            {
+                mapView.deselectAnnotation(selected, animated: false)
+            }            
+        }
     }
     
     
@@ -88,20 +99,10 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
         }
     }
     
-    func zoomToCurrentRestaurant(_ coord: CLLocationCoordinate2D)
+    func zoomToCurrentRestaurant(_ restaurant: Restaurant)
     {
+        let coord = CLLocationCoordinate2D(latitude: restaurant.lat, longitude: restaurant.lon)
         safeCenterMapOnLocation(coord)
-        /*
-         for l in mapData
-         {
-         if (l.identifier == listing.identifier && visibleRect != nil)
-         {
-         if let coord = l.coordinate()
-         {
-         safeCenterMapOnLocation(coord)
-         }
-         }
-         } */
     }
     
     public func zoomToAll(animated: Bool, center: CLLocationCoordinate2D? = nil)
@@ -246,7 +247,22 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView)
-    {   /*
+    {
+        let annotation = view.annotation as? LRRestAnnotation
+        if let myAnnotation = annotation
+        {
+            //view.image = UIImage(named: myAnnotation.listing.pinImageName(true))
+            //view.centerOffset = CGPoint(x: 0, y: -(view.image!.size.height / 2))
+            if let rest = myAnnotation.rest
+            {
+                delegate?.mapPinTapped(listing: rest)
+                let location = CLLocation(latitude: rest.lat, longitude: rest.lon)
+                safeCenterMapOnLocation(location.coordinate)
+            }
+        }
+        
+        
+        /*
          let annotation = view.annotation as? SBListingAnnotation
          
          if let myAnnotation = annotation
@@ -258,7 +274,10 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView)
-    {   /*
+    {
+        
+        
+        /*
          let annotation = view.annotation as? SBListingAnnotation
          if (annotation != nil)
          {
@@ -278,7 +297,7 @@ class LRMapController: UIViewController, MKMapViewDelegate, LRPullSheetDelegate
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool)
     {
-        //SBSettings.setLastMapRegion(mapView.region)
+
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?
