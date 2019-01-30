@@ -1,25 +1,22 @@
 //
-//  ConfirmReservationViewController.swift
+//  GrowingViewController.swift
 //  LateReservation
 //
-//  Created by Neil Ballard on 9/27/18.
-//  Copyright © 2018 Neil Ballard. All rights reserved.
+//  Created by Neil Ballard on 1/29/19.
+//  Copyright © 2019 Neil Ballard. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class ConfirmReservationViewController : UIViewController
+
+class GrowingViewController : UIViewController
 {
-    var reservation = LateReservation()
-    var party = 0
-
-    var delegate : ConfirmReservationDelegate?
-
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
         label.font = UIFont(name:"SourceSansPro-SemiBold",size:22)
+        label.text = "We're Growing!"
         label.textColor = UIColor.header
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -30,32 +27,16 @@ class ConfirmReservationViewController : UIViewController
     let imageView : UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
+        imageView.image = UIImage.init(named: "growing_icon")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    
-    let timeLabel : UITextView = {
-        let label = UITextView()
-        label.font = UIFont(name:"SourceSansPro-SemiBold",size:14)
-        label.textColor = .header//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
-        label.backgroundColor = UIColor.main
-        label.isScrollEnabled = false
-        label.isUserInteractionEnabled = false
-        label.textAlignment = .center
-        label.layer.borderColor = UIColor.LLDiv.cgColor
-        label.layer.borderWidth = 1
-        label.layer.cornerRadius = 2.5
-        label.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let whoLabel : UILabel = {
+    let messageLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-Regular",size:18)
         label.textColor = .title
+        label.text = "We're coming to your area soon. Stayed tuned and check back shortly!"
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,14 +63,14 @@ class ConfirmReservationViewController : UIViewController
     
     let confirmButton : UIButton = {
         let button = UIButton()
-        button.setTitle("CONFIRM", for: .normal)
+        button.setTitle("OK", for: .normal)
         button.backgroundColor = UIColor.white
         button.titleLabel?.font = UIFont(name:"SourceSansPro-Bold",size:18)//
         button.setTitleColor(UIColor.LROffTone, for: .normal)
         button.layer.borderColor = UIColor.LLDiv.cgColor
         button.layer.borderWidth = 1
         button.isUserInteractionEnabled = true
-        button.addTarget(self, action: #selector(confirmTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -107,25 +88,6 @@ class ConfirmReservationViewController : UIViewController
         
         setupView()
         
-        
-        if let restaurant = reservation.restaurant
-        {
-            titleLabel.text = String(format: "%@", restaurant.restaurantName)
-            imageView.imageFromURL(urlString: restaurant.photo)
-        }
-        
-        let ppl = party > 1 ? "people" : "person"
-        
-        whoLabel.text = String(format: "%d %@ at %d%% off", party, ppl, reservation.discount)
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm"
-        formatter.timeZone = TimeZone.current
-        let startString = formatter.string(from: reservation.startTime!)
-        let endString = formatter.string(from: reservation.endTime!)
-        formatter.dateFormat = "a"
-        let am_pm = formatter.string(from: reservation.endTime!)
-        timeLabel.text = String(format: "Today from %@ - %@ %@", startString, endString, am_pm)
     }
     
     func setupView()
@@ -146,44 +108,34 @@ class ConfirmReservationViewController : UIViewController
         containerFrame.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         containerFrame.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
         containerFrame.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
-                
-        let imgSize = UIScreen.main.bounds.width * 0.3
+        
         view.addSubview(imageView)
-        imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
+      //  imageView.heightAnchor.constraint(equalToConstant: imgSize).isActive = true
+      //  imageView.widthAnchor.constraint(equalToConstant: imgSize).isActive = true
         imageView.centerXAnchor.constraint(equalTo: containerFrame.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: containerFrame.topAnchor, constant: 10).isActive = true
-        //imageView.centerYAnchor.constraint(equalTo: viewContainer.centerYAnchor).isActive = true
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = imgSize / 2
-        imageView.layer.borderColor = UIColor.main.cgColor
-        imageView.layer.borderWidth = 2
-        
-        
+        imageView.topAnchor.constraint(equalTo: containerFrame.topAnchor, constant: 25).isActive = true
+
         containerFrame.addSubview(titleLabel)
         titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 25).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -25).isActive = true
         
-
-     //   timeLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 30).isActive = true
-     //   timeLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -30).isActive = true
         
-        containerFrame.addSubview(whoLabel)
-        whoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        whoLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 30).isActive = true
-        whoLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -30).isActive = true
+        //   timeLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 30).isActive = true
+        //   timeLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -30).isActive = true
         
-        containerFrame.addSubview(timeLabel)
-        timeLabel.topAnchor.constraint(equalTo: whoLabel.bottomAnchor, constant: 20).isActive = true
-        timeLabel.centerXAnchor.constraint(equalTo: containerFrame.centerXAnchor).isActive = true
+        containerFrame.addSubview(messageLabel)
+        messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+        messageLabel.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor, constant: 30).isActive = true
+        messageLabel.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor, constant: -30).isActive = true
+        
         
         containerFrame.addSubview(confirmButton)
         confirmButton.bottomAnchor.constraint(equalTo: containerFrame.bottomAnchor, constant: 0).isActive = true
         confirmButton.trailingAnchor.constraint(equalTo: containerFrame.trailingAnchor).isActive = true
         confirmButton.leadingAnchor.constraint(equalTo: containerFrame.leadingAnchor).isActive = true
         confirmButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.085).isActive = true
-        confirmButton.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 35).isActive = true
+        confirmButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 35).isActive = true
     }
     
     func setupContainerShadow()
@@ -203,13 +155,6 @@ class ConfirmReservationViewController : UIViewController
         shadowView.layer.shadowRadius = 5
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.clipsToBounds = false
-    }
-    
-    @objc func confirmTapped()
-    {
-        dismiss(animated: false, completion: {
-            self.delegate?.didConfirmReservation(self, self.reservation.tableId, self.party)
-        })
     }
     
     @objc func cancelTapped()

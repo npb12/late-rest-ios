@@ -33,14 +33,14 @@ protocol ConfirmReservationDelegate {
     // Classes that adopt this protocol MUST define
     // this method -- and hopefully do something in
     // that definition.
-    func didConfirmReservation(_ sender:ConfirmReservationViewController, _ tableId : Int)
+    func didConfirmReservation(_ sender:ConfirmReservationViewController, _ tableId : Int, _ party : Int)
 }
 
 protocol ReservationAvailableDelegate {
     // Classes that adopt this protocol MUST define
     // this method -- and hopefully do something in
     // that definition.
-    func reservationIsAvailable(_ sender:ChooseReservationViewController, _ tableId : Int, _ available: Bool)
+    func reservationIsAvailable(_ sender:ChooseReservationViewController, _ tableId : Int, _ party : Int, _ available: Bool)
 }
 
 protocol ReservationSuccessDelegate {

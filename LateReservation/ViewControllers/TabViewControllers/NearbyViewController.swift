@@ -111,7 +111,8 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
         statusView.contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         statusView.contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         statusView.contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        statusView.contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        statusView.heightAnchor.constraint(equalToConstant: UIApplication.shared.statusBarFrame.height).isActive = true
+       // statusView.contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
     }
     
     public func reservationFailure()
@@ -174,6 +175,15 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
                 self.hideIndicator()
                 if let restaurants = data
                 {
+                    
+                    if restaurants.count == 0
+                    {
+                        if let tabBar: TabBarController = self.tabBarController as? TabBarController
+                        {
+                            tabBar.goToGrowing()
+                        }
+                    }
+                    
                     if let sheet = self.pullSheetController
                     {
                         sheet.updateData(restaurants)

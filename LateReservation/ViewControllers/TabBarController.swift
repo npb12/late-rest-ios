@@ -77,6 +77,13 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
             //    reservedViewController.view.isOpaque = false
             }
         }
+        
+        if let growingViewController = segue.destination as? GrowingViewController
+        {
+            growingViewController.modalPresentationStyle = .overFullScreen
+            growingViewController.view.backgroundColor = UIColor.clear
+            growingViewController.view.isOpaque = false
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -327,5 +334,10 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
     func goToReservation(_ reservation: LateReservation)
     {
         performSegue(withIdentifier: "reservedSegue", sender: reservation)
+    }
+    
+    func goToGrowing()
+    {
+        performSegue(withIdentifier: "growingSegue", sender: self);
     }
 }

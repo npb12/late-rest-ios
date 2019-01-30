@@ -52,11 +52,17 @@ public class LateReservation
     {
         var reservations = [LateReservation]()
         
-        print(json)
-        
         for (_, object) in json
         {
-            reservations.append(parseReservation(restaurant ,object))
+            let rest = parseReservation(restaurant ,object)
+            //These are all from "today", now just filter out past times
+            if let end =  rest.endTime
+            {
+                if end  > Date()
+                {
+                    reservations.append(rest)
+                }
+            }
         }
         
         return reservations
@@ -65,7 +71,6 @@ public class LateReservation
     public static func parseReservation(_ restaurant: Restaurant, _ object: JSON) -> LateReservation
     {
       //  let object = json[JsonKeys.jsonId]
-        print(object)
         
         let reservation = LateReservation()
         
@@ -100,7 +105,7 @@ public class LateReservation
         let endStr = object[JsonKeys.endTime].stringValue
         //2018-10-02T22:57:49Z
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         reservation.startTime = dateFormatter.date(from: startStr)
         reservation.endTime = dateFormatter.date(from: endStr)
@@ -147,11 +152,18 @@ public class LateReservation
             let endStr = object[JsonKeys.endTime].stringValue
             //2018-10-02T22:57:49Z
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
             dateFormatter.locale = Locale(identifier: "en_US_POSIX")
             reservation.startTime = dateFormatter.date(from: startStr)
             reservation.endTime = dateFormatter.date(from: endStr)
-            restaurant.reservations.append(reservation)
+            
+            if let end =  reservation.endTime
+            {
+                if end  > Date()
+                {
+                    restaurant.reservations.append(reservation)
+                }
+            }
         }
     }
 }

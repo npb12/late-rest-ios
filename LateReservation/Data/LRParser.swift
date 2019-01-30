@@ -15,8 +15,6 @@ class LRParser: NSObject
     public static func parseAuth(_ json: JSON, completion: @escaping (_ error: Error?) -> Void)
     {
         
-        print(json)
-
         if let token = json["token"].string
         {
             let error = NSError(domain:"", code:500, userInfo:[ NSLocalizedDescriptionKey: "Server Error"])

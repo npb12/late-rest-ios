@@ -65,7 +65,6 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         return label
     }()
     
-    
     let partyLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont(name:"SourceSansPro-Regular",size:17)
@@ -412,18 +411,18 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         navigationController?.popViewController(animated: true)
     }
     
-    func didConfirmReservation(_ sender: ConfirmReservationViewController, _ tableId: Int) {
+    func didConfirmReservation(_ sender: ConfirmReservationViewController, _ tableId: Int, _ party: Int) {
         showIndicator("Checking Availability", 2.0, completion: {
             LRServer.shared.isAvailable(tableId) {(available: Bool) in
                 DispatchQueue.main.async {
                     self.hideIndicator()
                     if available
                     {
-                        self.delegate?.reservationIsAvailable(self, tableId, true)
+                        self.delegate?.reservationIsAvailable(self, tableId, party, true)
                     }
                     else
                     {
-                        self.delegate?.reservationIsAvailable(self, -1, false)
+                        self.delegate?.reservationIsAvailable(self, -1, party, false)
                     }
                     self.navigationController?.popViewController(animated: true)
                 }

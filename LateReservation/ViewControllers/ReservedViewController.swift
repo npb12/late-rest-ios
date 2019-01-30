@@ -13,6 +13,8 @@ import MapKit
 class ReservedViewController : UIViewController
 {
     var reservation = LateReservation()
+    var manager: LRLocationManager?
+    var currentIndex = 0
     
     @IBOutlet var likeBtn: UIBarButtonItem!
     var delegate : ConfirmReservationDelegate?
@@ -108,8 +110,6 @@ class ReservedViewController : UIViewController
         return view
     }()
     
-    
-    
     let directionsButton : UIButton = {
         let button = UIButton()
         button.setTitle("Get Directions", for: .normal)
@@ -156,8 +156,26 @@ class ReservedViewController : UIViewController
         setupView()
         
         
+        
         if let restaurant = reservation.restaurant
         {
+            
+            manager = LRLocationManager()
+            manager!.fetchWithCompletion {location, error in
+                // fetch location or an error
+                if let loc = location {
+                    let distance = LRLocationManager.distanceBetween(userLocation: loc, restaurantLocation: CLLocation(latitude: restaurant.lat, longitude: restaurant.lon))
+                    if distance < 0.05
+                    {
+                        LRServer.shared.redeemed(self.reservation.tableId, completion: {
+                            DispatchQueue.main.async {
+
+                            }
+                            })
+                    }
+                }
+            }
+            
             titleLabel.text = String(format: "%@", restaurant.restaurantName)
             imgView.imageFromURL(urlString: restaurant.photo)
             
@@ -210,6 +228,10 @@ class ReservedViewController : UIViewController
         imgView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         imgView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.view.frame
+        self.imgView.insertSubview(blurEffectView, at: 0)
         
         view.addSubview(chainView)
         chainView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true

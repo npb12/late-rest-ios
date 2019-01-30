@@ -29,6 +29,7 @@ class LRServer : NSObject
         case tables = "tables/%d/"
         case changePassword = "change-password/"
         case deviceToken = "device-token/"
+        case redeem = "redeem/"
     }
     
     private func formattedEndpoint(_ endpoint: Endpoint) -> String
@@ -72,7 +73,6 @@ class LRServer : NSObject
                     LRParser.parseAuth(json, completion: completion)
                 case .failure(let error):
                     let json = JSON(error)
-                    print(json)
                     completion(error)
                 }
             }
@@ -155,7 +155,6 @@ class LRServer : NSObject
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                    print(json)
                     let restaurants = Restaurant.fromJson(json, all)
                     completion(restaurants, nil)
                  //   completion(startups, nil)
@@ -237,11 +236,28 @@ class LRServer : NSObject
     ///
     */
     
-    public func reserve(_ tableID: Int, completion: @escaping (_ error: Error?) -> Void)
+    public func redeemed(_ tableId: Int, completion: @escaping () -> Void)
+    {
+        let urlStr = formattedEndpoint(Endpoint.redeem)
+        let parameters: Parameters =
+            [ "table" : tableId ]
+        let header = apiHeader()
+        
+        if let url = URL.init(string: urlStr)
+        {
+            Alamofire.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).validate(contentType: ["application/json"]).responseJSON { response in
+
+                completion()
+            }
+        }
+    }
+    
+    public func reserve(_ tableID: Int, _ party: Int, completion: @escaping (_ error: Error?) -> Void)
     {
         let urlStr = formattedEndpoint(Endpoint.reserve)
         let parameters: Parameters =
-            [ "tableID" : tableID ]
+            [ "tableID" : tableID,
+              "party" : party]
         let header = apiHeader()
         
         if let url = URL.init(string: urlStr)
@@ -250,11 +266,9 @@ class LRServer : NSObject
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                    print(json)
                     completion(nil)
                 case .failure(let error):
                     let json = JSON(error)
-                    print(json)
                     completion(error)
                 }
             }

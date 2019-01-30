@@ -17,6 +17,10 @@ class TablesCollectionCell : UICollectionViewCell
         let view = UIView()
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.borderColor = UIColor.LLDiv.cgColor
+        view.backgroundColor = UIColor.main
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 2.5
         return view
     }()
 
@@ -34,6 +38,17 @@ class TablesCollectionCell : UICollectionViewCell
         return button
     }() */
     
+    let slot : UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name:"SourceSansPro-SemiBold",size:16)
+        label.textColor = .header//UIColor(red: 181/255, green: 181/255, blue: 181/255, alpha: 1)
+        label.isUserInteractionEnabled = false
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    /*
     let slot : UITextView = {
         let label = UITextView()
         label.font = UIFont(name:"SourceSansPro-SemiBold",size:16)
@@ -48,7 +63,7 @@ class TablesCollectionCell : UICollectionViewCell
         label.textContainerInset = UIEdgeInsets(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
+    }() */
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,9 +83,9 @@ class TablesCollectionCell : UICollectionViewCell
         viewContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
     
         viewContainer.addSubview(slot)
-        slot.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: 0).isActive = true
-        slot.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor, constant: 0).isActive = true
-        slot.topAnchor.constraint(equalTo: viewContainer.topAnchor, constant: 0).isActive = true
+        slot.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -2.5).isActive = true
+        slot.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor, constant: 2.5).isActive = true
+        slot.topAnchor.constraint(equalTo: viewContainer.topAnchor, constant: 2.5).isActive = true
+        slot.bottomAnchor.constraint(equalTo: viewContainer.bottomAnchor, constant: -2.5).isActive = true
     }
-
 }

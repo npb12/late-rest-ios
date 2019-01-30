@@ -60,8 +60,13 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
         
     //    if Defaults.isLoggedIn()
      //   {
-            getData()
+        
     //    }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        getData()
     }
     
     override func viewDidLayoutSubviews() {

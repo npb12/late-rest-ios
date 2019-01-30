@@ -217,6 +217,17 @@ class NearbyRestaurantsViewController : BaseViewController, UICollectionViewDele
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier:
             "header", for: indexPath) as! AllHeaderCell
         header.doneButton.addTarget(self, action: #selector(doneTapped), for: .touchUpInside)
+        
+        if nearby.count == 0
+        {
+            header.headerLabel.text = "We're Growing!"
+            header.descLabel.text = "We're coming to your area soon. Stayed tuned and check back shortly!"
+        }
+        else
+        {
+            header.headerLabel.text = "Get Started"
+            header.descLabel.text = "Like your favorite restaurants to get notified for exclusive discounts"
+        }
 
         return header
     }

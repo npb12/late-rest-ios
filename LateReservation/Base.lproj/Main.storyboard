@@ -312,6 +312,7 @@
                         <segue destination="Y8Q-6a-qjb" kind="show" identifier="paymentSegue" id="mDv-Ld-HBz"/>
                         <segue destination="liC-pk-B29" kind="presentation" identifier="nearbySegue" id="JHP-Ka-Za8"/>
                         <segue destination="OdW-pP-cuy" kind="presentation" identifier="reservedSegue" animates="NO" id="Wx3-1N-7kX"/>
+                        <segue destination="hpw-jF-8Qd" kind="presentation" identifier="growingSegue" animates="NO" id="ZxR-sc-R2Y"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -404,6 +405,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BUt-qU-Nxz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3448.8000000000002" y="2798.9505247376314"/>
+        </scene>
+        <!--Growing View Controller-->
+        <scene sceneID="dWY-X9-0PI">
+            <objects>
+                <viewController id="hpw-jF-8Qd" customClass="GrowingViewController" customModule="LateReservation" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Aqk-up-dLq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2804" y="1209"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="MvA-Em-add">

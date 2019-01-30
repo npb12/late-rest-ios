@@ -266,7 +266,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
             //timesLabel.text = "No tables available currently"
             reserveButton.setTitle("BOOK IT", for: .normal)
             reserveButton.isUserInteractionEnabled = false
-            reserveButton.alpha = 0.2
+            reserveButton.isHidden = true
             
             LRServer.shared.getTables(restaurant) {
                 () in
@@ -333,7 +333,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         }
         
         reserveButton.isUserInteractionEnabled = true
-        reserveButton.alpha = 1.0
+        reserveButton.isHidden = false
         timesView.tables.removeAll()
 
         let formatter = DateFormatter()
@@ -466,7 +466,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         }
     }
     
-    func reservationIsAvailable(_ sender: ChooseReservationViewController, _ tableId: Int, _ available: Bool) {
+    func reservationIsAvailable(_ sender: ChooseReservationViewController, _ tableId: Int, _ party: Int, _ available: Bool) {
         
         if !available
         {
@@ -478,7 +478,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         else
         {
             showIndicator("Booking Table", 2.0, completion: {
-                LRServer.shared.reserve(tableId) {
+                LRServer.shared.reserve(tableId, party) {
                     (error: Error?) in
                     DispatchQueue.main.async {
                         self.hideIndicator()
