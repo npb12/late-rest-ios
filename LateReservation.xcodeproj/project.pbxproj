@@ -66,6 +66,7 @@
 		8C213C0E215ADD4D003554CC /* UUMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C213C0D215ADD4D003554CC /* UUMapView.swift */; };
 		8C213C10215B1D26003554CC /* ReservedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C213C0F215B1D25003554CC /* ReservedViewController.swift */; };
 		8C36F4DE22013BF300E3D792 /* GrowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C36F4DD22013BF200E3D792 /* GrowingViewController.swift */; };
+		8C36F4E02201FFCE00E3D792 /* LabelSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C36F4DF2201FFCE00E3D792 /* LabelSpacing.swift */; };
 		8C45BC0D21C4806600A03E6A /* Pacifico-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C45BC0C21C4806500A03E6A /* Pacifico-Regular.ttf */; };
 		8C5B04C3215811B000CFB814 /* LateReservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04C2215811B000CFB814 /* LateReservation.swift */; };
 		8C5B04CA2159437000CFB814 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5B04C92159437000CFB814 /* DetailViewController.swift */; };
@@ -176,6 +177,7 @@
 		8C213C0D215ADD4D003554CC /* UUMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UUMapView.swift; sourceTree = "<group>"; };
 		8C213C0F215B1D25003554CC /* ReservedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedViewController.swift; sourceTree = "<group>"; };
 		8C36F4DD22013BF200E3D792 /* GrowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingViewController.swift; sourceTree = "<group>"; };
+		8C36F4DF2201FFCE00E3D792 /* LabelSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSpacing.swift; sourceTree = "<group>"; };
 		8C45BC0C21C4806500A03E6A /* Pacifico-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pacifico-Regular.ttf"; sourceTree = "<group>"; };
 		8C5B04C2215811B000CFB814 /* LateReservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LateReservation.swift; sourceTree = "<group>"; };
 		8C5B04C92159437000CFB814 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				8CB1228321A227570009CF42 /* LRAnnotationView.swift */,
 				8C1406D021DEFAEE0057CC49 /* LRCalloutView.swift */,
 				8C1406D221DEFAFC0057CC49 /* LRCalloutView.xib */,
+				8C36F4DF2201FFCE00E3D792 /* LabelSpacing.swift */,
 			);
 			path = "Extensions+Views";
 			sourceTree = "<group>";
@@ -737,6 +740,7 @@
 				8CD77C0621628FC500D03EB6 /* Credentials.swift in Sources */,
 				8CD77BF0216196BA00D03EB6 /* LRLocationManager.swift in Sources */,
 				8C1ECEBC2156916200ED0A27 /* TableHeader.swift in Sources */,
+				8C36F4E02201FFCE00E3D792 /* LabelSpacing.swift in Sources */,
 				8C0825102193685700886168 /* BaseCollectionViewController.swift in Sources */,
 				8C1ECEAB2152CCAB00ED0A27 /* LateTableCell.swift in Sources */,
 				8C213C04215ACC6A003554CC /* Defaults.swift in Sources */,

@@ -194,9 +194,10 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
             }
         }
         listOfTimes = listOfTimes.sorted{ $0 < $1 }
-        if listOfTimes.count > 0
+        let selectedRow = timePicker.selectedRow(inComponent: 0)
+        if listOfTimes.count > selectedRow
         {
-            selectedTime = listOfTimes[0]
+            selectedTime = listOfTimes[selectedRow]
         }
         todayLabel.text = String(format: "Today %@", selectedTime)
         timePicker.reloadAllComponents()
@@ -312,6 +313,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
         else
         {
             selectedTime = listOfTimes[row]
+            todayLabel.text = String(format: "Today %@", selectedTime)
         }
         
         updateDiscount()
