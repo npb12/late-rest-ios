@@ -17,7 +17,6 @@ extension Favorites
     static let restIdAttr = "id"
     static let favIdAttr = "favid"
     
-    
     static func syncFavorites(_ favorites: [Favorite])
     {
         

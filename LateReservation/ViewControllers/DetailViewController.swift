@@ -477,7 +477,7 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         }
         else
         {
-            showIndicator("Booking Table", 2.0, completion: {
+            showIndicator("Booking Discount", 2.0, completion: {
                 LRServer.shared.reserve(tableId, party) {
                     (error: Error?) in
                     DispatchQueue.main.async {

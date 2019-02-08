@@ -229,7 +229,7 @@ class LateTableCell: UICollectionViewCell {
     
     let likeImg : UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.image = #imageLiteral(resourceName: "like_img")
         imageView.alpha = 0.8
         imageView.translatesAutoresizingMaskIntoConstraints = false
