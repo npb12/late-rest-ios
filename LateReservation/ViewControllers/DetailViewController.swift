@@ -71,7 +71,6 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
         label.font = UIFont(name:"SourceSansPro-Regular",size:16)
         label.textAlignment = .left
         label.textColor = UIColor.subheader
-     //   label.text = "Dijon's chophouse is centrally located in beautiful Melbourne Beach. Our steak and lobster is offered with a side of horschradish that is pretty awesome. We also offer specials for events such as birthdays etc. Some more text about this place and how good it is if you eat here. Come dine with us!"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -268,12 +267,15 @@ class DetailViewController : BaseViewController, ReservationAvailableDelegate
             reserveButton.isUserInteractionEnabled = false
             reserveButton.isHidden = true
             
-            LRServer.shared.getTables(restaurant) {
-                () in
-                DispatchQueue.main.async {
-                    if self.restaurant.reservations.count > 0
-                    {
-                        self.setReservationData()
+            if let lastLocation = Defaults.getLastLocation()
+            {
+                LRServer.shared.getTables(restaurant, lastLocation) {
+                    () in
+                    DispatchQueue.main.async {
+                        if self.restaurant.reservations.count > 0
+                        {
+                            self.setReservationData()
+                        }
                     }
                 }
             }

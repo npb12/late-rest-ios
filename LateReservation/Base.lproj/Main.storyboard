@@ -65,7 +65,7 @@
                                     <constraint firstItem="qHp-re-BeP" firstAttribute="centerY" secondItem="isK-gg-obb" secondAttribute="centerY" id="qYX-NE-2GD"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5jU-Lv-WjE">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5jU-Lv-WjE">
                                 <rect key="frame" x="320" y="30" width="45" height="45"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_icon" translatesAutoresizingMaskIntoConstraints="NO" id="IKt-hK-Cjc">

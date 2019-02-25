@@ -189,7 +189,14 @@ class ReservedViewController : UIViewController
             }
         }
         
-        whoLabel.text = String(format: "%d people at %d%% off", reservation.party, reservation.discount)
+        var pplStr = "people"
+        
+        if reservation.party == 1
+        {
+            pplStr = "person"
+        }
+        
+        whoLabel.text = String(format: "%d %@ at %d%% off", reservation.party, pplStr, reservation.discount)
         
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d"

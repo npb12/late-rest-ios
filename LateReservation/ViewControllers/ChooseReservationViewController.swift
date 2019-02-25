@@ -414,7 +414,7 @@ class ChooseReservationViewController : BaseViewController, UIPickerViewDelegate
     }
     
     func didConfirmReservation(_ sender: ConfirmReservationViewController, _ tableId: Int, _ party: Int) {
-        showIndicator("Checking Availability", 2.0, completion: {
+        showIndicator("Checking Availability", 1.0, completion: {
             LRServer.shared.isAvailable(tableId) {(available: Bool) in
                 DispatchQueue.main.async {
                     self.hideIndicator()

@@ -18,5 +18,5 @@ struct OnboardingPages {
 let pages = [OnboardingPages(title: "Step 1 of 5", placeholder: "Full Name"),
              OnboardingPages(title: "Step 2 of 5", placeholder: "Phone Number"),
              OnboardingPages(title: "Step 3 of 5", placeholder: "Email"),
-             OnboardingPages(title: "Step 4 of 5", placeholder: "Password"),
+             OnboardingPages(title: "Step 4 of 5", placeholder: "Password - Must contain 8 characters and one uppercase"),
              OnboardingPages(title: "Step 5 of 5", placeholder: "Re-enter Password")]

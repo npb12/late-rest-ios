@@ -125,6 +125,7 @@ class ReservationsViewController: BaseViewController, UICollectionViewDelegate, 
                     {
                         self.emptyLabel.isHidden = false
                         self.emptyImageView.isHidden = false
+                        self.collectionView.reloadData()
                     }
                 }
             }

@@ -58,6 +58,7 @@ class FavoriteCell : LateTableCell
         titleLabel.font = UIFont(name:"SourceSansPro-SemiBold",size:15)
         titleLabel.textAlignment = .center
         titleLabel.setLineSpacing(lineSpacing: 1.75)
+        titleLabel.numberOfLines = 2
         
         /*
         imageView.addSubview(emptyView)

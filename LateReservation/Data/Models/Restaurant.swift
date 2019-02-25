@@ -105,7 +105,7 @@ public class Restaurant
         {
             restaurant.lat = Double(latitude)!
         }
-
+        
         restaurant.photo = json[JsonKeys.photo].stringValue
         restaurant.restaurantName = json[JsonKeys.name].stringValue
         restaurant.location = json[JsonKeys.location].stringValue

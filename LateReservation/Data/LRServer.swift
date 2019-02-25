@@ -26,7 +26,7 @@ class LRServer : NSObject
         case myReservations = "my-reservations/"
         case reserve = "reserve/"
         case isAvailable = "is-available/%d/"
-        case tables = "tables/%d/"
+        case tables = "tables/%d/?lat=%f&lon=%f"
         case changePassword = "change-password/"
         case deviceToken = "device-token/"
         case redeem = "redeem/"
@@ -252,6 +252,8 @@ class LRServer : NSObject
         }
     }
     
+    //Refactor
+    //should just be updated to a put request /change
     public func reserve(_ tableID: Int, _ party: Int, completion: @escaping (_ error: Error?) -> Void)
     {
         let urlStr = formattedEndpoint(Endpoint.reserve)
@@ -273,7 +275,7 @@ class LRServer : NSObject
                 }
             }
         }
-    }
+    } 
     
     public func isAvailable(_ tableID: Int, completion: @escaping (_ available: Bool) -> Void)
     {
@@ -322,9 +324,11 @@ class LRServer : NSObject
         }
     }
     
-    public func getTables(_ restaurant: Restaurant, completion: @escaping () -> Void)
+    public func getTables(_ restaurant: Restaurant, _ location: CLLocation, completion: @escaping () -> Void)
     {
-        let availableEndpoint = String(format:Endpoint.tables.rawValue, restaurant.id)
+        let lat = location.coordinate.latitude as Double
+        let lon = location.coordinate.longitude as Double
+        let availableEndpoint = String(format:Endpoint.tables.rawValue, restaurant.id, lat, lon)
         let urlStr = formattedEndpoint(availableEndpoint)
         let header = apiHeader()
         
