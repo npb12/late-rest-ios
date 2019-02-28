@@ -317,7 +317,6 @@ class LateTableCell: UICollectionViewCell {
         emptyLabel2.topAnchor.constraint(equalTo: emptyLabel.bottomAnchor).isActive = true
         emptyLabel2.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
 
-        
         bottomView.addSubview(locationLabel)
         locationLabel.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: -10).isActive = true
         locationLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 15).isActive = true
@@ -356,6 +355,9 @@ class LateTableCell: UICollectionViewCell {
         
         viewContainer.addSubview(likeButton)
         likeButton.trailingAnchor.constraint(equalTo: viewContainer.trailingAnchor, constant: -5).isActive = true
+        
+       // likeButton.leadingAnchor.constraint(equalTo: viewContainer.leadingAnchor, constant: 5).isActive = true
+       // likeButton.centerXAnchor.constraint(equalTo: viewContainer.centerXAnchor).isActive = true
         likeButton.topAnchor.constraint(equalTo: viewContainer.topAnchor, constant: 0).isActive = true
         likeButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         likeButton.widthAnchor.constraint(equalToConstant: 50).isActive = true

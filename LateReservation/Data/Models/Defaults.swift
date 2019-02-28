@@ -17,7 +17,8 @@ struct Defaults {
     static let returningUserKey = "returningUserKey"
     static let userModeKey = "userMode"
     static let lastLocationKey = "lastLocation"
-    
+    static let usedDiscountBeforeKey = "DiscountKey"
+
     struct UserModel : Codable {
         var user: Int?
         var id: Int?
@@ -35,6 +36,16 @@ struct Defaults {
     static func returningUser() -> Bool
     {
         return UserDefaults.standard.bool(forKey: returningUserKey)
+    }
+    
+    static func usedDiscountBefore() -> Bool
+    {
+        return UserDefaults.standard.bool(forKey: usedDiscountBeforeKey)
+    }
+    
+    static func setusedDiscountBefore()
+    {
+        UserDefaults.standard.set(true, forKey: usedDiscountBeforeKey)
     }
     
     static func setReturningUser(status: Bool)

@@ -10,8 +10,15 @@ import Foundation
 import UIKit
 
 
-class GrowingViewController : UIViewController
+class AlertViewController : UIViewController
 {
+    enum AlertType {
+        case Growing
+        case NotReservation
+    }
+    
+    var alertType : AlertType = .Growing
+    
     let titleLabel : UILabel = {
         let label = UILabel()
         //label.font = UIFont.systemFont(ofSize: 21, weight: UIFont.Weight.semibold)
@@ -88,6 +95,12 @@ class GrowingViewController : UIViewController
         
         setupView()
         
+        if alertType == .NotReservation
+        {
+            imageView.image = nil
+            titleLabel.text = "Using Your Discount"
+            messageLabel.text = "11th Table is a discount app and is not used for reservations. This booking does not guarantee immediate seating."
+        }
     }
     
     func setupView()
@@ -159,6 +172,11 @@ class GrowingViewController : UIViewController
     
     @objc func cancelTapped()
     {
+        if alertType == .NotReservation
+        {
+            Defaults.setusedDiscountBefore()
+        }
+        
         dismiss(animated: false, completion: nil)
     }
 }

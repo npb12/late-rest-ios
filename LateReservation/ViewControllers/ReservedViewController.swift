@@ -225,6 +225,26 @@ class ReservedViewController : UIViewController
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        performSegue(withIdentifier: "alertSegue", sender: self)
+
+/*
+        if !Defaults.usedDiscountBefore()
+        {
+            performSegue(withIdentifier: "alertSegue", sender: self)
+        }
+ */
+    }
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let alertViewController = segue.destination as? AlertViewController
+        {
+            alertViewController.alertType = .NotReservation
+            alertViewController.modalPresentationStyle = .overFullScreen
+            alertViewController.view.backgroundColor = UIColor.clear
+            alertViewController.view.isOpaque = false
+        }
     }
     
     func setupView()

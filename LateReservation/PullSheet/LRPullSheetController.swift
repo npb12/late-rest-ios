@@ -40,6 +40,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet var gradientTop: NSLayoutConstraint!
     
     var nearby = [Restaurant]()
+    var laidoutShadow = false
     
     var parentVC : NearbyViewController?
     
@@ -132,7 +133,6 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
 
         collectionView.clipsToBounds = true
         
-        setupShadowView()
         /*
         contentContainer.layer.masksToBounds = true
         contentContainer.layer.cornerRadius = 5
@@ -162,6 +162,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     
     func setupShadowView()
     {
+        laidoutShadow = true
         let shadowView = UIView.init(frame: self.contentContainer.frame)
         shadowView.backgroundColor = .clear
         self.contentContainer.superview?.addSubview(shadowView)
@@ -183,6 +184,10 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
      
+        if !laidoutShadow
+        {
+            setupShadowView()
+        }
        // originalHeight = (UIScreen.main.bounds.height)
         
         if self.collectionView.frame.height == 0
@@ -814,6 +819,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
             let cell = collectionView.cellForItem(at: indexPath) as! LateTableCell
             if Favorites.isFavorited(id: rest.id)
             {
+                print("unliking")
                 cell.likeImg.image = #imageLiteral(resourceName: "like_img")
                 if let favId = Favorites.getFavoritedId(id: rest.id)
                 {
@@ -826,6 +832,7 @@ class LRPullSheetController: UIViewController, UICollectionViewDelegate, UIColle
             }
             else
             {
+                print("liking")
                 cell.likeImg.image = #imageLiteral(resourceName: "like_active")
                 AppDelegate.shared().registerForPushNotifications()
                 LRServer.shared.addFavorite(rest, completion: {

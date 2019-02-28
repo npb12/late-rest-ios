@@ -180,7 +180,7 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
                     {
                         if let tabBar: TabBarController = self.tabBarController as? TabBarController
                         {
-                            tabBar.goToGrowing()
+                            tabBar.goToAlert()
                         }
                     }
                     

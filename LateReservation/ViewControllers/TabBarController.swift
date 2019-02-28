@@ -78,11 +78,11 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
             }
         }
         
-        if let growingViewController = segue.destination as? GrowingViewController
+        if let alertViewController = segue.destination as? AlertViewController
         {
-            growingViewController.modalPresentationStyle = .overFullScreen
-            growingViewController.view.backgroundColor = UIColor.clear
-            growingViewController.view.isOpaque = false
+            alertViewController.modalPresentationStyle = .overFullScreen
+            alertViewController.view.backgroundColor = UIColor.clear
+            alertViewController.view.isOpaque = false
         }
     }
     
@@ -336,8 +336,8 @@ class TabBarController : UITabBarController, DidAuthorizeDelegate, ReservationSu
         performSegue(withIdentifier: "reservedSegue", sender: reservation)
     }
     
-    func goToGrowing()
+    func goToAlert()
     {
-        performSegue(withIdentifier: "growingSegue", sender: self);
+        performSegue(withIdentifier: "alertSegue", sender: self);
     }
 }

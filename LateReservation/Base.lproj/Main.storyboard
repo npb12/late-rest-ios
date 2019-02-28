@@ -312,7 +312,7 @@
                         <segue destination="Y8Q-6a-qjb" kind="show" identifier="paymentSegue" id="mDv-Ld-HBz"/>
                         <segue destination="liC-pk-B29" kind="presentation" identifier="nearbySegue" id="JHP-Ka-Za8"/>
                         <segue destination="OdW-pP-cuy" kind="presentation" identifier="reservedSegue" animates="NO" id="Wx3-1N-7kX"/>
-                        <segue destination="hpw-jF-8Qd" kind="presentation" identifier="growingSegue" animates="NO" id="ZxR-sc-R2Y"/>
+                        <segue destination="hpw-jF-8Qd" kind="presentation" identifier="alertSegue" animates="NO" id="ZxR-sc-R2Y"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -406,10 +406,10 @@
             </objects>
             <point key="canvasLocation" x="3448.8000000000002" y="2798.9505247376314"/>
         </scene>
-        <!--Growing View Controller-->
+        <!--Alert View Controller-->
         <scene sceneID="dWY-X9-0PI">
             <objects>
-                <viewController id="hpw-jF-8Qd" customClass="GrowingViewController" customModule="LateReservation" customModuleProvider="target" sceneMemberID="viewController"/>
+                <viewController id="hpw-jF-8Qd" customClass="AlertViewController" customModule="LateReservation" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aqk-up-dLq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2804" y="1209"/>
@@ -601,6 +601,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="likeBtn" destination="0OK-IC-HCP" id="uuG-R9-Ndr"/>
+                        <segue destination="hpw-jF-8Qd" kind="presentation" identifier="alertSegue" animates="NO" id="6Ro-Rf-wd4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B2u-CW-0k5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -662,6 +663,7 @@
         <image name="reserved_icon_inactive" width="21" height="23"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Tdp-In-X95"/>
+        <segue reference="77r-6A-Qis"/>
+        <segue reference="ZxR-sc-R2Y"/>
     </inferredMetricsTieBreakers>
 </document>
