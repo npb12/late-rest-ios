@@ -226,14 +226,10 @@ class ReservedViewController : UIViewController
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        performSegue(withIdentifier: "alertSegue", sender: self)
-
-/*
         if !Defaults.usedDiscountBefore()
         {
             performSegue(withIdentifier: "alertSegue", sender: self)
         }
- */
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation

@@ -191,7 +191,7 @@ class InviteViewController: UIViewController, UITableViewDelegate, UITableViewDa
         composeVC.recipients = [number]
         
         //replace with message + app link
-        composeVC.body = "Hey check out Local Level!"
+        composeVC.body = "Hey download 11th Table for exclusive discounts at restaurants!\nhttps://itunes.apple.com/us/app/11th-table/id1444916887?mt=8"
         
         // Present the view controller modally.
         DispatchQueue.main.async {

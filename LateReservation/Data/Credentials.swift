@@ -39,7 +39,7 @@ class Credentials
     
     static func isValidRegistration(info : RegistrationInfo) -> Bool
     {
-       return isValidEmail(info.email) && passwordsMatch(pass1: info.password, pass2: info.confirm)
+       return isValidEmail(info.email)
                 && validPassword(str: info.password) && validNameLength(str: info.first)
     }
     
@@ -60,11 +60,11 @@ class Credentials
             return infoErr.emptyName.rawValue
         }
         
-
+        /*
         if !validPhoneNumber(str: info.phone)
         {
             return infoErr.invalidPhone.rawValue
-        }
+        } */
         
         if !isValidEmail(info.email)
         {
@@ -76,10 +76,11 @@ class Credentials
             return infoErr.passwordFormat.rawValue
         }
         
+        /*
         if !passwordsMatch(pass1: info.password, pass2: info.confirm)
         {
             return infoErr.passwordMismatch.rawValue
-        }
+        } */
         
         return ""
     }
@@ -103,7 +104,7 @@ class Credentials
     
     static func validPassword(str : String) -> Bool
     {
-        return str.count >= passLength && hasUpper(str: str)
+        return str.count >= passLength
     }
     
     static func validNameLength(str : String) -> Bool

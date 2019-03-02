@@ -73,8 +73,8 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
         button.setTitle("Next", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont(name:"SourceSansPro-SemiBold",size:18)//UIFont.boldSystemFont(ofSize: 16)
-        button.backgroundColor = UIColor.LRPink
-        button.layer.borderColor = UIColor.LRPink.cgColor
+        button.backgroundColor = UIColor.LROffTone
+        button.layer.borderColor = UIColor.LROffTone.cgColor
         button.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
         button.layer.borderWidth = 0.5
         button.alpha = 0.2
@@ -108,6 +108,15 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
                 next.textField.becomeFirstResponder()
             }
         }
+        
+        if currentIndex > 1
+        {
+            startButton.setTitle("Get Started", for: .normal)
+        }
+        else
+        {
+            startButton.setTitle("Next", for: .normal)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -126,36 +135,18 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
                 cell.textField.autocapitalizationType = .words
                 break
             case 1:
-                cell.textField.text = info.phone
-                break
-            case 2:
                 cell.textField.text = info.email
                 break
-            case 3:
+            case 2:
                 cell.textField.text = info.password
-                break
-            case 4:
-                cell.textField.text = info.confirm
                 break
             default:
                 break
             }
         }
+    
         
-        if indexPath.row < 4
-        {
-            startButton.setTitle("Next", for: .normal)
-        }
-        else
-        {
-            startButton.setTitle("Get Started", for: .normal)
-        }
-        
-        if indexPath.row == 1
-        {
-            cell.textField.keyboardType = .numberPad
-        }
-        else if indexPath.row > 2
+        if indexPath.row == 2
         {
             cell.textField.keyboardType = .default
             cell.textField.isSecureTextEntry = true
@@ -230,6 +221,9 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        return true
+        /*
         if currentIndex == 1{
             
             let cell = collectionView?.cellForItem(at: IndexPath(row: currentIndex, section: 0)) as! OnboardingItemView
@@ -271,7 +265,7 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             return false
         } else {
             return true
-        }
+        } */
     }
     
     func setInfo(_ cell : OnboardingItemView, _ row : Int)
@@ -285,16 +279,10 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             registrationInfo?.first = text
             break
         case 1:
-            registrationInfo?.phone = text
-            break
-        case 2:
             registrationInfo?.email = text
             break
-        case 3:
+        case 2:
             registrationInfo?.password = text
-            break
-        case 4:
-            registrationInfo?.confirm = text
             break
         default:
             break
@@ -313,20 +301,12 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             }
             break
         case 1:
-            valid = true
-            /*
-             if Credentials.validPhoneNumber(str: text)
-             {
-             valid = true
-             } */
-            break
-        case 2:
             if Credentials.isValidEmail(text)
             {
                 valid = true
             }
             break
-        case 3...4:
+        case 2:
             if Credentials.validPassword(str: text)
             {
                 valid = true

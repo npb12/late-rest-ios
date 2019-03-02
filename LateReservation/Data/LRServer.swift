@@ -60,7 +60,7 @@ class LRServer : NSObject
             [ "email" : info.email.lowercased(),
               "username" : info.email.lowercased(),
               "first_name" : info.first,
-              "number" : info.phone,
+              "number" : "",
               "password" : info.password,
               "owner" : ""]
 
@@ -143,8 +143,8 @@ class LRServer : NSObject
     
     public func getNearbyRestaurants(_ location: CLLocation, _ all : Bool, completion: @escaping (_ restaurants: [Restaurant]?, _ error: Error?) -> Void)
     {
-        let lat = 28.120380//location.coordinate.latitude as Double
-        let lon = -80.576700//location.coordinate.longitude as Double
+        let lat = location.coordinate.latitude as Double
+        let lon = location.coordinate.longitude as Double
         let locationEndpoint = String(format:Endpoint.nearby.rawValue, lat, lon)
         let urlStr = formattedEndpoint(locationEndpoint)
         let header = apiHeader()
