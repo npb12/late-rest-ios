@@ -32,12 +32,14 @@ class LateTableCell: UICollectionViewCell {
             }
             
             if let restaurant = card
-            {                
+            {
+                distanceLabel.text = String(format: "%.1f mi", restaurant.distance)
+                /*
                 if let lastLocation = Defaults.getLastLocation()
                 {
                     let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
-                    distanceLabel.text = String(format: "%.1f mi", LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation))
-                }
+                    
+                } */
             }
             
             /*

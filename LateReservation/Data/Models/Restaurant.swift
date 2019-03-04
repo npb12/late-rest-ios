@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 import Alamofire
-
+import CoreLocation
 
 public class Restaurant
 {
@@ -33,6 +33,7 @@ public class Restaurant
     var createdBy : Int = 0
     var lat : Double = 0
     var lon : Double = 0
+    var distance : Double = 0
     var website : String = ""
     var photo : String = ""
     var description : String = ""
@@ -62,6 +63,11 @@ public class Restaurant
             let tables = object[JsonKeys.jsonTablesId]
             restaurant.reservations = LateReservation.fromJson(restaurant, tables)
             
+            if let lastLocation = Defaults.getLastLocation()
+            {
+                let restaurantLocation = CLLocation(latitude: restaurant.lat, longitude: restaurant.lon)
+                restaurant.distance = LRLocationManager.distanceBetween(userLocation: lastLocation, restaurantLocation: restaurantLocation)
+            }
             
             restaurants.append(restaurant)
             /*
@@ -74,6 +80,8 @@ public class Restaurant
                 restaurants.append(restaurant)
             } */
         }
+        
+        restaurants = restaurants.sorted(by: { $1.distance > $0.distance })
         
         restaurants = restaurants.sorted(by: { $0.reservations.count > $1.reservations.count })
         return restaurants
