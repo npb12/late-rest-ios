@@ -53,7 +53,7 @@ class OnboardingViewController: BaseCollectionViewController, UICollectionViewDe
             UIView.animate(withDuration: duration, animations: { () -> Void in
                 if let bottom = self.startBottom
                 {
-                    bottom.constant = UIScreen.main.bounds.height * 0.1
+                    bottom.constant = 0
                 }
             })
         }

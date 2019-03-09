@@ -83,6 +83,18 @@ public class Restaurant
         
         restaurants = restaurants.sorted(by: { $1.distance > $0.distance })
         
+        var i = 0
+        for res in restaurants
+        {
+            if res.restaurantName == "Jersey Mike's"
+            {
+                let jmikes = res
+                restaurants.remove(at: i)
+                restaurants.append(jmikes)
+            }
+            i += 1
+        }
+        
         restaurants = restaurants.sorted(by: { $0.reservations.count > $1.reservations.count })
         return restaurants
     }

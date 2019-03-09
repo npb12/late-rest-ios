@@ -175,7 +175,6 @@ class NearbyViewController: BaseViewController, LRMapControllerDelegate, LRSearc
                 self.hideIndicator()
                 if let restaurants = data
                 {
-                    
                     if restaurants.count == 0
                     {
                         if let tabBar: TabBarController = self.tabBarController as? TabBarController
